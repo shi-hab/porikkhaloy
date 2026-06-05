@@ -1,179 +1,132 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCategoryData } from "../filterquesforexam/useCategoryData";
+import { MultipleSelector } from "./MultipleSelector";
 
 export default function QuizCategoryForFilter({
+  control,
   setValue,
+  forPage = "start",
   setFormData = null,
 }) {
   const {
     categories: subjects,
-    isLoading,
+    isLoading: subjectsLoading,
+    categoryData: subjectData,
+    setCategoryData: setSubjectData,
   } = useCategoryData("subjects");
 
-  const [expandedSubjects, setExpandedSubjects] = useState([]);
-  const [selectedLessons, setSelectedLessons] = useState([]);
+  const {
+    categories: lessons,
+    isLoading: lessonsLoading,
+    categoryData: lessonData,
+    setCategoryData: setLessonData,
+  } = useCategoryData("lessons");
 
-  const filteredSubjects =
-    subjects?.filter((item) => item.status === true) || [];
+  // Filter using status
+  const filterByStatus = (categories) =>
+    categories?.filter((category) => category.status == true) || [];
 
-  const toggleExpand = (subjectId) => {
-    setExpandedSubjects((prev) =>
-      prev.includes(subjectId)
-        ? prev.filter((id) => id !== subjectId)
-        : [...prev, subjectId]
-    );
+  const filteredSubjects = filterByStatus(subjects);
+  const filteredLessons = filterByStatus(lessons);
+
+  /** SUBJECT CHANGE */
+  const handleSubjectChange = (ids) => {
+    const foundData = ids
+      .map((id) => filteredSubjects.find((item) => item.id === id))
+      .filter(Boolean);
+
+    setSubjectData(foundData);
+
+    const allLessons = foundData.flatMap((subject) => subject.lessons || []);
+    setValue("subject", ids);
+    setFormData?.((prev) => ({ ...prev, subject: ids }));
+
+    return allLessons;
   };
 
-  const handleLessonCheck = (lessonId) => {
-    let updatedLessons = [];
+  /** LESSON CHANGE */
+  const handleLessonChange = (ids) => {
+    const foundData = ids
+      .map((id) => filteredLessons.find((item) => item.id === id))
+      .filter(Boolean);
 
-    if (selectedLessons.includes(lessonId)) {
-      updatedLessons = selectedLessons.filter(
-        (id) => id !== lessonId
-      );
-    } else {
-      updatedLessons = [...selectedLessons, lessonId];
-    }
+    setLessonData(foundData);
 
-    setSelectedLessons(updatedLessons);
+    const allTopics = foundData.flatMap((lesson) => lesson.topics || []);
+    setValue("lesson", ids);
+    setFormData?.((prev) => ({ ...prev, lesson: ids }));
 
-    setValue("lesson", updatedLessons);
-
-    setFormData?.((prev) => ({
-      ...prev,
-      lesson: updatedLessons,
-    }));
+    return allTopics;
   };
 
-  const handleSubjectCheck = (subject) => {
-    const lessonIds = subject.lessons?.map((l) => l.id) || [];
+  /** Select Field Renderer */
+  const renderSelectField = ({
+    label,
+    name,
+    options,
+    onChange,
+    defaultValue = [],
+    disabled = false,
+  }) => {
+    if (!options || options.length === 0) return null;
 
-    const allSelected = lessonIds.every((id) =>
-      selectedLessons.includes(id)
-    );
-
-    let updatedLessons = [];
-
-    if (allSelected) {
-      updatedLessons = selectedLessons.filter(
-        (id) => !lessonIds.includes(id)
-      );
-    } else {
-      updatedLessons = [
-        ...new Set([...selectedLessons, ...lessonIds]),
-      ];
-    }
-
-    setSelectedLessons(updatedLessons);
-
-    setValue("lesson", updatedLessons);
-
-    setFormData?.((prev) => ({
-      ...prev,
-      lesson: updatedLessons,
-    }));
-  };
-
-  if (isLoading) {
     return (
-      <div className="space-y-3">
-        <Skeleton className="h-14 w-full rounded-xl" />
-        <Skeleton className="h-14 w-full rounded-xl" />
-        <Skeleton className="h-14 w-full rounded-xl" />
-      </div>
+      <MultipleSelector
+        label={label}
+        name={name}
+        control={control}
+        options={options}
+        placeholder={`Select ${label}`}
+        onChange={onChange}
+        defaultValue={defaultValue}
+        disabled={disabled}
+      />
     );
-  }
+  };
+
+  /** Skeleton Loader */
+  const SelectSkeleton = () => (
+    <div className="w-full flex flex-col gap-2">
+      <Skeleton className="h-5 w-32 rounded-md" />
+      <Skeleton className="h-10 w-full rounded-md" />
+    </div>
+  );
 
   return (
-    <div className="space-y-3">
-      <h2 className="text-lg font-semibold">
-        অধ্যায় নির্বাচন করুন
-      </h2>
+    <div className="flex bg-gray-100 p-2 flex-col items-start gap-4 my-6 rounded-md">
+      {/* SUBJECT LOADING */}
+      {subjectsLoading && lessonsLoading ? (
+        <SelectSkeleton />
+      ) : (
+        filteredSubjects?.length > 0 &&
+        renderSelectField({
+          label: "বিষয়",
+          name: "subject",
+          options: filteredSubjects,
+          onChange: handleSubjectChange,
+          disabled: !filteredSubjects,
+        })
+      )}
 
-      {filteredSubjects.map((subject) => {
-        const lessons = subject.lessons || [];
-
-        const selectedCount = lessons.filter((lesson) =>
-          selectedLessons.includes(lesson.id)
-        ).length;
-
-        const allSelected =
-          lessons.length > 0 &&
-          selectedCount === lessons.length;
-
-        const expanded = expandedSubjects.includes(subject.id);
-
-        return (
-          <div
-            key={subject.id}
-            className="overflow-hidden rounded-2xl border border-slate-200 bg-white"
-          >
-            {/* Subject Header */}
-            <div
-              className="flex items-center justify-between px-4 py-4 cursor-pointer hover:bg-slate-50"
-              onClick={() => toggleExpand(subject.id)}
-            >
-              <div className="flex items-center gap-3">
-                <Checkbox
-                  checked={allSelected}
-                  onCheckedChange={() =>
-                    handleSubjectCheck(subject)
-                  }
-                  onClick={(e) => e.stopPropagation()}
-                />
-
-                <span className="font-medium">
-                  {subject.name}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="text-sm text-muted-foreground">
-                  {selectedCount}/{lessons.length}
-                </span>
-
-                {expanded ? (
-                  <ChevronUp className="w-4 h-4" />
-                ) : (
-                  <ChevronDown className="w-4 h-4" />
-                )}
-              </div>
-            </div>
-
-            {/* Lessons */}
-            {expanded && (
-              <div className="border-t bg-slate-50">
-                {lessons.map((lesson) => (
-                  <div
-                    key={lesson.id}
-                    className="flex items-center gap-3 px-7 py-4 border-b last:border-b-0"
-                  >
-                    <Checkbox
-                      checked={selectedLessons.includes(
-                        lesson.id
-                      )}
-                      onCheckedChange={() =>
-                        handleLessonCheck(lesson.id)
-                      }
-                    />
-
-                    <span>{lesson.name}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      })}
+      {/* LESSON LOADING */}
+      {lessonsLoading
+        ? subjectData?.length > 0 && <SelectSkeleton />
+        : subjectData?.length > 0 &&
+          renderSelectField({
+            label: "অধ্যায়",
+            name: "lesson",
+            options: subjectData.flatMap((subject) => subject.lessons || []),
+            onChange: handleLessonChange,
+            disabled: !lessonData,
+          })}
     </div>
   );
 }
 
 QuizCategoryForFilter.propTypes = {
+  control: PropTypes.object.isRequired,
   setValue: PropTypes.func.isRequired,
+  forPage: PropTypes.string,
   setFormData: PropTypes.func,
 };
