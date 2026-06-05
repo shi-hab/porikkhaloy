@@ -1,0 +1,416 @@
+@import url("https://fonts.maateen.me/solaiman-lipi/font.css");
+@import url("https://fonts.googleapis.com/css2?family=Sen");
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll-left 60s linear infinite;
+}
+
+  @keyframes borderSpark {
+    0%, 100% {
+      border-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 
+        0 0 3px rgba(255, 0, 0, 0.5),
+        0 0 6px rgba(255, 0, 0, 0.6),
+        0 0 10px rgba(255, 0, 0, 0.4);
+    }
+    50% {
+      border-color: rgba(255, 50, 50, 1);
+      box-shadow: 
+        0 0 6px rgba(255, 0, 0, 0.8),
+        0 0 12px rgba(255, 0, 0, 0.7),
+        0 0 18px rgba(255, 50, 50, 0.5);
+    }
+  }
+
+  .animate-borderSpark {
+    animation: borderSpark 2s infinite ease-in-out;
+  }
+
+    .no-scrollbar::-webkit-scrollbar {
+    display: none;
+    }
+    .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    }
+    .cursor-grab {
+    cursor: grab;
+    }
+    .cursor-grabbing {
+    cursor: grabbing;
+    }
+
+
+.streak-stroke {
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+
+  /* crisp outline */
+  -webkit-text-stroke: 5px #ea580c;
+
+  /* soft glow */
+  text-shadow: 0 0 12px rgba(234, 88, 12, 0.35);
+}
+
+
+
+
+
+
+
+
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 0 0% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 0 0% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 0 0% 3.9%;
+        --primary: 0 0% 9%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 0 0% 96.1%;
+        --secondary-foreground: 0 0% 9%;
+        --muted: 0 0% 96.1%;
+        --muted-foreground: 0 0% 45.1%;
+        --accent: 0 0% 96.1%;
+        --accent-foreground: 0 0% 9%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 89.8%;
+        --input: 0 0% 89.8%;
+        --ring: 0 0% 3.9%;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
+        --radius: 0.5rem;
+    }
+    .dark {
+        --background: 0 0% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 0 0% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 0 0% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;
+        --primary-foreground: 0 0% 9%;
+        --secondary: 0 0% 14.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 0 0% 14.9%;
+        --muted-foreground: 0 0% 63.9%;
+        --accent: 0 0% 14.9%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 14.9%;
+        --input: 0 0% 14.9%;
+        --ring: 0 0% 83.1%;
+        --chart-1: 220 70% 50%;
+        --chart-2: 160 60% 45%;
+        --chart-3: 30 80% 55%;
+        --chart-4: 280 65% 60%;
+        --chart-5: 340 75% 55%;
+    }
+}
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground text-base;
+        font-family: "Noto Serif", "Hind Siliguri", sans-serif !important;
+      }
+}
+@layer components {
+    .list {
+        @apply relative after:absolute after:w-0 after:top-10 after:left-0 after:bg-gray-500 !px-0 hover:after:w-full after:mx-auto after:duration-300 cursor-pointer after:h-[2px] font-semibold ;
+    }
+    .actives {
+        @apply relative after:absolute after:w-full after:mx-auto after:top-10 !px-0 after:left-0 after:bg-gray-500 after:h-[2px] font-semibold;
+    }
+}
+
+/* fonts */
+@font-face {
+    font-family: "Hind Siliguri"; /* Define .hover-effect name for your font */
+    src: url("./assets/fonts/bangla/Hind_Siliguri/HindSiliguri-Regular.ttf")
+        format("truetype"); /* Path to your TTF file */
+    font-weight: normal; /* Normal weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Optimize Font Loading */
+}
+
+@font-face {
+    font-family: "Hind Siliguri"; /* Define .hover-effect name for your font */
+    src: url("./assets/fonts/bangla/Hind_Siliguri/HindSiliguri-Bold.ttf")
+        format("truetype"); /* Path to your TTF file */
+    font-weight: bold; /* Bold weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Optimize Font Loading */
+}
+
+@font-face {
+    font-family: "Hind Siliguri"; /* Define .hover-effect name for your font */
+    src: url("./assets/fonts/bangla/Hind_Siliguri/HindSiliguri-Medium.ttf")
+        format("truetype"); /* Path to your TTF file */
+    font-weight: 500; /* Medium weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Optimize Font Loading */
+}
+
+@font-face {
+    font-family: "Hind Siliguri"; /* Define .hover-effect name for your font */
+    src: url("./assets/fonts/bangla/Hind_Siliguri/HindSiliguri-Light.ttf")
+        format("truetype"); /* Path to your TTF file */
+    font-weight: 300; /* Light weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Optimize Font Loading */
+}
+
+@font-face {
+    font-family: "Hind Siliguri"; /* Define .hover-effect name for your font */
+    src: url("./assets/fonts/bangla/Hind_Siliguri/HindSiliguri-SemiBold.ttf")
+        format("truetype"); /* Path to your TTF file */
+    font-weight: 600; /* SemiBold weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Optimize Font Loading */
+}
+
+/* fonts */
+@font-face {
+    font-family: "Noto Serif"; /* Define .hover-effect name for your font */
+    src: url("./assets/fonts/bangla/Noto_Serif/NotoSerifBengali-Regular.ttf")
+        format("truetype"); /* Path to your TTF file */
+        unicode-range: U+0980-09FF; /* বাংলা অক্ষরের ইউনিকোড রেঞ্জ */
+    font-weight: normal; /* Normal weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Optimize Font Loading */
+}
+
+@font-face {
+    font-family: "Noto Serif"; /* Define .hover-effect name for your font */
+    src: url("./assets/fonts/bangla/Noto_Serif/NotoSerifBengali-Bold.ttf")
+        format("truetype"); /* Path to your TTF file */
+        unicode-range: U+0980-09FF; /* বাংলা অক্ষরের ইউনিকোড রেঞ্জ */
+    font-weight: 700; /* Bold weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Optimize Font Loading */
+}
+
+@font-face {
+    font-family: "Noto Serif"; /* Define .hover-effect name for your font */
+    src: url("./assets/fonts/bangla/Noto_Serif/NotoSerifBengali-Medium.ttf")
+        format("truetype"); /* Path to your TTF file */
+        unicode-range: U+0980-09FF; /* বাংলা অক্ষরের ইউনিকোড রেঞ্জ */
+    font-weight: 500; /* Medium weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Optimize Font Loading */
+}
+
+@font-face {
+    font-family: "Noto Serif"; /* Define .hover-effect name for your font */
+    src: url("./assets/fonts/bangla/Noto_Serif/NotoSerifBengali-Light.ttf")
+        format("truetype"); /* Path to your TTF file */
+        unicode-range: U+0980-09FF; /* বাংলা অক্ষরের ইউনিকোড রেঞ্জ */
+    font-weight: 300; /* Light weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Optimize Font Loading */
+}
+
+@font-face {
+    font-family: "Noto Serif"; /* Define .hover-effect name for your font */
+    src: url("./assets/fonts/bangla/Noto_Serif/NotoSerifBengali-SemiBold.ttf")
+        format("truetype"); /* Path to your TTF file */
+        unicode-range: U+0980-09FF; /* বাংলা অক্ষরের ইউনিকোড রেঞ্জ */
+    font-weight: 600; /* SemiBold weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Optimize Font Loading */
+}
+@font-face {
+    font-family: "Noto Serif"; /* Define .hover-effect name for your font */
+    src: url("./assets/fonts/bangla/Noto_Serif/NotoSerifBengali-ExtraBold.ttf")
+        format("truetype"); /* Path to your TTF file */
+        unicode-range: U+0980-09FF; /* বাংলা অক্ষরের ইউনিকোড রেঞ্জ */
+    font-weight: 800; /* SemiBold weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Optimize Font Loading */
+}
+@font-face {
+    font-family: "Noto Serif"; /* Define .hover-effect name for your font */
+    src: url("./assets/fonts/bangla/Noto_Serif/NotoSerifBengali-Black.ttf")
+        format("truetype"); /* Path to your TTF file */
+        unicode-range: U+0980-09FF; /* বাংলা অক্ষরের ইউনিকোড রেঞ্জ */
+    font-weight: 900; /* SemiBold weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Optimize Font Loading */
+}
+
+
+
+
+
+/* Global font override for Ant Design components */
+.ant-select,
+.ant-select-selector,
+.ant-input,
+.ant-input-textarea,
+.ant-input-affix-wrapper {
+  font-family: "Noto Serif","Hind Siliguri", "Poppins", sans-serif !important;
+}
+
+/* Fix font for dropdown options */
+.ant-select-dropdown {
+  font-family: "Noto Serif","Hind Siliguri", "Poppins", sans-serif !important;
+}
+
+/* Optional: also target items inside dropdown */
+.ant-select-item,
+.ant-select-item-option-content {
+  font-family: "Noto Serif","Hind Siliguri", "Poppins", sans-serif !important;
+}
+
+
+.hover-effect {
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+    color: #6d6d6d;
+    font-weight: 800;
+    text-transform: capitalize;
+    overflow: hidden;
+}
+.hover-effect,
+.hover-effect:after,
+.hover-effect:before {
+    transition: all 0.5s;
+}
+.hover-effect:hover {
+    color: #555;
+}
+
+.hover-effect-active {
+    position: relative;
+}
+.hover-effect-active:after,
+.hover-effect-active:after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 0%;
+    content: ".";
+    color: transparent;
+    background: #6d6d6d;
+    height: 2px;
+}
+.hover-effect-active:hover:after {
+    width: 80%;
+}
+
+
+
+/* ==========================================================================
+   porikkhaloy-preview: ১০০% ফিক্সড স্ক্রলযোগ্য টেবিল স্টাইল
+   ========================================================================== */
+
+
+/* টেবিল স্টাইল */
+.porikkhaloy-preview table {
+  width: auto !important;             /* 🎯 টেবিল সাইজ কন্টেন্ট অনুযায়ী ছোট থাকবে */
+  min-width: max-content;            /* 🎯 মোবাইলে কলামগুলোকে চ্যাপ্টা হতে দেবে না */
+  border-collapse: collapse !important;
+  background-color: #ffffff;
+  border-radius: 6px;
+}
+
+.dark .porikkhaloy-preview table {
+  background-color: #1f2937 !important;
+}
+
+/* হেডার ও ডাটা সেল */
+.porikkhaloy-preview th, 
+.porikkhaloy-preview td {
+  padding: 8px 16px !important;
+  border: 1px solid #e2e8f0 !important;
+  text-align: center !important;
+  white-space: nowrap !important;     /* 🎯 লেখা বা ম্যাথ ভেঙে নিচে নামবে না */
+  font-size: 14px;
+}
+
+.dark .porikkhaloy-preview th, 
+.dark .porikkhaloy-preview td {
+  border-color: #374151 !important;
+}
+
+/* হেডার ব্যাকগ্রাউন্ড */
+.porikkhaloy-preview th {
+  background-color: #f8fafc !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+}
+
+.dark .porikkhaloy-preview th {
+  background-color: #111827 !important;
+  color: #f9fafb !important;
+}
+
+
+/* ==========================================================================
+   porikkhaloy-preview: কাস্টম লিস্ট ও বুলেট স্টাইলিং
+   ========================================================================== */
+
+/* ১. বুলেট লিস্ট (Unordered List - `<ul>`) */
+.porikkhaloy-preview ul {
+  list-style-type: disc !important; /* 🎯 ডট বা ডিস্ক বুলেট ফিরিয়ে আনা হলো */
+  margin-left: 24px !important;    /* বাম পাশে পারফেক্ট গ্যাপ */
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+}
+
+/* ২. নাম্বারিং লিস্ট (Ordered List - `<ol>`) */
+.porikkhaloy-preview ol {
+  list-style-type: decimal !important; /* 🎯 ১, ২, ৩ নাম্বারিং ফিরিয়ে আনা হলো */
+  margin-left: 24px !important;       /* বাম পাশে পারফেক্ট গ্যাপ */
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+}
+
+/* ৩. লিস্টের ভেতরের প্রতিটা উপাদানের (<li>) স্পেসিং */
+.porikkhaloy-preview li {
+  margin-top: 1px !important;
+  margin-bottom: 1px !important;
+  line-height: 1.4;
+  font-size: 15px;
+}
+
+/* সাব-লিস্টের (লিস্টের ভেতর আরেক লিস্ট) জন্য স্পেসিং ঠিক করা */
+.porikkhaloy-preview ul ul, 
+.porikkhaloy-preview ol ol,
+.porikkhaloy-preview ul ol,
+.porikkhaloy-preview ol ul {
+  margin-top: 1px !important;
+  margin-bottom: 1px !important;
+}
+
+
