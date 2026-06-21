@@ -101,10 +101,14 @@ const EnrollmentForm = () => {
     }
 
     const payload = new FormData();
+
+    const transactionId = `order_id_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+
     payload.append("resource_id", singlePackage?.data?.id);
     payload.append("resource_type", "package");
     payload.append("mobile_number", data.mobile_number);
     payload.append("amount", finalPrice);
+    payload.append("transaction_id", transactionId);
 
     if (storeCoupon) {
       payload.append("coupon", storeCoupon);
@@ -120,10 +124,8 @@ const EnrollmentForm = () => {
         event: "purchase",
 
         ecommerce: {
-          unique_id: response?.data?.payment?.id?.toString(),
-
+          transaction_id: transactionId,
           currency: "BDT",
-
           value: Number(response?.data?.payment?.amount),
 
           items: [

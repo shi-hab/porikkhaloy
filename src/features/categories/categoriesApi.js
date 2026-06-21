@@ -34,7 +34,7 @@ export const categoriesApi = apiSlice.injectEndpoints({
                 try {
                     await queryFulfilled;
                 } catch (err) {
-                    console.log(err);
+                     (err);
                 }
             },
         }),
@@ -64,7 +64,7 @@ export const categoriesApi = apiSlice.injectEndpoints({
                 try {
                     await queryFulfilled;
                 } catch (err) {
-                    console.log(err);
+                     (err);
                 }
             },
         }),
@@ -78,7 +78,7 @@ export const categoriesApi = apiSlice.injectEndpoints({
                 try {
                     await queryFulfilled;
                 } catch (err) {
-                    console.log(err);
+                     (err);
                 }
             },
         }),

@@ -55,7 +55,6 @@ export const ExamResultForMcqCard = ({
       setIsModalOpen(false);
       setFeedback({ title: "", note: "" });
     } catch (error) {
-      console.log(error);
       toast.error("Failed to submit feedback.");
     }
   };

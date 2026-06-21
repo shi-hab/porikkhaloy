@@ -50,8 +50,6 @@ export function ExamResultForCreativeCard({
   }
   const banglaSerials = ["ক", "খ", "গ", "ঘ", "ঙ", "চ", "ছ", "জ", "ঝ", "ঞ"];
 
-  console.log(pathname);
-
   return (
     <Card className="relative text-start p-3  duration-500 shadow-md group hover:shadow-lg dark:bg-gray-100 dark:text-black">
       <Modal

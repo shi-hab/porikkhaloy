@@ -1,6 +1,5 @@
 import { PackageCard } from "@/exams/components/molecules/packages/PackageCard";
 import { useGetFreeExamBatchQuery } from "@/features/freeExamPage/freeExamApi"
-import { Spin } from "antd";
 
 function FreeExamBatch() {
     const { data } = useGetFreeExamBatchQuery();
@@ -14,11 +13,14 @@ function FreeExamBatch() {
                 </p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {(freeBatch?.map((batch) => (
-                    <PackageCard
-                        key={batch.id}
-                        singlePackageID={batch.id}
-                    />
+                {(freeBatch?.map((pkg) => (
+                <PackageCard
+                    key={pkg.id}
+                    packageId={pkg.id}
+                    name={pkg.name}
+                    pkgImg={pkg.img}
+                    isSubscribed={pkg.is_subscribed}
+                />
                 ))
                 )}
             </div>

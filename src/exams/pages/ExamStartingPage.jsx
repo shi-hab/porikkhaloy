@@ -1,21 +1,16 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import ExamStartingForm from "../components/organism/exams/ExamStartingForm";
 import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useGetProfileQuery } from "@/features/auth/authApi";
 import { useGetMaxFreeExamQuery } from "@/features/quota/quotaApi";
-import { Checkbox, Skeleton, Spin } from "antd";
+import { Spin } from "antd";
 import { useExamSubscriptionsQuery } from "@/features/exams/examsApi";
-import HeaderImage from "@/assets/mock.png";
-import toBanglaNumeral from "@/utils/Tobangla";
+
 import { Button } from "@/components/ui/button";
-import img1 from "@/assets/documents.png";
-import img2 from "@/assets/test-results.png";
-import img3 from "@/assets/week.png";
+
 import { useMyExamsubScriptionsQuery } from "@/features/packages/packagesApi";
 import moment from "moment";
-import { isoDateFormatter } from "@/helpers/dateFormatter";
 
 import {
   Form,
@@ -29,23 +24,17 @@ import { useExamQuotaSubscriptionsMutation } from "@/features/packages/packagesA
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { CustomDialog } from "@/components/custom-dialog";
 import { Link } from "react-router-dom";
 
 export default function ExamStartingPage() {
-  const { data, error, refetch } = useMyExamsubScriptionsQuery();
+  const { data} = useMyExamsubScriptionsQuery();
   const auth = useAuth();
   const navigate = useNavigate();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [freeQuota, setFreeQuota] = useState(0);
   const [examCount, setExamCount] = useState(0);
   const [examSubscription, setExamSubscription] = useState([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
 
-  const handleSelect = (item) => {
-    setSelectedItem(item.id === selectedItem?.id ? null : item);
-  };
   const {
     data: profileData,
     isLoading: isLoadingProfile,

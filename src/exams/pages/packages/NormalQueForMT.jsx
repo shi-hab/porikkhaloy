@@ -6,6 +6,7 @@ import { MdFeedback, MdChevronRight } from "react-icons/md";
 import useAuth from "../../hooks/useAuth";
 import TagsTitle from './../../components/molecules/questionList/TagsTitle';
 import { parseHtmlContent } from "@/utils/parseHtmlContent";
+import { toast } from "sonner";
 
 export function NormalQueForMT({
     queIndex,
@@ -17,7 +18,7 @@ export function NormalQueForMT({
     const { id, title, description, tags } = question || {};
     const pathname = window.location.pathname;
 
-    const [feedback, setFeedback] = useState({ title: "", note: "" });
+    const [feedback, setFeedback] = useState({ title: "No Title", note: "" });
     const [addFeedback, { isLoading }] = useAddFeedbackMutation();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -30,27 +31,26 @@ export function NormalQueForMT({
 
     const handleFeedbackSubmit = async () => {
         if (!feedback.title || !feedback.note) {
-            message.error("Please fill in both fields.");
+            toast.error("Please fill in both fields.");
             return;
         }
 
         try {
             await addFeedback({
-                title: feedback.title,
+                title: feedback.title || "No Title",
                 note: feedback.note,
                 question_id: id,
             }).unwrap();
-            message.success("Feedback submitted successfully!");
+            toast.success("Feedback submitted successfully!");
             setIsModalOpen(false);
-            setFeedback({ title: "", note: "" });
+            setFeedback({ title: "No Title", note: "" });
         } catch (error) {
-            message.error("Failed to submit feedback. " + error?.message);
+            toast.error("Failed to submit feedback. " + error?.message);
         }
     };
 
     return (
-        <Card className="relative p-5 my-4 overflow-hidden rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-300 hover:shadow-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-            {/* Feedback Modal */}
+        <div className="relative p-5 my-4 overflow-hidden rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-300 hover:shadow-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
             <Modal
                 title={<span className="text-lg font-semibold text-gray-800 dark:text-gray-200">Add Feedback</span>}
                 open={isModalOpen}
@@ -67,7 +67,7 @@ export function NormalQueForMT({
                         onClick={handleFeedbackSubmit}
                         className="bg-blue-600 hover:bg-blue-700"
                     >
-                        Submit Feedback
+                        Submit
                     </Button>,
                 ]}
             >
@@ -76,10 +76,10 @@ export function NormalQueForMT({
                         placeholder="Feedback Title"
                         value={feedback.title}
                         onChange={(e) => setFeedback({ ...feedback, title: e.target.value })}
-                        className="py-2"
+                        className="py-2 hidden"
                     />
                     <Input.TextArea
-                        placeholder="Write your note here..."
+                        placeholder="কি সমস্যা হয়েছে..."
                         value={feedback.note}
                         onChange={(e) => setFeedback({ ...feedback, note: e.target.value })}
                         rows={4}
@@ -89,15 +89,25 @@ export function NormalQueForMT({
 
             {/* Main Layout Container */}
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 w-full">
-
                 {/* Question Text Area */}
-                <div className="flex items-start gap-3 flex-1 w-full text-justify [text-align-last:left]">
-                    <span className="text-lg font-bold text-blue-600 dark:text-blue-400 select-none shrink-0">
-                        {queIndex + 1}.
-                    </span>
-                    <div className="text-[16px] md:text-[17px] font-medium leading-relaxed text-gray-800 dark:text-gray-100 w-full break-words">
-                        {parseHtmlContent(title)}
+                <div className=" items-start gap-3 flex-1 w-full text-justify [text-align-last:left]">
+                    <div className="flex items-center justify-between">
+                        <span className="text-lg font-bold text-blue-600 dark:text-blue-400 select-none shrink-0">
+                            {queIndex + 1}.
+                        </span>
+                        {/* Feedback Button */}
+                        {auth === true && !pathname.includes("exam-ongoing") && (
+                            <div
+                                onClick={() => setIsModalOpen(true)}
+                                className="font-siliguri bg-gray-50 duration-300 hover:bg-gray-100 py-1 border-2 text-xs border-red-500 rounded-md px-2 cursor-pointer"
+                            >
+                                রিপোট করো
+                            </div>
+                        )}
                     </div>
+                    <span className="text-xs text-gray-800 dark:text-gray-100 w-full break-words">
+                        {parseHtmlContent(title)}
+                    </span>
                 </div>
 
                 {/* Tags & Action Buttons */}
@@ -110,20 +120,7 @@ export function NormalQueForMT({
                         </div>
                     )}
 
-                    {auth === true && !pathname.includes("exam-ongoing") && (
-                        <button
 
-                            className="p-1 rounded-full border border-blue-500 text-white bg-blue-500 hover:bg-blue-50 hover:text-blue-900 transition-colors duration-300 shadow-sm hover:shadow-md"
-
-                            type="primary"
-
-                            onClick={() => setIsModalOpen(true)}
-
-                        >
-                            <MdFeedback className="text-[12px]" />
-
-                        </button>
-                    )}
                 </div>
             </div>
 
@@ -156,6 +153,6 @@ export function NormalQueForMT({
                     </div>
                 </div>
             )}
-        </Card>
+        </div>
     );
 }

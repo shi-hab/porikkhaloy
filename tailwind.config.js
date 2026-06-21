@@ -8,6 +8,14 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+    fontSize: {
+        title: "1.5rem",        // 24px
+        heading: "1.125rem",    // 18px
+        body: "1rem",           // 16px
+        subBody: "0.875rem",    // 14px
+        caption: "0.75rem",     // 12px
+        topHeading:"2rem",
+      },
       keyframes: {
         borderAnimation: {
           "0%": { borderColor: "red" },

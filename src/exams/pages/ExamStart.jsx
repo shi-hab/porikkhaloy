@@ -69,7 +69,6 @@ const ExamStart = () => {
       year_categories: formData.year || [],
     };
 
-    console.log(payload)
     try {
       const response = await startExam(payload).unwrap();
 

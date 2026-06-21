@@ -29,7 +29,7 @@ export const mtExamsApi = apiSlice.injectEndpoints({
 
           dispatch(submittedMTExamInfo(submittedMTExam));
         } catch (err) {
-          console.log(err);
+           (err);
         }
       },
     }),

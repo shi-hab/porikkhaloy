@@ -23,7 +23,7 @@ const QuestionFeedback = () => {
     perPage: perPage,
   });
 
-  console.log(data);
+   (data);
 
   if (isLoading) {
     return (

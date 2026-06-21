@@ -31,8 +31,7 @@ const SubscriptionsEnrollmentForm = () => {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  const { data: examSubscriptions, isLoading: isSubLoading } =
-    useExamSubscriptionsQuery();
+  const examSubscriptions = JSON.parse(localStorage.getItem("subscription_data") || "[]");
 
   const [examQuotaSubscriptions, { isLoading: isSubmitting }] =
     useExamQuotaSubscriptionsMutation();
@@ -41,10 +40,10 @@ const SubscriptionsEnrollmentForm = () => {
     useApplyCouponMutation();
 
   const [couponCode, setCouponCode] = useState("");
-  const [storeCoupon, setStoreCoupon] = useState("");
+  const [storeCoupon, setStoreCoupon] = useState(null);
   const [finalPrice, setFinalPrice] = useState(0);
 
-  const Subdata = examSubscriptions?.data?.find(
+  const Subdata = examSubscriptions?.find(
     (sub) => sub.id === Number(subId)
   );
 
@@ -97,22 +96,17 @@ const SubscriptionsEnrollmentForm = () => {
 
     const payload = new FormData();
 
+    const transactionId = `order_id_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+
     payload.append("subscription_id", Subdata?.id);
-
-    payload.append(
-      "mobile_number",
-      data.mobile_number
-    );
-
+    payload.append("mobile_number", data.mobile_number);
     payload.append("amount", finalPrice);
+    payload.append("coupon", storeCoupon || "");
+    payload.append("transaction_id", transactionId);
 
-    if (storeCoupon) {
-      payload.append("coupon", storeCoupon);
-    }
 
     try {
-      const response =
-        await examQuotaSubscriptions(payload).unwrap();
+      const response = await examQuotaSubscriptions(payload).unwrap();
 
       // =========================
       // GA4 PURCHASE EVENT
@@ -123,27 +117,16 @@ const SubscriptionsEnrollmentForm = () => {
         event: "purchase",
 
         ecommerce: {
-          transaction_id:
-            response?.data?.payment?.id?.toString(),
-
+          transaction_id: transactionId,
           currency: "BDT",
-
-          value: Number(
-            response?.data?.payment?.amount
-          ),
+          value: Number(response?.data?.payment?.amount),
 
           items: [
             {
               item_id: Subdata?.id,
-
               item_name: Subdata?.title,
-
               item_category: "Subscription Purchase",
-
-              price: Number(
-                response?.data?.payment?.amount
-              ),
-
+              price: Number(response?.data?.payment?.amount),
               quantity: 1,
             },
           ],
@@ -156,7 +139,9 @@ const SubscriptionsEnrollmentForm = () => {
 
       form.reset();
 
-      navigate("/user/subscription");
+      setTimeout(() => {
+        navigate("/user/subscription");
+      }, 300);
 
     } catch (err) {
       toast.error(
@@ -165,12 +150,7 @@ const SubscriptionsEnrollmentForm = () => {
     }
   };
 
-  if (isSubLoading)
-    return (
-      <div className="h-[60vh] grid place-content-center">
-        <Spin />
-      </div>
-    );
+
 
   return (
     <div className="px-2 mx-auto w-full max-w-6xl mt-6">
@@ -244,7 +224,7 @@ const SubscriptionsEnrollmentForm = () => {
 
                     <div className="text-left">
                       <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                        পেমেন্ট নাম্বার
+                        সেন্ড মানি নাম্বার
                       </p>
 
                       <h2 className="text-xl font-bold tracking-wide text-gray-800 dark:text-white">

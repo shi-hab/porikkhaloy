@@ -19,7 +19,6 @@ export function NormalExamForMT({
   const { id, title, description, tags } = question || {};
   const pathname = window.location.pathname;
 
-  console.log(question);
 
   const [feedback, setFeedback] = useState({ title: "", note: "" });
   const [addFeedback, { isLoading }] = useAddFeedbackMutation();

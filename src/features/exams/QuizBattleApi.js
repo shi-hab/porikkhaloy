@@ -23,7 +23,7 @@ export const examsApi = apiSlice.injectEndpoints({
               })
             );
           } catch (err) {
-            console.log(err);
+             (err);
           }
         },
     }),

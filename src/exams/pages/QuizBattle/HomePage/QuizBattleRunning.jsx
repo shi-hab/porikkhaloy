@@ -62,7 +62,7 @@ export default function QuizBattleRunning() {
         setNextQuestion(response.questions_list[0]);
       }
     } catch (err) {
-      console.log("Prefetch next question failed", err);
+       ("Prefetch next question failed", err);
     }
   };
 

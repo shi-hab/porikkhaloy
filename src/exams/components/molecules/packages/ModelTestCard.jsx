@@ -114,7 +114,7 @@ export const ModelTestCard = ({ singleMT, packageId, mtid }) => {
         )}
 
         {/* Title - Compact & Safe */}
-        <h3 className="mb-2.5 pr-10 text-start font-siliguri text-[15px] sm:text-sm font-bold text-gray-800 dark:text-gray-100 line-clamp-1 ">
+        <h3 className="mb-2.5 pr-10 text-start font-siliguri text-sm sm:text-sm font-bold text-gray-800 dark:text-gray-100 line-clamp-1 ">
           {parseHtmlContent(singleMT?.title)}
         </h3>
 

@@ -10,40 +10,70 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logout from "./../molecules/auth/Logout";
 import { useState } from "react";
 
-
-const UserNav = () => {
+/**
+ * UserNav
+ *
+ * Props:
+ * - onMobileClick?: () => void
+ *    Called when the avatar is clicked on mobile/tablet (< lg).
+ *    Used by Navbar to open the right-side drawer instead of a dropdown.
+ *    If not provided, mobile click falls back to opening the dropdown (old behavior).
+ */
+const UserNav = ({ onMobileClick }) => {
   const auth = useSelector((state) => state.auth);
-  const [open, setOpen] = useState(false); // Dropdown state
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false); // Dropdown state (desktop only)
 
-  // Function to close dropdown
   const closeDropdown = () => setOpen(false);
+
+  const avatarMarkup = (
+    <Avatar className="h-8 w-8 !shadow-inner">
+      <AvatarImage src="/avatars/01.png" alt="@shadcn" />
+      <AvatarFallback>
+        {auth?.student?.profile_image ? (
+          <img
+            className="h-full w-full object-cover"
+            src={auth?.student?.profile_image}
+            alt="user image"
+          />
+        ) : (
+          <span className="font-semibold uppercase">
+            {auth?.student?.name?.charAt(0)}
+          </span>
+        )}
+      </AvatarFallback>
+    </Avatar>
+  );
+
+  const handleTriggerClick = (e) => {
+    // On mobile/tablet, hijack the click: don't open the dropdown,
+    // instead let the parent Navbar open its right-side drawer.
+    if (onMobileClick && window.matchMedia("(max-width: 1023px)").matches) {
+      e.preventDefault();
+      e.stopPropagation();
+      onMobileClick();
+    }
+    // On desktop (lg+), do nothing here — DropdownMenuTrigger opens normally.
+  };
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative w-8 h-8 rounded-full">
-          <Avatar className="h-8 w-8 !shadow-inner">
-            <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-            <AvatarFallback>
-              {auth?.student?.profile_image ? (
-                <img
-                  className="h-full w-full object-cover"
-                  src={auth?.student?.profile_image}
-                  alt="user image"
-                />
-              ) : (
-                <span className="font-semibold uppercase">
-                  {auth?.student?.name.charAt(0)}
-                </span>
-              )}
-            </AvatarFallback>
-          </Avatar>
+        <Button
+          variant="ghost"
+          className="relative w-8 h-8 rounded-full"
+          onClick={handleTriggerClick}
+        >
+          {avatarMarkup}
         </Button>
       </DropdownMenuTrigger>
+
+      {/* This dropdown content only ever opens on desktop now,
+          since mobile clicks are intercepted above. */}
       <DropdownMenuContent align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex items-center gap-4">
@@ -58,7 +88,7 @@ const UserNav = () => {
                       alt="user image"
                     />
                   ) : (
-                    <span>{auth?.student?.name.charAt(0)}</span>
+                    <span>{auth?.student?.name?.charAt(0)}</span>
                   )}
                 </AvatarFallback>
               </Avatar>
@@ -78,87 +108,17 @@ const UserNav = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={closeDropdown}>
             <Link
-              to="user/profile"
+              to="/user/profile"
               className="flex items-center w-full h-full p-2 text-base"
             >
               প্রোফাইল
             </Link>
           </DropdownMenuItem>
-
-          <div className="sm:hidden">
-            <DropdownMenuItem onClick={closeDropdown}>
-              <Link
-                to="user/packages"
-                className="flex items-center w-full h-full p-2 text-base"
-              >
-                তোমার ব্যাচসমূহ
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={closeDropdown}>
-              <Link
-                to="user/subscription"
-                className="flex items-center w-full h-full p-2 text-base"
-              >
-                সাবস্ক্রিপশন
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={closeDropdown}>
-              <Link
-                to="user/question-feedback"
-                className="flex items-center w-full h-full p-2 text-base"
-              >
-                ডাউট সল্ভ
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={closeDropdown}>
-              <Link
-                to="user/mentor-feedback"
-                className="flex items-center w-full h-full p-2 text-base"
-              >
-                পার্সোনাল মেন্টরিং
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={closeDropdown}>
-              <Link
-                to="user/exam-history"
-                className="flex items-center w-full h-full p-2 text-base"
-              >
-                এক্সাম হিস্ট্রি
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={closeDropdown}>
-              <Link
-                to="user/book-mark"
-                className="flex items-center w-full h-full p-2 text-base"
-              >
-                বুক মার্ক প্রশ্ন
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={closeDropdown}>
-              <Link
-                to="/privacy-policy"
-                className="flex items-center w-full h-full p-2 text-base"
-              >
-                Privacy Policy
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={closeDropdown}>
-              <Link
-                to="/terms-and-conditions"
-                className="flex items-center w-full h-full p-2 text-base"
-              >
-                Terms of Service
-              </Link>
-            </DropdownMenuItem>
-          </div>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="!text-base">
           <Logout />
         </DropdownMenuItem>
-        {/* <DropdownMenuItem className="!text-base flex justify-center">
-          <DarkModeToggle />
-        </DropdownMenuItem> */}
       </DropdownMenuContent>
     </DropdownMenu>
   );

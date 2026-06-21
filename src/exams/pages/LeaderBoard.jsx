@@ -6,8 +6,6 @@ function LeaderBoard() {
 
   if (isError) return <p>কিছু সমস্যা হয়েছে। অনুগ্রহ করে পরে চেষ্টা করুন।</p>;
 
-  console.log(data);
-
   const items = data?.data || [];
   const self = data?.self || null;
 

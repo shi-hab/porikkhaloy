@@ -71,7 +71,7 @@ const QuestionListForStudentPage = () => {
           const newQuestions = paginationData.data.data.filter(
             (newQ) => !prev.some((oldQ) => oldQ.id === newQ.id)
           );
-          console.log("Appending questions count:", newQuestions.length);
+           ("Appending questions count:", newQuestions.length);
           return [...prev, ...newQuestions];
         });
       }

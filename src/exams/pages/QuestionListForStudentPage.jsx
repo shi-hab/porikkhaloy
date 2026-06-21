@@ -2,22 +2,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, RotateCcw } from "lucide-react";
 import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import QuesCategoryForFilter from "../components/molecules/filterquesforexam/QuesCategoryForFilter";
-import { Drawer, Empty, FloatButton, Spin } from "antd";
+import { Drawer, FloatButton, Spin } from "antd";
 import { useGetMaxFreeExamQuery } from "@/features/quota/quotaApi";
 import QuestionCard from "../components/molecules/questionList/QuestionCard";
 import { CreativeExamForMT } from "../components/molecules/packages/mtexam/CreativeExamForMT";
 import { NormalExamForMT } from "../components/molecules/packages/mtexam/NormalExamForMT";
-import { IoMdAddCircleOutline } from "react-icons/io";
 import { LoaderSubmit } from "../components/atoms/LoaderSubmit";
 import { SquareCheck, CircleX } from "lucide-react";
 import toBanglaNumeral from "@/utils/Tobangla";
 import ExamStartingForm from "./ExamStartingForm";
 import MCQCardSkeleton from "../components/atoms/skeletons/QuestionCard/MCQCardSkeleton";
+import { useNavigate } from "react-router-dom";
 
 const QuestionListForStudentPage = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
   const [filters, setFilters] = useState({});
@@ -25,11 +26,14 @@ const QuestionListForStudentPage = () => {
   const [examData, setExamData] = useState({});
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const { data: maxFreeExamData } = useGetMaxFreeExamQuery();
-  const [hideExp, setHideExp] = useState(true);
   const [hideAns, setHideAns] = useState(false);
   const [restart, setRestart] = useState(false);
   const [correctTotal, setCorrectTotal] = useState(0);
   const [wrongTotal, setWrongTotal] = useState(0);
+
+  const [showPremiumCard, setShowPremiumCard] = useState(false);
+
+
 
   const {
     register,
@@ -54,7 +58,7 @@ const QuestionListForStudentPage = () => {
     if (!isLoadingGetQuestions && !isFetching) {
       setOpen(false);
     }
-  }, [isLoadingGetQuestions, isFetching,restart]);
+  }, [isLoadingGetQuestions, isFetching, restart]);
 
   useEffect(() => {
     if (currentPage > 1) {
@@ -71,7 +75,6 @@ const QuestionListForStudentPage = () => {
           const newQuestions = paginationData.data.data.filter(
             (newQ) => !prev.some((oldQ) => oldQ.id === newQ.id)
           );
-          console.log("Appending questions count:", newQuestions.length);
           return [...prev, ...newQuestions];
         });
       }
@@ -88,55 +91,66 @@ const QuestionListForStudentPage = () => {
       )
     );
 
-    const handleFilterQuestions = async (data) => {
-      const rawPayload = {
-        keyword: data.keyword,
-        lesson_id: data.lesson || [],
-        topic_id: data.topic || [],
-        subject_id: data.subject || [],
-        sub_topic_id: data.sub_topics || [],
-        type: examData.examFormat || [],
-        exam_type_id: examData.selectExamType || [],
-        exam_sub_type_id: examData.examSubType || [],
-        exam_paper_id: examData.examPaper || [],
-      };
-
-      const cleanedPayload = cleanPayload(rawPayload);
-
-      const isPayloadEmpty = Object.keys(cleanedPayload).length === 0;
-
-      let finalPayload;
-
-      if (isPayloadEmpty) {
-        if (Object.keys(filters).length > 0) {
-          finalPayload = filters;
-        } else {
-          finalPayload = { type: ["mcq", "normal", "creative"] }; // ✅ default value
-        }
-      } else {
-        finalPayload = {
-          ...cleanedPayload,
-          ...(cleanedPayload.type
-            ? {}
-            : { type: ["mcq", "normal", "creative"] }), // ✅ fallback default
-        };
-      }
-
-      setFilters(finalPayload);
-      setCurrentPage(1);
-
-      setTimeout(() => {
-        refetch();
-      }, 100);
+  const handleFilterQuestions = async (data) => {
+    const rawPayload = {
+      keyword: data.keyword,
+      lesson_id: data.lesson || [],
+      topic_id: data.topic || [],
+      subject_id: data.subject || [],
+      sub_topic_id: data.sub_topics || [],
+      type: examData.examFormat || [],
+      exam_type_id: examData.selectExamType || [],
+      exam_sub_type_id: examData.examSubType || [],
+      exam_paper_id: examData.examPaper || [],
     };
-    
-    
 
-  const handleLoadMore = async () => {
+    const cleanedPayload = cleanPayload(rawPayload);
+
+    const isPayloadEmpty = Object.keys(cleanedPayload).length === 0;
+
+    let finalPayload;
+
+    if (isPayloadEmpty) {
+      if (Object.keys(filters).length > 0) {
+        finalPayload = filters;
+      } else {
+        finalPayload = { type: ["mcq", "normal", "creative"] }; // ✅ default value
+      }
+    } else {
+      finalPayload = {
+        ...cleanedPayload,
+        ...(cleanedPayload.type
+          ? {}
+          : { type: ["mcq", "normal", "creative"] }), // ✅ fallback default
+      };
+    }
+
+    setFilters(finalPayload);
+    setCurrentPage(1);
+
+    setTimeout(() => {
+      refetch();
+    }, 100);
+  };
+
+
+
+  const handleLoadMore = () => {
+    if (maxFreeExamData?.verified === "inactive") {
+      setShowPremiumCard(true);
+      return;
+    }
+
     if (currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
+      setCurrentPage((prev) => prev + 1);
     }
   };
+
+  const handlePremiumRedirect = () => {
+    navigate("/subscriptions");
+  }
+
+
 
   const totalPages = Math.ceil(paginationData?.data?.total / perPage);
   const [open, setOpen] = useState(false);
@@ -148,7 +162,7 @@ const QuestionListForStudentPage = () => {
   const hideAnswer = (e) => {
     setHideAns(e.target.checked);
   };
-  
+
   const reStart = (e) => {
     e.preventDefault();
     setRestart(true);
@@ -180,50 +194,6 @@ const QuestionListForStudentPage = () => {
       <hr className="my-2" />
 
       <div>
-        <div className="flex items-center justify-around space-x-6 p-2 bg-white dark:bg-gray-800 rounded-lg shadow">
-          <div className="flex items-center space-x-3">
-            <label
-              htmlFor="answer"
-              className="relative inline-flex items-center cursor-pointer"
-            >
-              {/* Hidden Checkbox */}
-              <input
-                type="checkbox"
-                id="answer"
-                name="answer"
-                checked={hideAns}
-                onChange={hideAnswer}
-                className="sr-only peer"
-              />
-
-              {/* Toggle Track */}
-              <div
-                className="w-14 h-6 bg-gray-300 dark:bg-gray-700 rounded-full peer peer-checked:bg-blue-900
-                    transition-colors duration-300"
-              ></div>
-
-              {/* Toggle Thumb */}
-              <div
-                className="absolute left-1 top-0.5 w-5 h-5 bg-white rounded-full shadow-md
-                    transform peer-checked:translate-x-7 transition-transform duration-300"
-              ></div>
-              {/* Label Text */}
-              <span className="text-gray-900 ml-2 dark:text-gray-200 font-bold text-base select-none">
-                লাইভ কুইজ দাও
-              </span>
-            </label>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={reStart}
-              className="flex items-center gap-2 ml-4 px-3 py-1 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded shadow dark:bg-red-600 dark:hover:bg-red-700 transition-colors"
-            >
-              <RotateCcw className="w-4 h-4" />
-              রিস্টার্ট
-            </button>
-          </div>
-        </div>
         {hideAns ? (
           <div className="fixed bottom-0 left-0 w-full z-50 ">
             <div className="max-w-7xl mx-auto">
@@ -368,95 +338,104 @@ const QuestionListForStudentPage = () => {
           border: "none",
           transition: "all 0.2s ease",
         }}
-        className={`fixed rounded-r bottom-28 right-0 z-50 hover:scale-110 active:scale-95 ${
-          isFetching || isLoadingGetQuestions || open ? "hidden" : ""
-        }`}
+        className={`fixed rounded-r bottom-28 right-0 z-50 hover:scale-110 active:scale-95 ${isFetching || isLoadingGetQuestions || open ? "hidden" : ""
+          }`}
       />
 
       {/* Questions */}
       <div className="grid gap-2 mt-3">
-        {/* 🔹 FIRST LOAD → Skeleton */}
         {isLoadingGetQuestions &&
           currentPage === 1 &&
           Array.from({ length: 4 }).map((_, i) => (
             <MCQCardSkeleton key={`first-${i}`} />
           ))}
-        {/* 🔹 REAL DATA */}
-        
+
         {!isLoadingGetQuestions &&
           questions.map((question, index) => {
             const key = `${question.id}-${index}`;
 
-            if (question.type === "mcq") {
-              return (
-                <QuestionCard
-                  key={key}
-                  data={question}
-                  index={index}
-                  verified={maxFreeExamData}
-                  hideAns={hideAns}
-                  restart={restart}
-                  onCountUpdate={handleCountUpdate}
-                />
-              );
-            }
+            const isBlurred =
+              maxFreeExamData?.verified === "inactive" &&
+              index >= 20;
 
-            if (question.type === "creative") {
-              return (
-                <CreativeExamForMT
-                  key={key}
-                  question={question}
-                  queIndex={index}
-                  verified={maxFreeExamData}
-                />
-              );
-            }
+            return (
+              <div key={key} className="relative">
 
-            if (question.type === "normal") {
-              return (
-                <NormalExamForMT
-                  key={key}
-                  question={question}
-                  queIndex={index}
-                  verified={maxFreeExamData}
-                  hideExp={hideExp}
-                />
-              );
-            }
+                {/* Question */}
+                <div
+                  className={`${isBlurred
+                    ? "blur-md pointer-events-none select-none"
+                    : ""
+                    } transition-all duration-300`}
+                >
+                  {question.type === "mcq" && (
+                    <QuestionCard
+                      data={question}
+                      index={index}
+                      verified={maxFreeExamData}
+                      hideAns={hideAns}
+                      restart={restart}
+                      onCountUpdate={handleCountUpdate}
+                    />
+                  )}
 
-            return null;
+                  {question.type === "creative" && (
+                    <CreativeExamForMT
+                      question={question}
+                      queIndex={index}
+                      verified={maxFreeExamData}
+                    />
+                  )}
+
+                  {question.type === "normal" && (
+                    <NormalExamForMT
+                      question={question}
+                      queIndex={index}
+                      verified={maxFreeExamData}
+                    />
+                  )}
+                </div>
+
+
+
+              </div>
+            );
           })}
-        {/* 🔹 SCROLL LOAD → Skeleton */}
-        {isFetching &&
-          currentPage > 1 &&
-          Array.from({ length: 6 }).map((_, i) => (
-            <MCQCardSkeleton key={`more-${i}`} />
-          ))}
-        {/* questions?.length < 200 && */}{" "}
-        {questions?.length > 0 && (
-          <div className="relative flex items-center justify-center">
-            {" "}
-            {currentPage < totalPages && (
+        {showPremiumCard &&
+          maxFreeExamData?.verified === "inactive" && (
+            <div className="mt-6 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-900 to-indigo-800 p-8 text-center text-white shadow-xl">
+
+              <div className="text-6xl mb-4">🔒</div>
+
+              <h2 className="text-3xl font-bold">
+                আরও হাজারো প্রশ্ন আনলক করো
+              </h2>
+
+              <p className="mt-3 text-gray-200">
+                Porikkhaloy Premium Subscription কিনে সকল প্রশ্ন, ব্যাখ্যা ও সমাধান দেখো ও লাইভ কুইজ দাও।
+              </p>
+
               <Button
-                onClick={handleLoadMore}
-                disabled={isLoadingMore}
-                className="flex items-center border-blue-900 border-b-4 dark:bg-blue-600 dark:border-blue-800 w-36 gap-2 mt-5 px-3 cursor-pointer bg-blue-700 hover:bg-blue-700 rounded text-white"
+                className="mt-6 bg-white text-blue-900 hover:bg-gray-100 font-bold px-8 py-6"
+                onClick={handlePremiumRedirect}
               >
-                {" "}
-                {isLoadingMore ? (
-                  <>
-                    {" "}
-                    <Spin size="small" />{" "}
-                  </>
-                ) : (
-                  <>
-                    {" "}
-                    <span>Load More</span>{" "}
-                    <IoMdAddCircleOutline size={20} />{" "}
-                  </>
-                )}{" "}
+                🚀 এখনই Premium কিনো
               </Button>
-            )}{" "}
+            </div>
+          )}
+
+        {questions?.length > 0 && questions.length <= 120 && (
+          <div className="relative flex items-center justify-center">
+            {!showPremiumCard &&
+              currentPage < totalPages &&  (
+                <Button
+                  onClick={handleLoadMore}
+                  disabled={isLoadingMore}
+                  className="w-40"
+                >
+                  {isLoadingMore ? <Spin size="small" /> : "Load More"}
+                </Button>
+              )}
           </div>
         )}
       </div>

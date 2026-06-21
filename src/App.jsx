@@ -9,15 +9,22 @@ function App() {
   const noHeaderOrFooter = paths.some(path => location.pathname.includes(path));
 
   return (
-    <div className="relative mx-auto ">
+    <div className="relative mx-auto">
       <AnalyticsTracker />
+
       <Navbar />
-      <div>
-        <div className="w-full max-w-7xl mx-auto ">
+
+      <div className="lg:pl-80 lg:pr-16">
+        <div className="w-full max-w-6xl mx-auto">
           <Outlet />
         </div>
       </div>
-      {noHeaderOrFooter || <Footer />}
+
+      {(noHeaderOrFooter || false) ? null : (
+        <div className="lg:pl-64">
+          <Footer />
+        </div>
+      )}
     </div>
   );
 }

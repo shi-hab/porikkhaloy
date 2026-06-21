@@ -31,7 +31,7 @@ export const authApi = apiSlice.injectEndpoints({
             })
           );
         } catch (err) {
-          console.log(err);
+           (err);
         }
       },
     }),
@@ -54,7 +54,7 @@ export const authApi = apiSlice.injectEndpoints({
           );
           persistor.purge(["auth"]);
         } catch (err) {
-          console.log(err);
+           (err);
         }
       },
     }),
@@ -91,7 +91,7 @@ export const authApi = apiSlice.injectEndpoints({
           );
           persistor.purge(["auth"]);
         } catch (err) {
-          console.log(err);
+           (err);
         }
       },
     }),

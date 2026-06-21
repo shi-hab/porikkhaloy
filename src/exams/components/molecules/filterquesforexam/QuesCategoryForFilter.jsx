@@ -1,6 +1,4 @@
-import React from "react";
 import PropTypes from "prop-types";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useCategoryData } from "../filterquesforexam/useCategoryData";
 import { MultipleSelector } from "./MultipleSelector";
 import { Input } from "@/components/ui/input";
@@ -26,6 +24,7 @@ export default function FilterQuestionsByCategory({
     categoryData: topicData,
     setCategoryData: setTopicData,
   } = useCategoryData("topics");
+
 
   // Filter categories to exclude those with status = 0
   const filterByStatus = (categories) => {
@@ -211,6 +210,19 @@ export default function FilterQuestionsByCategory({
               }
             />
           </div>
+          {/* <div>
+            <p>নেগেটিভ মার্ক</p>
+            <Input
+              defaultValue={0.5}
+              className="py-2"
+              onChange={(e) =>
+                setFormData?.((prevFormData) => ({
+                  ...prevFormData,
+                  negative_mark: e.target.value,
+                }))
+              }
+            />
+          </div> */}
         </div>
       )}
     </div>

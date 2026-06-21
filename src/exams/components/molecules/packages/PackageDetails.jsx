@@ -128,7 +128,7 @@ export function PackageDetails({ singlePackage, packageId }) {
               >
                 <div className="mt-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm">
 
-                  <div className="prose prose-sm dark:prose-invert max-w-none text-slate-700 dark:text-slate-200 leading-relaxed">
+                  <div className="prose prose-sm dark:prose-invert max-w-none text-slate-700 dark:text-slate-200">
 
                     {isSubscribed ? (
                       <>{parseHtmlContent(singlePackage?.description)}</>

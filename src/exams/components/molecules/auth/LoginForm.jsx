@@ -32,10 +32,38 @@ const LoginForm = () => {
   };
 
   useEffect(() => {
+    const res = error?.data;
+    if (!res) return;
+
+    const errors = res?.errors || {};
+
+    // reset previous server errors first (IMPORTANT)
+    Object.keys(errors).forEach((key) => {
+      setError(key, {
+        type: "server",
+        message: errors[key],
+      });
+    });
+
+    if (!errors.email && !errors.password && res.message) {
+      setError("root.serverError", {
+        type: "server",
+        message: res.message,
+      });
+    }
+  }, [error, setError]);
+
+
+  useEffect(() => {
     if (data?.data?.token) {
 
-      // 1. Data Layer Push (GTM)
       window.dataLayer = window.dataLayer || [];
+
+      window.dataLayer.push({
+        user_id: null,
+        user_email: null,
+        user_phone: null,
+      });
 
       window.dataLayer.push({
         event: "user_login",
@@ -44,12 +72,10 @@ const LoginForm = () => {
         user_phone: data?.data?.student?.phone,
       });
 
-      // 3. Redirect delay (optional)
       setTimeout(() => {
         navigate("/");
       }, 300);
     }
-
   }, [data, error, navigate, setError]);
 
   useEffect(() => {

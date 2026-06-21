@@ -11,7 +11,7 @@ const Logo = () => {
             <img
               src="/logo/logo-light.png"
               alt="logo"
-              className="md:h-10 h-9 w-auto block dark:hidden"
+              className=" h-9  w-auto block dark:hidden"
             />
             {/* Dark mode logo */}
             <img

@@ -51,6 +51,7 @@ import QuizBattleRunning from "../pages/QuizBattle/HomePage/QuizBattleRunning";
 import SliderImageSkeleton from "../components/atoms/skeletons/HomePage/SliderImageSkeleton";
 import FocusKitHome from "../pages/FocusKit/FocusKitHome";
 import FreeExamBatch from "../pages/FreeExam/FreeExamBatch";
+import SubscriptionView from "../components/subscriptions/SubscriptionView";
 
 const Routes = createBrowserRouter([
   {
@@ -236,6 +237,10 @@ const Routes = createBrowserRouter([
       {
         path: "/subscriptions",
         element: <SubscriptionShow />,
+      },
+      {
+        path: "/subscriptions/view/:id",
+        element: <SubscriptionView />,
       },
       {
         path: "/subscriptions/:checkoutId",

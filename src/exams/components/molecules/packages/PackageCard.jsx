@@ -1,39 +1,10 @@
 import { parseHtmlContent } from "@/utils/parseHtmlContent";
 import { Link } from "react-router-dom";
 import placeholder from "@/assets/Placeholder.svg";
-import { useGetAllPackagesQuery } from "@/features/packages/packagesApi";
 import { EncodeURL } from "../../atoms/urlHashCode/EncodeURL";
 
-export const PackageCard = ({ singlePackageID }) => {
-  const { data: allPackages, isLoading } = useGetAllPackagesQuery();
+export const PackageCard = ({ packageId, name, pkgImg, isSubscribed = null }) => {
 
-  if (isLoading || !allPackages) return null;
-
-  const packagesArray = Array.isArray(allPackages)
-    ? allPackages
-    : allPackages?.data || [];
-
-  const singlePackage = packagesArray.find((pkg) => pkg.id === singlePackageID);
-
-  if (!singlePackage) return null;
-
-  const {
-    id: packageId,
-    name,
-    img: pkgImg,
-    is_subscribed: isSubscribed,
-  } = singlePackage;
-
-  // লাইভ বৈধতা চেক
-  function isPackageValid(pkg) {
-    const createdDate = new Date(pkg.created_at);
-    const today = new Date();
-    const diffTime = today - createdDate;
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays <= pkg.duration_days;
-  }
-
-  const valid = isPackageValid(singlePackage);
 
   const packageIdURL = EncodeURL(packageId);
 
@@ -68,11 +39,11 @@ export const PackageCard = ({ singlePackageID }) => {
         </div>
       )}
       {/* লাইভ ব্যাজ */}
-      {valid && (
+      {/* {valid && (
         <p className="absolute top-1 left-1 z-10 px-1 overflow-hidden text-sm text-white bg-red-600 dark:bg-red-500 rounded-lg animate-borderSpark">
           লাইভ
         </p>
-      )}
+      )} */}
     </Link>
   );
 };

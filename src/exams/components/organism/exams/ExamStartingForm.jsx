@@ -111,7 +111,7 @@ const ExamStartingForm = () => {
             )}
           </div>
 
-          <div>
+          {/* <div>
             {examTypes
               ?.filter((exam_sub_type) =>
                 selectExamType.includes(exam_sub_type.id)
@@ -151,7 +151,7 @@ const ExamStartingForm = () => {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
         <hr />
 

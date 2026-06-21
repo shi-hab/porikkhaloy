@@ -21,7 +21,7 @@ function MCQBookMarkCard({
   const auth = useAuth();
   
   const { id, title, mcq_questions, tags, images } = questionData || {};
-  console.log(questionData);
+   (questionData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [feedback, setFeedback] = useState({ title: "", note: "" });
   const [addFeedback, { isLoading }] = useAddFeedbackMutation();

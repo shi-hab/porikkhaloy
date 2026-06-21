@@ -31,7 +31,6 @@ export default function NormalExamPage({ questions_list = [], verified = {} }) {
     //         toast.error("Cannot Delete the Data");
     //     }
     // };
-    console.log(questions_list);
     const pathname = window.location.pathname;
     const student = useSelector((state) => state.auth.student);
     const [isModalOpen, setIsModalOpen] = useState(false);

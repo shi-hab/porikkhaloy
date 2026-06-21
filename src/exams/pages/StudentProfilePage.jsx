@@ -44,7 +44,7 @@ const StudentProfilePage = () => {
         alert("Account deleted successfully");
       } catch (err) {
         alert("Failed to delete account");
-        console.log(err);
+         (err);
       }
     }
   };

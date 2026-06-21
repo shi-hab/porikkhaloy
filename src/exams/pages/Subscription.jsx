@@ -14,11 +14,9 @@ import { useNavigate } from "react-router-dom";
 const Subscription = () => {
   const navigate = useNavigate();
   const { data, isLoading, error, refetch } = useMyExamsubScriptionsQuery();
-  const { data: maxFreeExamData } =
-    useGetMaxFreeExamQuery();
+  const { data: maxFreeExamData } = useGetMaxFreeExamQuery();
 
-  const { data: profileData, isLoading: isLoadingProfile } =
-    useGetProfileQuery();
+  const { data: profileData, isLoading: isLoadingProfile } = useGetProfileQuery();
   const [profile, setProfile] = useState({});
 
   useEffect(() => {
@@ -31,8 +29,7 @@ const Subscription = () => {
   const [notice, setNotice] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { data: exam_subscription, isLoading: isLoadingSubscription } =
-    useExamSubscriptionsQuery();
+  const { data: exam_subscription, isLoading: isLoadingSubscription } = useExamSubscriptionsQuery();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [examSubscription, setExamSubscription] = useState([]);
 
@@ -41,6 +38,7 @@ const Subscription = () => {
       setExamSubscription(exam_subscription?.data || []);
     }
   }, [exam_subscription]);
+  
   if (isLoading) {
     return (
       <div className="grid w-full h-screen place-content-center">
@@ -240,8 +238,7 @@ const Subscription = () => {
       <div className="grid grid-cols-1 gap-4 mt-4 mb-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
         {subscriptions?.[0] &&
           (() => {
-            const { subscription, verified, verified_at, expiresIn } =
-              subscriptions[0];
+            const { subscription, verified, verified_at, expiresIn } = subscriptions[0];
             return (
               <div
                 key={subscription?.id}

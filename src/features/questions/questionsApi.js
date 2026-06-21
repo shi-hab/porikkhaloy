@@ -58,7 +58,7 @@ export const questionsApi = apiSlice.injectEndpoints({
             })
           );
         } catch (err) {
-          console.log(err);
+           (err);
         }
       },
     }),
@@ -96,7 +96,7 @@ export const questionsApi = apiSlice.injectEndpoints({
             })
           );
         } catch (err) {
-          console.log(err);
+           (err);
         }
       },
     }),

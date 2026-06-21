@@ -380,37 +380,69 @@
    porikkhaloy-preview: কাস্টম লিস্ট ও বুলেট স্টাইলিং
    ========================================================================== */
 
-/* ১. বুলেট লিস্ট (Unordered List - `<ul>`) */
+/* Unordered List */
 .porikkhaloy-preview ul {
-  list-style-type: disc !important; /* 🎯 ডট বা ডিস্ক বুলেট ফিরিয়ে আনা হলো */
-  margin-left: 24px !important;    /* বাম পাশে পারফেক্ট গ্যাপ */
-  margin-top: 8px !important;
-  margin-bottom: 8px !important;
+  list-style: disc;
+  padding-left: 1.5rem;
 }
 
-/* ২. নাম্বারিং লিস্ট (Ordered List - `<ol>`) */
+/* Ordered List */
 .porikkhaloy-preview ol {
-  list-style-type: decimal !important; /* 🎯 ১, ২, ৩ নাম্বারিং ফিরিয়ে আনা হলো */
-  margin-left: 24px !important;       /* বাম পাশে পারফেক্ট গ্যাপ */
-  margin-top: 8px !important;
-  margin-bottom: 8px !important;
+  list-style: decimal;
+  padding-left: 1.5rem;
 }
 
-/* ৩. লিস্টের ভেতরের প্রতিটা উপাদানের (<li>) স্পেসিং */
-.porikkhaloy-preview li {
-  margin-top: 1px !important;
-  margin-bottom: 1px !important;
-  line-height: 1.4;
-  font-size: 15px;
+/* Nested List */
+.porikkhaloy-preview li > ul,
+.porikkhaloy-preview li > ol {
+  margin-top: 2px;
+  margin-bottom: 2px;
 }
 
-/* সাব-লিস্টের (লিস্টের ভেতর আরেক লিস্ট) জন্য স্পেসিং ঠিক করা */
-.porikkhaloy-preview ul ul, 
-.porikkhaloy-preview ol ol,
-.porikkhaloy-preview ul ol,
-.porikkhaloy-preview ol ul {
-  margin-top: 1px !important;
-  margin-bottom: 1px !important;
+.porikkhaloy-preview .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding-bottom: 6px;
 }
 
+.porikkhaloy-preview .katex-display::-webkit-scrollbar {
+  height: 6px;
+}
+
+.porikkhaloy-preview pre {
+  overflow-x: auto;
+}
+
+/* Inline Code (`code`) */
+.porikkhaloy-preview :not(pre) > code {
+  background: #1e1e1e;
+  color: #dcdcaa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: "Fira Code", "JetBrains Mono", Consolas, monospace;
+}
+
+/* Code Block (` ``` `) */
+.porikkhaloy-preview pre {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 12px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: "Fira Code", "JetBrains Mono", Consolas, monospace;
+}
+
+/* Code Block এর ভিতরের code */
+.porikkhaloy-preview pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  white-space: pre;
+  display: block;
+}
 

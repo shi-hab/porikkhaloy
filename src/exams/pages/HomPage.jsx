@@ -10,7 +10,7 @@ import SliderImageSkeleton from "./../components/atoms/skeletons/HomePage/Slider
 import { MdLeaderboard, MdAssignmentAdd } from "react-icons/md";
 import { SiVitest } from "react-icons/si";
 import { FaBookReader } from "react-icons/fa";
-// import { TbTargetArrow } from "react-icons/tb";
+import SocialIcon from "./home/SocialIcon";
 
 export default function HomePage() {
   const auth = useSelector((state) => state.auth?.student);
@@ -172,6 +172,12 @@ export default function HomePage() {
       {/* Our Partner */}
       <div>
         <PartnerSlider />
+      </div>
+
+
+      {/* Social link */}
+      <div>
+        <SocialIcon/>
       </div>
     </div>
   );

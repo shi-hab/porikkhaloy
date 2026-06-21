@@ -2,26 +2,26 @@ import { useExamSubscriptionsQuery } from "@/features/exams/examsApi.js";
 import { useEffect, useState } from "react";
 import toBanglaNumeral from "@/utils/Tobangla.jsx";
 import { useNavigate } from "react-router-dom";
-import { CircleCheckBig, BadgeCheck } from "lucide-react";
 import { Spin } from "antd";
 import { parseHtmlContent } from "@/utils/parseHtmlContent";
 import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
+import { FaCircle } from "react-icons/fa";
 
 
 function SubscriptionShow() {
   const navigate = useNavigate();
   const user_auth = useSelector((state) => state.auth?.student);
-  const { data: exam_subscription, isLoading: isLoadingSubscription } =
-    useExamSubscriptionsQuery();
+  const { data: exam_subscription, isLoading: isLoadingSubscription } = useExamSubscriptionsQuery();
   const [examSubscription, setExamSubscription] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    if (exam_subscription) {
-      setExamSubscription(exam_subscription?.data || []);
+    if (exam_subscription?.data) {
+      setExamSubscription(exam_subscription.data);
     }
   }, [exam_subscription]);
+
 
   const handleSelect = (item) => {
     setSelectedItem(item.id === selectedItem?.id ? null : item);
@@ -54,10 +54,16 @@ function SubscriptionShow() {
       },
     });
     setTimeout(() => {
-      navigate(`/subscriptions/checkout-${item.id}`);
+      navigate(`/subscriptions/view/${item.id}`);
     }, 500)
   };
 
+  const durationLabel = {
+    "১ মাস": "Monthly",
+    "৩ মাস": "Quarterly",
+    "৬ মাস": "Half-Yearly",
+    "১২ মাস": "Yearly",
+  };
 
   return (
     <div className="flex flex-col justify-center px-4 max-w-7xl mx-auto">
@@ -68,127 +74,91 @@ function SubscriptionShow() {
           </div>
         ) : (
           <>
-            {/* Section Wrapper Function for Reusability */}
-            {[
-              {
-                title: "পরীক্ষালয়ের সাবস্ক্রিপশন'স",
-                data: examSubscription?.filter(
-                  (item) => item.packagesList?.length > 0,
-                ),
-                icon: "🎓",
-              },
-              {
-                title: "মক টেস্ট সাবস্ক্রিপশনসমূহ",
-                data: examSubscription?.filter(
-                  (item) => !item.packagesList?.length,
-                ),
-                icon: "🧠",
-              },
-            ].map(
-              (section, idx) =>
-                section.data?.length > 0 && (
-                  <div key={idx} className="relative">
-                    <div className="flex flex-col items-center mb-16">
-                      <h2 className="text-2xl font-extrabold text-gray-800 dark:text-white flex items-center gap-3">
-                        <span>{section.icon}</span> {section.title}
-                      </h2>
-                      <div className="h-1 w-20 bg-blue-600 rounded-full mt-2"></div>
+            <div className="relative">
+              <div className="flex flex-col items-center mb-8">
+                <h2 className="text-title font-bold font-siliguri text-gray-800 dark:text-white flex items-center gap-3">
+                  <span>Subscription Package</span>
+                </h2>
+                <div className="h-1 w-20 bg-blue-600 rounded-full mt-2"></div>
+              </div>
+
+              <div className="relative  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {examSubscription.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => handleSelect(item)}
+                    className={`group relative rounded-lg border-[3px] cursor-pointer duration-300 ${selectedItem?.id === item?.id
+                      ? "ring-2 ring-blue-600 shadow-2xl"
+                      : "hover:shadow-xl"
+                      }`}
+                  >
+                    <div className="">
+                      <span className="absolute top-2 left-2 z-10 flex h-5 items-center justify-center rounded-sm bg-blue-500 px-2 text-caption font-medium text-white">
+                        {parseHtmlContent(durationLabel[item.description] || item.description)}
+                      </span>
+                      <span className="absolute flex items-center z-10 top-2 right-2 h-5 text-caption font-semibold text-blue-500   bg-gray-200 rounded-full px-2">
+                        <FaCircle size={10} className="text-gray-300" /> <span className="ml-2">{item.packagesList.length} courses</span>
+                      </span>
                     </div>
+                    {/* Background Layer */}
+                    <div
+                      className={`absolute inset-0 rounded-lg transition-opacity duration-300 opacity-5 group-hover:opacity-10 ${selectedItem?.id === item?.id
+                        ? "bg-blue-600"
+                        : "bg-gray-400 dark:bg-gray-600"
+                        }`}
+                    ></div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-                      {section.data.map((item) => (
-                        <div
-                          key={item.id}
-                          onClick={() => handleSelect(item)}
-                          className={`group relative rounded-2xl transition-all duration-500 cursor-pointer ${selectedItem?.id === item?.id
-                            ? "ring-2 ring-blue-600 shadow-2xl scale-[1.02]"
-                            : "hover:shadow-xl hover:-translate-y-2"
-                            }`}
-                        >
-                          {/* Background Layer */}
-                          <div
-                            className={`absolute inset-0 rounded-2xl opacity-10 ${selectedItem?.id === item?.id
-                              ? "bg-blue-600"
-                              : "bg-gray-400"
-                              }`}
-                          ></div>
-
-                          {/* Main Content Card */}
-                          <div className="relative bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6 pt-10 h-full flex flex-col">
-                            {/* Floating Title */}
-                            <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-max">
-                              <h2 className="text-md font-bold bg-blue-700 text-white px-6 py-2 rounded-full shadow-lg">
-                                {item.title}
-                              </h2>
-                            </div>
-
-                            {/* Content List */}
-                            <div className="flex-grow mt-4">
-                              <h4 className="text-sm font-bold uppercase tracking-wider text-blue-600 mb-4">
-                                অন্তর্ভুক্ত বিষয়সমূহ:
-                              </h4>
-                              <ul className="space-y-3">
-                                {item.packagesList?.map((pkg) => (
-                                  <li
-                                    key={pkg.id}
-                                    className="flex items-start gap-3 text-gray-700 dark:text-gray-300"
-                                  >
-                                    <BadgeCheck className="w-5 h-5 text-green-500 shrink-0" />
-                                    <span className="text-[15px] font-medium leading-tight">
-                                      {parseHtmlContent(pkg.name)}
-                                    </span>
-                                  </li>
-                                ))}
-                                {item.features?.map((feature, i) => (
-                                  <li
-                                    key={i}
-                                    className="flex items-start gap-3 text-gray-600 dark:text-gray-400"
-                                  >
-                                    <CircleCheckBig className="w-5 h-5 text-blue-400 shrink-0" />
-                                    <span className="text-[15px] leading-tight">
-                                      {feature}
-                                    </span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-
-                            {/* Pricing & Validity */}
-                            <div className="mt-8 flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-5">
-                              <div className="flex flex-col">
-                                <span className="text-[10px] text-gray-500 uppercase font-bold">
-                                  মেয়াদকাল
-                                </span>
-                                <span className="text-sm font-bold text-gray-800 dark:text-gray-200">
-                                  {item.description}
-                                </span>
-                              </div>
-                              <div className="text-right">
-                                <span className="text-[10px] text-gray-500 uppercase font-bold block">
-                                  মূল্য
-                                </span>
-                                <span className="text-2xl font-black text-blue-700 dark:text-blue-400">
-                                  ৳{toBanglaNumeral(item.price)}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Action Button */}
-                            <div className="mt-6">
-                              <Button
-                                onClick={() => handleSubscriptionClick(item)}
-                                className="flex items-center justify-center w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors shadow-lg shadow-blue-100 dark:shadow-none"
-                              >
-                                এখনই সাবস্ক্রাইব করো
-                              </Button>
-                            </div>
-                          </div>
+                    {/* Main Card */}
+                    <div className="relative bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 rounded-lg px-4 pt-12 pb-4 h-full flex flex-col">
+                      {/* Features */}
+                      <div className="flex-grow mt-2 ">
+                        <div className="text-heading font-semibold mb-3">
+                          <p>{parseHtmlContent(item.title)}</p>
                         </div>
-                      ))}
+                        <div className="text-gray-400 text-caption">
+                          <p>{item.packagesList.length} Exam Batches & {item.features.length} features are inclued</p>
+                        </div>
+                      </div>
+
+                      {/* Pricing Section */}
+                      <div className="mt-6 flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-4">
+
+                        <div className="flex flex-col">
+                          <span className="text-[10px] text-gray-500 font-bold">
+                            মেয়াদকাল
+                          </span>
+                          <span className="text-sm font-bold text-gray-800 dark:text-gray-200">
+                            {parseHtmlContent(item.description)}
+                          </span>
+                        </div>
+
+                        <div className="text-right">
+                          <span className="text-[10px] text-gray-500  font-bold block">
+                            মূল্য
+                          </span>
+                          <span className="text-xl font-black text-blue-700 dark:text-blue-400">
+                            ৳{toBanglaNumeral(item.price)}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Button */}
+                      <div className="mt-6 ">
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation(); // important fix
+                            handleSubscriptionClick(item);
+                          }}
+                          className="bg-white text-blue-900 hover:bg-blue-200 hover:text-blue-900 font-bold w-full border-blue-900 border-2 border-b-4 dark:bg-blue-600 dark:border-blue-800"
+                        >
+                          Pick this plan
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                ),
-            )}
+                ))}
+              </div>
+            </div>
           </>
         )}
       </div>
