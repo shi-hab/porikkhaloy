@@ -37,7 +37,7 @@ export default function HomePage() {
       return Array.from({ length: 3 }).map((_, index) => (
         <div
           key={index}
-          className="w-full h-[140px] lg:h-[420px] bg-gray-200 dark:bg-gray-700  animate-pulse"
+          className="w-full h-[155px] lg:h-[335px] bg-gray-200 dark:bg-gray-700  animate-pulse"
         />
       ));
     }
@@ -45,7 +45,7 @@ export default function HomePage() {
     return images.map((item, index) => (
       <div
         key={index}
-        className="relative w-full lg:h-[420px] overflow-hidden rounded-md shadow-lg"
+        className="relative w-full  overflow-hidden rounded-md shadow-lg"
       >
         <img
           src={item.image}

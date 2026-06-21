@@ -14,7 +14,7 @@ function App() {
 
       <Navbar />
 
-      <div className="lg:pl-80 lg:pr-16">
+      <div className="lg:pl-96 lg:pr-28">
         <div className="w-full max-w-6xl mx-auto">
           <Outlet />
         </div>

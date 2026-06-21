@@ -70,6 +70,7 @@ const UserNav = ({ onMobileClick }) => {
         >
           {avatarMarkup}
         </Button>
+        
       </DropdownMenuTrigger>
 
       {/* This dropdown content only ever opens on desktop now,

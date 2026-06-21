@@ -14,6 +14,8 @@ import {
   FileCheck,
   LogOut,
 } from "lucide-react";
+import { FaBookReader } from "react-icons/fa";
+
 
 export const NavLinks = [
   {
@@ -51,7 +53,7 @@ export const NavLinks = [
   {
     title: "প্রশ্নব্যাংক",
     href: "/questions",
-    icon: <Library size={20} />,
+    icon: <FaBookReader size={20} />,
     urlActive: ["/questions"],
     showInBottomNav: true,
 

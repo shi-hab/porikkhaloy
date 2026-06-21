@@ -135,7 +135,7 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
           <div className=" pt-4 border-t dark:border-gray-800">
             {checkingUser ? (
               <div className="bg-gray-300 flex justify-between items-center px-2 py-2 rounded-lg">
-                <UserNav />
+                <UserNav  />
               </div>
             ) : (
               <div className="flex flex-col gap-2">
