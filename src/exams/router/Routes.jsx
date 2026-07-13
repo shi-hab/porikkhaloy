@@ -52,6 +52,8 @@ import SliderImageSkeleton from "../components/atoms/skeletons/HomePage/SliderIm
 import FocusKitHome from "../pages/FocusKit/FocusKitHome";
 import FreeExamBatch from "../pages/FreeExam/FreeExamBatch";
 import SubscriptionView from "../components/subscriptions/SubscriptionView";
+import TestPaperPage from "../pages/DigitalTestPaper/TestPaperPage";
+import TestPaperQuestionCard from './../pages/DigitalTestPaper/TestPaperQuestionCard';
 
 const Routes = createBrowserRouter([
   {
@@ -150,6 +152,14 @@ const Routes = createBrowserRouter([
       {
         path: "/questions",
         element: <QuestionListForStudentPage />,
+      },
+      {
+        path: "/digital-testpaper",
+        element: <TestPaperPage />,
+      },
+      {
+        path: "/testpaper-que",
+        element: <TestPaperQuestionCard />,
       },
       {
         path: "/leaderboard",

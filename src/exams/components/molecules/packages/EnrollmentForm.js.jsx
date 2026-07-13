@@ -318,11 +318,11 @@ const EnrollmentForm = () => {
                     <Button
                       type="submit"
                       disabled={isLoading || !form.formState.isValid}
-                      className="w-full md:w-1/2 mt-4"
+                      className="mt-4"
                     >
                       {isLoading ? (
                         <>
-                          <Spin />
+                          <Spin size="small" />
                         </>
                       ) : finalPrice !== 0 ? (
                         <p>
@@ -420,15 +420,12 @@ const EnrollmentForm = () => {
                         placeholder="Enter coupon code"
                         value={couponCode}
                         onChange={(e) => setCouponCode(e.target.value)}
-                        className="flex-1 w-full pr-32 px-3 font-semibold text-red-900 py-2 border-2 rounded-md bg-white dark:bg-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700"
+                        className="flex-1 w-full pr-32 px-3 font-semibold text-red-900 py-4 border-2 rounded-md bg-white dark:bg-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700"
                       />
-                      <span> </span>
-
                       <Button
                         type="button"
                         onClick={onApplyCoupon}
-                        disabled={isApplying || couponCode == ""}
-                        className="absolute top-0 bg-red-900 hover:bg-red-700 right-0 w-[110px] h-full px-4 rounded-l-none"
+                        className="absolute top-0 right-0 z-10"
                       >
                         {isApplying ? <Spin /> : "Apply Coupon"}
                       </Button>

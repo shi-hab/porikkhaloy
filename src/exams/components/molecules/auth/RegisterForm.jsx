@@ -239,14 +239,13 @@ export default function RegisterForm() {
 
         {/* Submit Button */}
         <Button
-          className="bg-green-600  font-bold border-b-4 border-green-800 hover:bg-green-700 text-white dark:bg-green-500 dark:border-green-700 dark:hover:bg-green-600"
+          variant="green"
           type="submit"
           disabled={isLoading}
         >
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              অপেক্ষা করো...
             </>
           ) : (
             "রেজিস্ট্রেশন করো"

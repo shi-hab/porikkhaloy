@@ -185,7 +185,6 @@ const LoginForm = () => {
 
         <Button
           disabled={isLoading}
-          className="bg-blue-700 font-bold text-white border-blue-900 border-b-4 dark:bg-blue-600 dark:border-blue-800"
         >
           {isLoading ? <LoaderSubmit /> : "লগইন করো"}
         </Button>

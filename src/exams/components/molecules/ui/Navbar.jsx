@@ -135,19 +135,18 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
           <div className=" pt-4 border-t dark:border-gray-800">
             {checkingUser ? (
               <div className="bg-gray-300 flex justify-between items-center px-2 py-2 rounded-lg">
-                <UserNav  />
+                <UserNav />
               </div>
             ) : (
               <div className="flex flex-col gap-2">
                 <Button
                   onClick={() => navigate("/login")}
-                  className="h-8 w-full bg-blue-700 font-bold text-white border-blue-900 border-b-4 dark:bg-blue-600 dark:border-blue-800"
                 >
                   লগইন
                 </Button>
                 <Button
                   onClick={() => navigate("/registration")}
-                  className="h-8 w-full bg-green-600 font-bold border-b-4 border-green-800 hover:bg-green-700 text-white dark:bg-green-500 dark:border-green-700 dark:hover:bg-green-600"
+                  variant="green"
                 >
                   রেজিস্ট্রেশন
                 </Button>
@@ -201,13 +200,12 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
                   <>
                     <Button
                       onClick={() => navigate("/login")}
-                      className="h-8 px-2 bg-blue-700 font-bold text-white border-blue-900 border-b-4 dark:bg-blue-600 dark:border-blue-800"
                     >
                       লগইন
                     </Button>
                     <Button
                       onClick={() => navigate("/registration")}
-                      className="h-8 px-2 bg-green-600 font-bold border-b-4 border-green-800 hover:bg-green-700 text-white dark:bg-green-500 dark:border-green-700 dark:hover:bg-green-600"
+                      variant="green"
                     >
                       রেজিস্ট্রেশন
                     </Button>

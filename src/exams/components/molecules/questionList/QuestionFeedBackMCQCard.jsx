@@ -56,12 +56,12 @@ export default function QuestionFeedBackMCQCard({ data: questionData, index, ver
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         footer={[
-          <Button key="cancel" onClick={() => setIsModalOpen(false)}>
+          <Button key="cancel" className="mb-2" onClick={() => setIsModalOpen(false)}>
             Cancel
           </Button>,
           <Button
             key="submit"
-            type="primary"
+            ariant="green"
             loading={isLoading}
             onClick={handleFeedbackSubmit}
           >

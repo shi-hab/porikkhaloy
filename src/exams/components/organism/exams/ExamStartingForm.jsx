@@ -159,7 +159,7 @@ const ExamStartingForm = () => {
           <Button
             onClick={handleStartExam}
             type="submit"
-            className="px-5 mt-5 rounded w-full"
+            className=" mt-5 "
           >
             {" "}
             এগিয়ে যাও

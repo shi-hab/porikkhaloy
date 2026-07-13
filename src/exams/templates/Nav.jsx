@@ -70,7 +70,7 @@ export default function Nav({ links, isCollapsed, className, closeNav, checkingU
         mobileNav = (
             <div className="flex flex-col">
                 <div className="flex items-center gap-4 px-8 py-4">
-                    <Button variant='ghost' className='relative w-10 h-10 rounded-full'>
+                    <Button variant='ghost' >
                         <Avatar className='w-8 h-8'>
                             <AvatarImage src='/avatars/01.png' alt='@shadcn' />
                             <AvatarFallback>

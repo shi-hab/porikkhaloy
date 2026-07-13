@@ -59,6 +59,14 @@ export const NavLinks = [
 
   },
   {
+    title: "টেস্ট পেপার",
+    href: "/digital-testpaper",
+    icon: <FaBookReader size={20} />,
+    urlActive: ["/digital-testpaper"],
+    showInBottomNav: true,
+
+  },
+  {
     title: "এক্সাম ব্যাচ",
     href: "/package",
     icon: <GraduationCap size={20} />,

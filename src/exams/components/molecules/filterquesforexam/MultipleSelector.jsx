@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/popover";
 import useMediaQuery from "@/exams/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronDown, X } from "lucide-react";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
 
@@ -49,9 +49,16 @@ export function MultipleSelector({
     }
   };
 
+  const handleClear = (e) => {
+    e.stopPropagation();
+    setSelectedValues([]);
+    if (onChange) {
+      onChange([]);
+    }
+  };
+
   return (
-    <div className="min-w-full space-y-1 text-left">
-      {/* <Label className="font-semibold">{label} সিলেক্ট করো</Label> */}
+    <div className="w-full space-y-2 text-left">
       <Controller
         name={name}
         control={control}
@@ -65,61 +72,117 @@ export function MultipleSelector({
               onOpenChange={setOpen}
             >
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
+                <button
                   role="combobox"
                   aria-expanded={open}
-                  className="flex items-center justify-start w-full h-auto p-2 text-left"
+                  className="w-full transition-all duration-200 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-0"
                 >
-                  <div className="w-full ">
-                    {selectedValues.length === 1 ? (
-                      // Show only the first selected value
-                      <div className=" !p-1 rounded-sm bg-slate-100 dark:bg-slate-800 font-medium text-wrap">
-                        {options.find((item) => item.id === selectedValues[0])
-                          ?.title || "Unknown"}
+                  <div className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm hover:shadow-md transition-shadow duration-200">
+                    {selectedValues.length === 0 ? (
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-400 text-sm font-medium">
+                          {label} বাছাই করো...
+                        </span>
+                        <ChevronDown
+                          className={cn(
+                            "h-5 w-5 text-gray-400 transition-transform duration-300",
+                            open && "rotate-180"
+                          )}
+                        />
                       </div>
-                    ) : selectedValues.length > 1 ? (
-                      // Show first selected value and total count for multiple selections
-                      <div className="!p-1 rounded-sm  bg-slate-100 dark:bg-slate-800 font-medium text-wrap">
-                        {options.find((item) => item.id === selectedValues[0])
-                          ?.title || "Unknown"}
-                        {"....(" + selectedValues.length + ")"}
+                    ) : selectedValues.length === 1 ? (
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="h-2 w-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
+                          <span className="font-semibold text-gray-800 text-sm">
+                            {options.find((item) => item.id === selectedValues[0])
+                              ?.title || "Unknown"}
+                          </span>
+                        </div>
+                        <ChevronDown
+                          className={cn(
+                            "h-5 w-5 text-gray-400 transition-transform duration-300",
+                            open && "rotate-180"
+                          )}
+                        />
                       </div>
                     ) : (
-                      `${label} বাছাই করো...`
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                            <div className="h-2 w-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
+                            <span className="font-semibold text-gray-800 text-sm">
+                              {options.find(
+                                (item) => item.id === selectedValues[0]
+                              )?.title || "Unknown"}
+                            </span>
+                          </div>
+                          <span className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200">
+                            <span className="text-xs font-bold text-blue-700">
+                              +{selectedValues.length - 1}
+                            </span>
+                          </span>
+                        </div>
+                        <button
+                          onClick={handleClear}
+                          className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                        >
+                          <X className="h-4 w-4 text-gray-500 hover:text-gray-700" />
+                        </button>
+                      </div>
                     )}
                   </div>
-                  {/* <ChevronsUpDown className="w-4 h-8 shrink-0 opacity-60" /> */}
-                </Button>
+                </button>
               </PopoverTrigger>
-              <PopoverContent className="z-[10000]">
+              <PopoverContent className="z-[10000] p-0 shadow-lg border-gray-200">
                 <Command>
                   {!isMobile && (
                     <CommandInput
-                      placeholder={placeholder}
+                      placeholder={placeholder || `${label} খুঁজুন...`}
                       readOnly={isMobile}
+                      className="border-b border-gray-200 rounded-none"
                     />
                   )}
-                  <CommandEmpty>No {label} found.</CommandEmpty>
-                  <CommandGroup>
-                    <CommandList>
-                      {options.map((item) => (
+                  <CommandEmpty>
+                    <div className="flex flex-col items-center justify-center py-6 text-gray-500">
+                      <span className="text-sm">কোনো {label} খুঁজে পাওয়া যায়নি</span>
+                    </div>
+                  </CommandEmpty>
+                  <CommandGroup className="w-full">
+                    <CommandList className="max-h-64">
+                      {options.map((item, index) => (
                         <CommandItem
                           key={item.id}
                           value={item.id}
                           onSelect={() => {
                             handleSetValue(item.id);
                           }}
+                          className="cursor-pointer w-full px-4 py-2.5 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-0"
                         >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              selectedValues.includes(item.id)
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {item.title}
+                          <div className="flex items-center gap-3 w-full">
+                            <div
+                              className={cn(
+                                "h-5 w-5 rounded border-2 transition-all duration-200 flex items-center justify-center",
+                                selectedValues.includes(item.id)
+                                  ? "bg-gradient-to-r from-blue-500 to-purple-500 border-blue-500"
+                                  : "border-gray-300 hover:border-blue-400"
+                              )}
+                            >
+                              {selectedValues.includes(item.id) && (
+                                <Check className="h-3 w-3 text-white" />
+                              )}
+                            </div>
+                            <span
+                              className={cn(
+                                "text-sm transition-colors duration-200",
+                                selectedValues.includes(item.id)
+                                  ? "font-semibold text-gray-900"
+                                  : "text-gray-700"
+                              )}
+                            >
+                              {item.title}
+                            </span>
+                          </div>
                         </CommandItem>
                       ))}
                     </CommandList>
@@ -128,7 +191,9 @@ export function MultipleSelector({
               </PopoverContent>
             </Popover>
             {errors[name] && (
-              <span className="text-red-600">{errors[name]?.message}</span>
+              <span className="text-sm text-red-500 font-medium">
+                {errors[name]?.message}
+              </span>
             )}
           </>
         )}

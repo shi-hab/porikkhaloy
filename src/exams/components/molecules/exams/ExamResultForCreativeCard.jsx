@@ -1,11 +1,12 @@
 import { Card } from "@/components/ui/card";
 import { MdFeedback } from "react-icons/md";
-import { Modal, Input, Button, message } from "antd";
+import { Modal, Input,  message } from "antd";
 import { useAddFeedbackMutation } from "@/features/Feedbacks/Feedback";
 import { useState } from "react";
 import TagsTitle from "../../questionList/TagsTitle";
 import { useSelector } from "react-redux";
 import { parseHtmlContent } from "../../../../utils/parseHtmlContent";
+import { Button } from "@/components/ui/button";
 
 
 export function ExamResultForCreativeCard({
@@ -44,10 +45,7 @@ export function ExamResultForCreativeCard({
       message.error("Failed to submit feedback." + error);
     }
   };
-  function toBanglaNumeral(number) {
-    const banglaDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
-    return number.toString().replace(/\d/g, (digit) => banglaDigits[digit]);
-  }
+
   const banglaSerials = ["ক", "খ", "গ", "ঘ", "ঙ", "চ", "ছ", "জ", "ঝ", "ঞ"];
 
   return (
@@ -57,12 +55,11 @@ export function ExamResultForCreativeCard({
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         footer={[
-          <Button key="cancel" onClick={() => setIsModalOpen(false)}>
+          <Button variant="outline" key="cancel" onClick={() => setIsModalOpen(false)}>
             Cancel
           </Button>,
           <Button
             key="submit"
-            type="primary"
             loading={isLoading}
             onClick={handleFeedbackSubmit}
           >
@@ -111,8 +108,6 @@ export function ExamResultForCreativeCard({
           verified?.verified == "active" ||
           (data == "mt" && (
             <button
-              className="p-1 mb-2 text-black border border-blue-400 rounded-full bg-blue-50 hover:bg-blue-500 hover:text-white hover:transition-colors"
-              type="primary"
               onClick={() => setIsModalOpen(true)}
             >
               <MdFeedback />

@@ -78,7 +78,7 @@ export function SubscriptionCard({ singlePackage }) {
           <div className={`flex gap-3 ${discount == 100 ? "w-full" : ""}`}>
             {singlePackage.has_subscription == true ? (
               <Button
-                className={`flex-1 sm:flex-none bg-green-600 hover:bg-green-700 text-white text-sm font-bold px-4 py-2 rounded-lg transition-all active:scale-95 shadow-sm ${discount == 100 ? "w-full" : ""
+                className={`flex-1 sm:flex-none  ${discount == 100 ? "w-full" : ""
                   }`}
                 onClick={handleSubscriptionClick}
               >
@@ -86,7 +86,8 @@ export function SubscriptionCard({ singlePackage }) {
               </Button>
             ):(
               <Button
-              className={`flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white text-sm font-bold px-6 py-2 rounded-lg transition-all active:scale-95 shadow-md shadow-red-200 dark:shadow-none ${discount == 100 ? "w-full" : ""
+              variant="green"
+              className={`flex-1 sm:flex-none ${discount == 100 ? "w-full" : ""
                 }`}
               onClick={handleBuyClick}
             >

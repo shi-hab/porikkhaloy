@@ -159,7 +159,7 @@ export const MTExamCard = ({ exam, isSubscribed, packageId, modelTestId, allExam
                                             <Button
                                                 variant="outline"
                                                 onClick={handleSwitchExam}
-                                                className="flex gap-2 text-blue-600"
+                                                className="flex gap-2 "
                                             >
                                                 Go to {exam?.title} Page <ArrowRightCircleIcon size={18} />
                                             </Button>
@@ -201,7 +201,7 @@ export const MTExamCard = ({ exam, isSubscribed, packageId, modelTestId, allExam
                                 <>
                                     <Button
                                         onClick={handleExamStart}
-                                        className="w-full bg-red-500 cursor-not-allowed hover:bg-red-600"
+                                        className="w-full "
                                         disabled={true}
                                     >
                                 Exam Ended

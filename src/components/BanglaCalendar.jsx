@@ -3,6 +3,7 @@ import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
+import { Button } from "./ui/button";
 
 // Bangla month names
 const banglaMonths = [
@@ -94,22 +95,22 @@ function BanglaCalendar({ streakDates = []}) {
     <div className="w-full font-siliguri bg-white sm:max-w-md md:max-w-md mx-auto border-2 rounded-md p-2 shadow">
       {/* Header */}
       <div className="flex justify-between items-center mb-4 md:mx-3 lg:mx-2">
-        <button
+        <Button
           onClick={prevMonth}
           className="px-1 py-1 rounded-full hover:bg-gray-200"
         >
           <MdOutlineKeyboardArrowLeft size={28} className="text-gray-600" />
-        </button>
+        </Button>
         <h3 className="text-lg font-extrabold">
           {banglaMonths[currentDate.getMonth()]}{" "}
           {toBanglaNumber(currentDate.getFullYear())}
         </h3>
-        <button
+        <Button
           onClick={nextMonth}
           className="px-1 py-1 rounded-full hover:bg-gray-200"
         >
           <MdOutlineKeyboardArrowRight size={28} className="text-gray-600" />
-        </button>
+        </Button>
       </div>
       <div className="flex flex-col items-center">
         {/* Weekdays */}

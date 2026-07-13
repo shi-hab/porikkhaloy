@@ -1,8 +1,9 @@
 import { PackageCard } from "@/exams/components/molecules/packages/PackageCard";
 import { useGetFreeExamBatchQuery } from "@/features/freeExamPage/freeExamApi"
+import { Spin } from "antd";
 
 function FreeExamBatch() {
-    const { data } = useGetFreeExamBatchQuery();
+    const { data, isLoading } = useGetFreeExamBatchQuery();
     const freeBatch = data?.data || [];
 
     return (
@@ -12,18 +13,25 @@ function FreeExamBatch() {
                     ফ্রি এক্সাম ব্যাচসমূহ
                 </p>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {(freeBatch?.map((pkg) => (
-                <PackageCard
-                    key={pkg.id}
-                    packageId={pkg.id}
-                    name={pkg.name}
-                    pkgImg={pkg.img}
-                    isSubscribed={pkg.is_subscribed}
-                />
-                ))
-                )}
-            </div>
+            {isLoading ? (
+                <div className="h-[70vh] grid place-content-center">
+                    <Spin />
+                </div>
+            ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {(freeBatch?.map((pkg) => (
+                        <PackageCard
+                            key={pkg.id}
+                            packageId={pkg.id}
+                            name={pkg.name}
+                            pkgImg={pkg.img}
+                            isSubscribed={pkg.is_subscribed}
+                        />
+                    ))
+                    )}
+                </div>
+            )}
+
         </div>
     )
 }

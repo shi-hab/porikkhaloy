@@ -62,13 +62,13 @@ export function MultipleSelector({
                                     variant="outline"
                                     role="combobox"
                                     aria-expanded={open}
-                                    className="w-full h-auto flex items-center justify-start p-2 text-left"
+                                    className="w-full h-auto flex items-center justify-start  text-left"
                                 >
                                     <div className="w-full">
                                         {
                                             selectedValues.length ?
                                                 selectedValues?.map((val) => (
-                                                    <div key={val} className="px-2 my-1 p-1 rounded bg-slate-200 dark:bg-slate-800 text-sm font-medium text-wrap">
+                                                    <div key={val} className="px-2 my-1 p-1 rounded  text-sm font-medium text-wrap">
                                                         {options.find((item) => item.id === val)?.title || "Unknown"}
                                                     </div>
                                                 ))

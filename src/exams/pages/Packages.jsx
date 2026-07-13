@@ -8,11 +8,9 @@ const PackagesPage = () => {
 
   const categories = res?.data || [];
 
-  // 🔥 flat all packages
   const allPackages =
     categories?.flatMap((cat) => cat.packages || []) || [];
 
-  // 🔥 ONLY SUBSCRIBED PACKAGES
   const subscribedPackages = allPackages.filter(
     (item) => item?.is_subscribed === true
   );
@@ -21,7 +19,7 @@ const PackagesPage = () => {
     <div className="container px-2 pt-6 mx-auto dark:text-white">
 
       {/* TITLE */}
-      <h1 className="mb-4 text-xl font-siliguri font-bold md:ml-[40px] lg:ml-0">
+      <h1 className="mb-4 ml-1 text-xl font-siliguri font-bold md:ml-[40px] lg:ml-0">
         এনরোল করা এক্সাম ব্যাচ
       </h1>
 

@@ -1,127 +1,98 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import Logout from "../molecules/auth/Logout";
+import { Link } from 'react-router-dom';
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { NavLinks } from "../../components/molecules/ui/NavLinks";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import Logout from "./../molecules/auth/Logout";
-import { useState } from "react";
 
-/**
- * UserNav
- *
- * Props:
- * - onMobileClick?: () => void
- *    Called when the avatar is clicked on mobile/tablet (< lg).
- *    Used by Navbar to open the right-side drawer instead of a dropdown.
- *    If not provided, mobile click falls back to opening the dropdown (old behavior).
- */
-const UserNav = ({ onMobileClick }) => {
+import {
+  Sheet,
+  SheetContent,
+} from "@/components/ui/sheet";
+
+const UserNav = () => {
   const auth = useSelector((state) => state.auth);
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false); // Dropdown state (desktop only)
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const closeDropdown = () => setOpen(false);
-
-  const avatarMarkup = (
-    <Avatar className="h-8 w-8 !shadow-inner">
-      <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-      <AvatarFallback>
-        {auth?.student?.profile_image ? (
-          <img
-            className="h-full w-full object-cover"
-            src={auth?.student?.profile_image}
-            alt="user image"
-          />
-        ) : (
-          <span className="font-semibold uppercase">
-            {auth?.student?.name?.charAt(0)}
-          </span>
-        )}
-      </AvatarFallback>
-    </Avatar>
+  const avatar = (
+    <div className="w-8 h-8 rounded-full overflow-hidden shadow-inner cursor-pointer flex items-center justify-center bg-muted">
+      {auth?.student?.profile_image ? (
+        <img
+          src={auth.student.profile_image}
+          alt="user"
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <span className="font-semibold uppercase">
+          {auth?.student?.name?.charAt(0)}
+        </span>
+      )}
+    </div>
   );
 
-  const handleTriggerClick = (e) => {
-    // On mobile/tablet, hijack the click: don't open the dropdown,
-    // instead let the parent Navbar open its right-side drawer.
-    if (onMobileClick && window.matchMedia("(max-width: 1023px)").matches) {
-      e.preventDefault();
-      e.stopPropagation();
-      onMobileClick();
-    }
-    // On desktop (lg+), do nothing here — DropdownMenuTrigger opens normally.
-  };
-
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="relative w-8 h-8 rounded-full"
-          onClick={handleTriggerClick}
-        >
-          {avatarMarkup}
-        </Button>
-        
-      </DropdownMenuTrigger>
+    <>
+      {/* Desktop */}
+      <div className="hidden lg:block w-full">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            {avatar}
+          </DropdownMenuTrigger>
 
-      {/* This dropdown content only ever opens on desktop now,
-          since mobile clicks are intercepted above. */}
-      <DropdownMenuContent align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" className="relative w-10 h-10 rounded-full">
-              <Avatar className="w-10 h-10">
-                <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-                <AvatarFallback>
-                  {auth?.student?.profile_image ? (
-                    <img
-                      className="h-full w-full object-cover"
-                      src={auth?.student?.profile_image}
-                      alt="user image"
-                    />
-                  ) : (
-                    <span>{auth?.student?.name?.charAt(0)}</span>
-                  )}
-                </AvatarFallback>
-              </Avatar>
-            </Button>
-            <div className="flex flex-col gap-2 text-base">
-              <p className="text-base font-semibold leading-none capitalize text-muted-foreground">
-                {auth?.student?.name}
-              </p>
-              <p className="text-sm leading-none text-muted-foreground">
-                {auth?.student?.email}
-              </p>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem asChild>
+              <Link to="/user/profile">প্রোফাইল</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Logout />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* Mobile */}
+      <div className="lg:hidden">
+        <div onClick={() => setMobileOpen(true)}>
+          {avatar}
+        </div>
+
+        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+          <SheetContent side="right" className="w-72">
+            <div className="space-y-2 mt-8">
+
+              <Link
+                to="/user/profile"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted"
+              >
+                প্রোফাইল
+              </Link>
+
+              {NavLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted"
+                >
+                  {item.icon}
+                  {item.title}
+                </Link>
+              ))}
+
+              <div className="pt-4 border-t">
+                <Logout />
+              </div>
             </div>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-
-        <DropdownMenuGroup>
-          <DropdownMenuItem onClick={closeDropdown}>
-            <Link
-              to="/user/profile"
-              className="flex items-center w-full h-full p-2 text-base"
-            >
-              প্রোফাইল
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="!text-base">
-          <Logout />
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </>
   );
 };
 

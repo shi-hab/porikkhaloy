@@ -28,8 +28,7 @@ export const WelcomeBox = ({ packageId, modelTestId, setIsResultModalOpen }) => 
 
             <Button
                 onclick={() => setIsResultModalOpen(false)}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg"
-                variant="outline"
+                variant="green"
             >
                 Back to Parent
             </Button>

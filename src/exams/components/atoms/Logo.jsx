@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 const Logo = () => {
     const homePageUrl = import.meta.env.VITE_HOME_PAGE_URL;
+    const logo = "https://app.porikkhaloy.com/public/images/id_432_1782277125.png";
 
     return (
       <div className="flex justify-center items-center">
@@ -9,15 +10,9 @@ const Logo = () => {
           <Link to={homePageUrl}>
             {/* Light mode logo */}
             <img
-              src="/logo/logo-light.png"
+              src={logo}
               alt="logo"
               className=" h-9  w-auto block dark:hidden"
-            />
-            {/* Dark mode logo */}
-            <img
-              src="/logo/logo-dark.png"
-              alt="logo"
-              className="h-10 w-auto hidden dark:block"
             />
           </Link>
         </div>

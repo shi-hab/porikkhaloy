@@ -4,8 +4,6 @@ import placeholder from "@/assets/Placeholder.svg";
 import { EncodeURL } from "../../atoms/urlHashCode/EncodeURL";
 
 export const PackageCard = ({ packageId, name, pkgImg, isSubscribed = null }) => {
-
-
   const packageIdURL = EncodeURL(packageId);
 
   return (

@@ -62,7 +62,7 @@ export default function PaginationSCN({
           {currentPage < totalPages && (
             <button
               onClick={handleLoadMore}
-              className="flex items-center gap-2 px-5 cursor-pointer bg-black p-2.5 rounded text-white"
+              className="flex items-center gap-2  cursor-pointer"
             >
               <span>Load More Questions</span>
               <IoMdAddCircleOutline size={20} />

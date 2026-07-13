@@ -79,8 +79,8 @@ const PackagesPage = () => {
       ) : (
         <>
           {/* Sticky Category Bar */}
-          <div className="sticky top-14 z-50 backdrop-blur-md bg-[#f4f4f5] dark:bg-gray-900/70 border-b border-gray-200/50 dark:border-gray-700/50 py-2.5 px-1">
-            <div className="flex gap-2 overflow-x-auto">
+          <div className="sticky top-14 md:top-0 z-50 backdrop-blur-md bg-[#f4f4f5] dark:bg-gray-900/70 border-b border-gray-200/50 dark:border-gray-700/50 py-2.5 px-1">
+            <div className="flex gap-2 overflow-x-auto ">
               {categories.map((cat) => (
                 <button
                   key={cat.id}

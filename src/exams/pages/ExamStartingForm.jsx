@@ -8,6 +8,8 @@ function ExamStartingForm({ setExamData }) {
   const [examFormat, setExamFormat] = useState("");
   const { categories: examTypes } = useCategoryData("exam-types");
 
+
+  
   useEffect(() => {
     setExamData({
       examFormat,

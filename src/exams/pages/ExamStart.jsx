@@ -1,11 +1,13 @@
 import { useForm } from "react-hook-form";
-import { Button } from "antd";
 import QuesCategoryForFilter from "../components/molecules/filterquesforexam/QuesCategoryForFilter";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useStartExamMutation } from "@/features/exams/examsApi";
 import { toast } from "sonner";
+import { Button } from '@/components/ui/button';
+import { Loader2 } from "lucide-react";
+import { LoaderSubmit } from './../components/atoms/LoaderSubmit';
 
 const Modal = ({ isOpen, onClose, onRedirect }) => {
   if (!isOpen) return null;
@@ -40,10 +42,16 @@ const ExamStart = () => {
     time_limit: 10,
   });
   const { control, setValue } = useForm();
+  const data = JSON.parse(sessionStorage.getItem("data"));
+
+  console.log(data);
   
-  const handleStartExam = async () => {
+  const handleStartExam = async (e) => {
+    e.preventDefault();
+
     if (!auth?.student) navigate("/login");
-    const data = JSON.parse(sessionStorage.getItem("data"));
+
+
     const payload = {
       title: "Mock Test",
       description: "",
@@ -71,6 +79,8 @@ const ExamStart = () => {
 
     try {
       const response = await startExam(payload).unwrap();
+
+      console.log(response);
 
       if (response.exam && response.questions_list) {
         sessionStorage.setItem("examData", JSON.stringify(payload));
@@ -103,19 +113,19 @@ const ExamStart = () => {
         onClose={() => setModalOpen(false)}
         onRedirect={() => navigate("/buy-quota")}
       />
-      <form className="grid items-start w-full gap-4 mx-auto   xl:p-8">
+      <form onSubmit={handleStartExam} className="grid items-start w-full gap-4 mx-auto   xl:p-8">
         <QuesCategoryForFilter
           control={control}
           setValue={setValue}
           setFormData={setFormData}
         />
         <Button
-          onClick={handleStartExam}
           loading={isExamStarting}
           type="submit"
-          className=" bg-[#281E5D] hover:!text-white hover:!bg-blue-800 w-full h-10 text-white"
+          variant="green"
+          className="w-full"
         >
-          পরিক্ষা শুরু করো
+          {isExamStarting ? <LoaderSubmit/> : "পরিক্ষা শুরু করো"}
         </Button>
       </form>
     </div>

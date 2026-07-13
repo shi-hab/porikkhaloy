@@ -308,7 +308,8 @@ const SubscriptionsEnrollmentForm = () => {
               {/* Submit */}
               <Button
                 type="submit"
-                className="w-full bg-blue-700 hover:bg-blue-800"
+                variant="green"
+                className="w-full"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

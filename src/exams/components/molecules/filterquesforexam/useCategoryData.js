@@ -3,7 +3,7 @@ import { useState } from "react";
 
  const useCategoryData = (category) => {
   const {data: categoriesData, isLoading, error} = useGetCategoryQuery(category);
-  const [categoryData, setCategoryData] = useState(null); 
+  const [categoryData, setCategoryData] = useState(null);
 
   return {
     categories: categoriesData?.data?.data,

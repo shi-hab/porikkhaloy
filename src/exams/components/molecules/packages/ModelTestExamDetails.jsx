@@ -328,7 +328,7 @@ function ModelTestExamDetails() {
           {/* Start Exam Button */}
           <Button
             onClick={handleExamStart}
-            className={`w-full font-bold border-b-4 border-blue-800 rounded-md text-white transition-colors duration-200
+            className={`
             ${isExamNotStarted || isExamStarting ? "cursor-not-allowed " : ""}`}
           >
             {isExamStarting ? (
@@ -345,7 +345,7 @@ function ModelTestExamDetails() {
             <Link
               to={`/package/${packageId}/model-test-merit-list/${singleMT?.id}`}
             >
-              <Button className="w-full bg-green-600 font-bold border-b-4 border-green-800 hover:bg-green-700 text-white dark:bg-green-500 dark:border-green-700 dark:hover:bg-green-600 rounded-md transition-colors duration-200">
+              <Button variant="green" className="w-full">
                 মেরিট লিস্ট
               </Button>
             </Link>

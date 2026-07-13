@@ -11,6 +11,7 @@ import { MdLeaderboard, MdAssignmentAdd } from "react-icons/md";
 import { SiVitest } from "react-icons/si";
 import { FaBookReader } from "react-icons/fa";
 import SocialIcon from "./home/SocialIcon";
+import { Button } from '@/components/ui/button';
 
 export default function HomePage() {
   const auth = useSelector((state) => state.auth?.student);

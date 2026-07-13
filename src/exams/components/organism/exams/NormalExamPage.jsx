@@ -74,12 +74,13 @@ export default function NormalExamPage({ questions_list = [], verified = {} }) {
                             <Button
                               key="cancel"
                               onClick={() => setIsModalOpen(false)}
+                              className="mb-2"
                             >
                               Cancel
                             </Button>,
                             <Button
                               key="submit"
-                              type="primary"
+                              variant="green"
                               loading={isLoading}
                               onClick={handleFeedbackSubmit}
                             >

@@ -1,7 +1,7 @@
-import DIULogo from "@/assets/page/home/diuLogoSide.png";
-import IICLogo from "@/assets/page/home/IICLogo.jpg";
-
 function PartnerSlider() {
+  const DIULogo = "https://app.porikkhaloy.com/public/images/id_433_1782277295.png";
+  const IICLogo = "https://app.porikkhaloy.com/public/images/id_434_1782277353.jpg";
+
   return (
     <section className="w-full pt-8 pb-6">
       {/* Title */}

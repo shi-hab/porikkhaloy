@@ -23,7 +23,7 @@ export const MTExamActions = ({
       {allExamsSubmitted ? (
         <Button
           onClick={handleResultShow}
-          className="w-full text-lg bg-blue-600 hover:bg-blue-800"
+          className="w-full "
         >
           View Result
         </Button>
@@ -38,7 +38,6 @@ export const MTExamActions = ({
             onClick={() => {
               onExamsSubmit();
             }}
-            className="w-full bg-blue-900 font-bold border-b-4 border-blue-800 hover:bg-blue-700 text-white dark:bg-blue-500 dark:border-blue-700 dark:hover:bg-blue-600 rounded-md transition-colors duration-200"
             disabled={isLoading}
           >
             <p className="flex  justify-center gap-5 text-center ">

@@ -42,7 +42,7 @@ const Logout = () => {
     return (
         <AlertDialog open={open} onOpenChange={setOpen} >
             <AlertDialogTrigger onClick={handleOpen} className="w-full !p-0" >
-                <Button className="w-full !p-0 text-base">
+                <Button className="w-full">
                     Logout
                 </Button>
             </AlertDialogTrigger>

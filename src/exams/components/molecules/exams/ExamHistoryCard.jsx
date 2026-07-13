@@ -4,6 +4,7 @@ import { isoDateFormatter } from "@/helpers/dateFormatter";
 import { MdOutlineRestartAlt } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { Spin } from "antd";
+import { Button } from "@/components/ui/button";
 
 const ExamHistoryCard = ({ exam, handleStartExam }) => {
   const [loading, setLoading] = useState(false);
@@ -91,16 +92,14 @@ const ExamHistoryCard = ({ exam, handleStartExam }) => {
             {exam?.type || "Unknown Type"}
           </div>
 
-          <button
+          <Button
             onClick={() => handleRestartClick(exam?.id)}
             disabled={loading}
-            className={`bg-purple-500 px-2 py-1 rounded-lg text-white flex items-center gap-1 mb-2 hover:bg-purple-600 transition ${
-              loading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+            variant="green"
           >
             {loading ? <Spin size="small" /> : <MdOutlineRestartAlt />}
             {loading ? "Restarting..." : "Restart Exam"}
-          </button>
+          </Button>
         </div>
       </Link>
     </Card>

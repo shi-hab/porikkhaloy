@@ -17,7 +17,7 @@ export default function ErrorPage() {
                     <Button variant='outline' onClick={() => navigate(-1)}>
                         Go Back
                     </Button>
-                    <Button onClick={() => navigate('/')}>Back to Home</Button>
+                    <Button  onClick={() => navigate('/')}>Back to Home</Button>
                 </div>
             </div>
         </div>
