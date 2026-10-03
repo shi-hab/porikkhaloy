@@ -132,7 +132,7 @@ const ModelTestMeritList = () => {
           {/* HEADER */}
           {results?.data?.model_test_name && (
             <div className="w-full flex justify-center items-center">
-              <p className="bg-white shadow-sm border w-full text-center px-4 py-1 font-siliguri font-semibold text-lg my-2 rounded-md ">
+              <p className="bg-white shadow-sm border w-full text-center px-4 py-1 font-siliguri font-bold text-lg my-2 rounded-md ">
                 {results?.data?.model_test_name
                   ? parseHtmlContent(results?.data?.model_test_name)
                   : "মডেল টেস্ট এর নাম"}
@@ -160,7 +160,7 @@ const ModelTestMeritList = () => {
               {/* WINNER */}
               {finalWinner && (
                 <div className="mb-6 animate-bounce  flex flex-col items-center">
-                  <div className="bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white text-2xl md:text-3xl font-extrabold px-6 py-3 rounded-2xl shadow-2xl border-2 border-white transform transition-transform duration-500 hover:scale-105 text-center">
+                  <div className="bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-white text-2xl md:text-3xl font-bold px-6 py-3 rounded-2xl shadow-2xl border-2 border-white transform transition-transform duration-500 hover:scale-105 text-center">
                     🎊 Congratulations! 🎊 <br />
                     You are the Winner!
                   </div>
@@ -184,7 +184,7 @@ const ModelTestMeritList = () => {
 
                       {/* Name & ID */}
                       <div className="flex-1">
-                        <div className="text-sm md:text-base font-semibold dark:text-white">
+                        <div className="text-sm md:text-base font-bold dark:text-white">
                           {finalWinner ? finalWinner.name : item.name}
                         </div>
                         <div className="text-[12px] text-gray-600 dark:text-gray-300">
@@ -202,7 +202,7 @@ const ModelTestMeritList = () => {
                         <div className="text-green-900 dark:text-white font-bold">
                           পজিশন : #{finalWinner ? finalWinner.rank : item.rank}
                         </div>
-                        <div className="text-blue-800 dark:text-white font-semibold">
+                        <div className="text-blue-800 dark:text-white font-bold">
                           মার্ক :{" "}
                           {finalWinner
                             ? finalWinner.final_result
@@ -242,7 +242,7 @@ const ModelTestMeritList = () => {
                     </div>
 
                     <div className="flex-1">
-                      <div className="text-sm md:text-base font-semibold dark:text-white">
+                      <div className="text-sm md:text-base font-bold dark:text-white">
                         {myResult?.name}
                         <span className="ml-1 px-3  text-xs bg-purple-200 text-purple-800 rounded-full">
                           তুমি
@@ -259,7 +259,7 @@ const ModelTestMeritList = () => {
                       <div className="text-green-900 dark:text-white font-bold">
                         পজিশন : #{myResult.rank}
                       </div>
-                      <div className="text-blue-800 dark:text-white font-semibold">
+                      <div className="text-blue-800 dark:text-white font-bold">
                         মার্ক : {myResult.final_result}
                       </div>
                     </div>
@@ -287,7 +287,7 @@ const ModelTestMeritList = () => {
                       </div>
 
                       <div className="flex-1">
-                        <div className="text-sm md:text-base font-semibold dark:text-white">
+                        <div className="text-sm md:text-base font-bold dark:text-white">
                           {item?.name}
                         </div>
                         <div className="text-[12px] text-gray-600 dark:text-gray-300">
@@ -301,7 +301,7 @@ const ModelTestMeritList = () => {
                         <div className="text-green-900 dark:text-white font-bold">
                           পজিশন : #{item.rank}
                         </div>
-                        <div className="text-blue-800 dark:text-white font-semibold">
+                        <div className="text-blue-800 dark:text-white font-bold">
                           মার্ক : {item.final_result}
                         </div>
                       </div>

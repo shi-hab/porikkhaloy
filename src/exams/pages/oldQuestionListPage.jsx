@@ -224,7 +224,7 @@ const QuestionListForStudentPage = () => {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={reStart}
-                  className="flex items-center gap-2 ml-4 px-3 py-1 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded shadow dark:bg-red-600 dark:hover:bg-red-700 transition-colors"
+                  className="flex items-center gap-2 ml-4 px-3 py-1 text-sm font-bold text-white bg-red-500 hover:bg-red-600 rounded shadow dark:bg-red-600 dark:hover:bg-red-700 transition-colors"
                 >
                   <RotateCcw className="w-4 h-4" />
                   রিস্টার্ট
@@ -237,7 +237,7 @@ const QuestionListForStudentPage = () => {
                   <div className="flex justify-between items-center  shadow-2xl bg-blue-900">
                     {/* Total Question */}
                     <div className="flex items-center justify-center space-x-2 w-32 px-2 py-3  font-bold ">
-                      <span className="text-white dark:text-indigo-400 font-semibold text-center truncate">
+                      <span className="text-white dark:text-indigo-400 font-bold text-center truncate">
                         মোট : {toBanglaNumeral(totalQuestion)} টি
                       </span>
                     </div>
@@ -245,7 +245,7 @@ const QuestionListForStudentPage = () => {
                     {/* Correct */}
                     <div className="flex items-center justify-center space-x-2 w-32 px-2 py-3  font-bold border-l-[3px] border-r-[3px] border-gray-200/50 dark:border-gray-700/50">
                       <SquareCheck className="w-5 h-5 text-white dark:text-green-400" />
-                      <span className="text-white dark:text-green-400 font-semibold text-center truncate">
+                      <span className="text-white dark:text-green-400 font-bold text-center truncate">
                         {toBanglaNumeral(correctTotal)} টি
                       </span>
                     </div>
@@ -253,14 +253,14 @@ const QuestionListForStudentPage = () => {
                     {/* Wrong */}
                     <div className="flex items-center justify-center space-x-2 w-32 px-2 py-3  font-bold  border-r-[3px] border-gray-200/50 dark:border-gray-700/50">
                       <CircleX className="w-5 h-5 text-white dark:text-red-400" />
-                      <span className="text-white dark:text-red-400 font-semibold text-center truncate">
+                      <span className="text-white dark:text-red-400 font-bold text-center truncate">
                         {toBanglaNumeral(wrongTotal)} টি
                       </span>
                     </div>
 
                     {/* Marks */}
                     <div className="flex items-center justify-center space-x-2 w-32 px-2 py-3  font-bold ">
-                      <span className="text-white dark:text-yellow-400 font-semibold text-center truncate">
+                      <span className="text-white dark:text-yellow-400 font-bold text-center truncate">
                         মার্ক :{" "}
                         {toBanglaNumeral(correctTotal * 1 - wrongTotal * 0.25)}
                       </span>
@@ -355,7 +355,7 @@ const QuestionListForStudentPage = () => {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={reStart}
-                  className="flex items-center gap-2 ml-4 px-3 py-1 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded shadow dark:bg-red-600 dark:hover:bg-red-700 transition-colors"
+                  className="flex items-center gap-2 ml-4 px-3 py-1 text-sm font-bold text-white bg-red-500 hover:bg-red-600 rounded shadow dark:bg-red-600 dark:hover:bg-red-700 transition-colors"
                 >
                   <RotateCcw className="w-4 h-4" />
                   রিস্টার্ট

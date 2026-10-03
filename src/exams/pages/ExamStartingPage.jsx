@@ -109,7 +109,7 @@ export default function ExamStartingPage() {
       <div>
         <h1 className="py-4 text-3xl text-blue-900 bg-green-50 border border-green-400 border-b-4 rounded-lg mt-2 font-bold md:text-4xl">
           পরীক্ষালয়ে তোমাকে স্বাগতম
-          <p className="text-sm mt-2 font-normal">
+          <p className="text-sm mt-2 font-regular">
             ইচ্ছামতো প্রতিষ্ঠান সিলেক্ট করে ব্যাখ্যাসহ প্রশ্নে পরিক্ষা দেও!
           </p>
         </h1>
@@ -126,7 +126,7 @@ export default function ExamStartingPage() {
               </p>
               <Link
                 to="/user/subscription"
-                className="mt-4 inline-block text-center bg-green-700 text-white px-5 py-2 rounded hover:bg-green-600 transition-all duration-300 text-lg font-semibold"
+                className="mt-4 inline-block text-center bg-green-700 text-white px-5 py-2 rounded hover:bg-green-600 transition-all duration-300 text-lg font-bold"
               >
                 সাবস্ক্রিপশন কিনো &rarr;
               </Link>
@@ -156,7 +156,7 @@ export default function ExamStartingPage() {
                     {subscription?.title}
                   </h4>
 
-                  <p className="text-xl font-semibold text-gray-800">
+                  <p className="text-xl font-bold text-gray-800">
                     <span className="font-serif">৳</span>
                     {subscription?.price}
                   </p>
@@ -170,7 +170,7 @@ export default function ExamStartingPage() {
                       </p>
                       <Link
                         to="/user/subscription"
-                        className="mt-4 inline-block text-center bg-green-700 text-white px-5 py-2 rounded hover:bg-green-600 transition-all duration-300 text-lg font-semibold"
+                        className="mt-4 inline-block text-center bg-green-700 text-white px-5 py-2 rounded hover:bg-green-600 transition-all duration-300 text-lg font-bold"
                       >
                         সাবস্ক্রিপশন কিনো &rarr;
                       </Link>
@@ -252,16 +252,16 @@ const EnrollmentForm = ({
 
         <div className="py-2 px-3 mb-4 text-sm bg-gray-50 border border-gray-200 rounded-sm">
           <ul className="list-disc pl-5 mt-2 text-gray-600">
-            <li className="text-[14px] font-medium mb-2">
+            <li className="text-[14px] font-regular mb-2">
               নিচের নাম্বারে{" "}
               {/* <span className="font-bold text-blue-600 underline">
                 {discountedPrice}
               </span>{" "} */}
               টাকা সেন্ড মানি করো
             </li>
-            <li className="text-[14px] font-medium">
+            <li className="text-[14px] font-regular">
               01706-429945 -{" "}
-              <span className="font-semibold">বিকাশ, নগদ, রকেট</span>
+              <span className="font-bold">বিকাশ, নগদ, রকেট</span>
             </li>
           </ul>
 
@@ -310,7 +310,7 @@ const EnrollmentForm = ({
                         onChange={() => field.onChange(method)}
                         className="w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center transition-all duration-300 peer-checked:border-blue-800 peer-checked:bg-blue-700 peer-checked:scale-110"
                       />
-                      <span className="capitalize text-gray-700 text-lg font-medium">
+                      <span className="capitalize text-gray-700 text-lg font-regular">
                         {method}
                       </span>
                     </label>

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 export function ErrorScreen() {
     return (
         <div className="flex flex-col items-center justify-center h-screen text-center bg-gray-50">
-            <p className="text-xl font-semibold text-red-600 mb-2">
+            <p className="text-xl font-bold text-red-600 mb-2">
                 Oops! Unable to load package details.
             </p>
             <p className="text-gray-600">

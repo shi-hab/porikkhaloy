@@ -1,98 +1,190 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useResendEmailVerificationMutation } from "@/features/auth/authApi";
-import { useEffect } from "react";
-import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { LoaderSubmit } from "../components/atoms/LoaderSubmit";
+import { useState } from "react";
+import { MessageCircle, UserPlus, LogIn, ArrowLeft } from "lucide-react";
+import Logo from "../components/atoms/Logo";
+
+const WHATSAPP_NUMBER = "8801706429945";
 
 const ForgetPass = () => {
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		setError,
-	} = useForm();
-	const navigate = useNavigate();
-	const [resendEmailVerification, { data, isLoading, error }] = useResendEmailVerificationMutation();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const navigate = useNavigate();
 
-	const handleLogin = async(formData) => {
-		const res = await resendEmailVerification(formData);
+  // step: "choose" | "new" | "old" | null (modal closed)
+  const [step, setStep] = useState(null);
+  const [email, setEmail] = useState("");
 
-		if (res.data.status_code == 200) {
-			toast.success(res.data.message);
-		}
-	}
+  const onSubmit = (formData) => {
+    setEmail(formData.email);
+    setStep("choose");
+  };
 
-	useEffect(() => {
-		if (error?.data) {
-			setError("root.random", {
-				type: "random",
-				message: error.data?.message,
-			});
+  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    `আমার পাসওয়ার্ড চেঞ্জ করতে সাহায্য দরকার।\nআমার ইমেইল: ${email}`
+  )}`;
 
-			toast.error(error.data?.message);
-		}
+  const closeModal = () => setStep(null);
 
-		if (data && data?.data?.token) {
-			navigate("/exams");
-		}
-	}, [data, error, navigate, setError]);
-	return (
-    <form
-      className="py-10 xl:pt-20 h-[80vh]"
-      onSubmit={handleSubmit(handleLogin)}
-    >
-      <div className="grid gap-4 max-w-xl mx-auto bg-white rounded-md p-5 xl:p-10 shadow border">
-        <div className="grid gap-2 ">
-          <h1 className="text-2xl font-bold text-gray-600">
-            Forgotten Password
-          </h1>
-          <span className="text-base">
-            Enter Your Email to fix your password
+  return (
+    <div className="min-h-dvh flex items-center justify-center px-4">
+      <div className="w-full max-w-md lg:max-w-xl">
+        <div className="flex justify-center mb-6">
+          <Logo />
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid gap-4">
+            <div className="grid gap-1">
+              <Input
+                {...register("email", { required: "Email is required" })}
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Email"
+              />
+              {errors.email && (
+                <p className="text-red-600 text-sm">{errors.email.message}</p>
+              )}
+
+              <Link
+                to="/login"
+                className="text-sm text-right text-gray-500 hover:underline"
+              >
+                Remember Password?
+              </Link>
+            </div>
+
+            <Button className="mt-10">Continue</Button>
+          </div>
+        </form>
+
+        <div className="mt-6 text-center border-t pt-5">
+          <span className="text-sm text-gray-600">
+            তুমি কি অ্যাপে নতুন?{" "}
+            <Link
+              to="/registration"
+              className="font-semibold text-blue-700 hover:text-blue-800 underline underline-offset-2 transition"
+            >
+              নতুন একাউন্ট খুলো
+            </Link>
           </span>
         </div>
-        <div className="grid gap-1">
-          <div className="flex items-center">
-            <Label htmlFor="email" className="text-base">
-              Email
-            </Label>
-          </div>
-          <Input
-            {...register("email", {
-              required: "Password is required",
-              minLength: {
-                value: 8,
-                message: "Your email must be at least 8 characters",
-              },
-            })}
-            id="email"
-            name="email"
-            type="email"
-            placeholder="email"
-          />
-          <Link
-            to={"/login"}
-            className="text-right text-sm hover:underline text-gray-500"
-          >
-            Remember Password?
-          </Link>
-          {errors.email && (
-            <span className="text-red-600">{errors.email.message}</span>
-          )}
-        </div>
-        <p className="text-red-600">{errors?.root?.random?.message}</p>
-        <Button
-          className="!py-6 bg-blue-700 font-bold text-white border-blue-900 border-b-4 dark:bg-blue-600 dark:border-blue-800"
-          disabled={isLoading}
-        >
-          {isLoading ? <LoaderSubmit /> : "Change Password"}
-        </Button>
       </div>
-    </form>
-  );
-}
 
-export default ForgetPass
+      {/* ---------------- Modal ---------------- */}
+      <Dialog open={!!step} onOpenChange={(open) => !open && closeModal()}>
+        <DialogContent className="sm:max-w-md">
+          {step === "choose" && (
+            <>
+              <DialogHeader>
+                <DialogTitle>তোমার একাউন্ট আছে?</DialogTitle>
+                <DialogDescription>
+                  তুমি এই অ্যাপে নতুন, নাকি আগে থেকেই অ্যাকাউন্ট আছে — সেটা বেছে নাও
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setStep("new")}
+                  className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-colors p-5 text-center"
+                >
+                  <UserPlus className="w-7 h-7 text-blue-600" />
+                  <span className="font-semibold text-sm">আমি নতুন ইউজার</span>
+                  <span className="text-xs text-gray-500">এখনো অ্যাকাউন্ট নেই</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setStep("old")}
+                  className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 hover:border-green-500 hover:bg-green-50 transition-colors p-5 text-center"
+                >
+                  <LogIn className="w-7 h-7 text-green-600" />
+                  <span className="font-semibold text-sm">আগে থেকে অ্যাকাউন্ট আছে</span>
+                  <span className="text-xs text-gray-500">পাসওয়ার্ড ভুলে গেছি</span>
+                </button>
+              </div>
+            </>
+          )}
+
+          {step === "new" && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <UserPlus className="w-5 h-5 text-blue-600" />
+                  নতুন অ্যাকাউন্ট প্রয়োজন
+                </DialogTitle>
+                <DialogDescription>
+                  তোমার এই ইমেইলে ({email}) এখনো কোনো অ্যাকাউন্ট খোলা নেই। প্রথমে একটা অ্যাকাউন্ট তৈরি করো।
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="flex flex-col gap-2 mt-4">
+                <Button onClick={() => navigate("/registration")}>
+                  Create Account
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => setStep("choose")}
+                  className="flex items-center justify-center gap-1 text-sm text-gray-500 hover:underline mt-1"
+                >
+                  <ArrowLeft className="w-4 h-4" /> পিছনে যাও
+                </button>
+              </div>
+            </>
+          )}
+
+          {step === "old" && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-green-600" />
+                  সাপোর্ট এর সাথে কথা বলো
+                </DialogTitle>
+                <DialogDescription>
+                  তোমার ইমেইল ({email}) সহ একটা মেসেজ WhatsApp এ পাঠানো হবে। আমাদের টিম দ্রুত তোমার পাসওয়ার্ড রিসেট করে দেবে।
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="flex flex-col gap-2 mt-4">
+                <a
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeModal}
+                >
+                  <Button className="w-full flex items-center gap-2 bg-green-600 hover:bg-green-700">
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp এ মেসেজ করো
+                  </Button>
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setStep("choose")}
+                  className="flex items-center justify-center gap-1 text-sm text-gray-500 hover:underline mt-1"
+                >
+                  <ArrowLeft className="w-4 h-4" /> পিছনে যাও
+                </button>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default ForgetPass;

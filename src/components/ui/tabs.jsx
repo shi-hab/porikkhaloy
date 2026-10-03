@@ -21,7 +21,7 @@ const TabsTrigger = React.forwardRef(({ className, ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "px-4 py-2 text-sm font-medium",
+      "px-4 py-2 text-sm font-regular",
       "border-none outline-none", // removes all focus ring
       "text-gray-700 dark:text-gray-300",
       "hover:bg-gray-200 dark:hover:bg-gray-700",

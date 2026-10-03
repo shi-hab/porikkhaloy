@@ -140,8 +140,8 @@ const QuestionFeedback = () => {
           {/* Page Info */}
           <div className="text-sm text-gray-500 dark:text-gray-400">
             Showing page{" "}
-            <span className="font-medium text-blue-600">{currentPage}</span> of{" "}
-            <span className="font-medium">
+            <span className="font-regular text-blue-600">{currentPage}</span> of{" "}
+            <span className="font-regular">
               {Math.ceil((data?.data?.total || 0) / perPage)}
             </span>
           </div>

@@ -17,6 +17,10 @@ export const packagesApi = apiSlice.injectEndpoints({
       query: (id) => `/packages/${id}`,
     }),
 
+    getPackageBySlug: builder.query({
+      query: (slug) => `/packages/slug/${slug}`,
+    }),
+
     getModelTestsByPkgId: builder.query({
       query: (id) => `/packages/${id}/model-tests`,
     }),
@@ -62,6 +66,7 @@ export const {
   useGetAllPaymentsQuery,
   useGetAllHomePageDataQuery,
   useGetSinglePackageQuery,
+  useGetPackageBySlugQuery,
   useGetSingleModelTestQuery,
   useSubscribeToPackageMutation,
   useGetModelTestsByPkgIdQuery,

@@ -49,7 +49,7 @@ const BuyQuotaPage = () => {
 
       {/* Recipient Info Section */}
       <div className="py-4 px-2 mb-4 text-sm bg-gray-100 rounded-md">
-        <h3 className="mb-2 font-semibold">
+        <h3 className="mb-2 font-bold">
           নিচের নাম্বারে নির্দিষ্ট টাকা সেন্ড মানি করো
         </h3>
         <ul className="list-disc pl-5 mt-4">
@@ -68,7 +68,7 @@ const BuyQuotaPage = () => {
 
       <form onSubmit={handleSubmit(handleBuyQuota)} className="space-y-4">
         <div>
-          <Label htmlFor="mobile_number" className="block text-sm font-medium">
+          <Label htmlFor="mobile_number" className="block text-sm font-regular">
             Mobile Number
           </Label>
           <Input
@@ -87,7 +87,7 @@ const BuyQuotaPage = () => {
         </div>
 
         <div>
-          {/* <Label htmlFor="payment_method" className="block text-sm font-medium">
+          {/* <Label htmlFor="payment_method" className="block text-sm font-regular">
             Payment Method
           </Label> */}
           <select
@@ -110,7 +110,7 @@ const BuyQuotaPage = () => {
         </div>
 
         <div>
-          <Label htmlFor="transaction_id" className="block text-sm font-medium">
+          <Label htmlFor="transaction_id" className="block text-sm font-regular">
             Transaction ID or Your Name
           </Label>
           <Input
@@ -129,7 +129,7 @@ const BuyQuotaPage = () => {
         </div>
 
         {/* <div>
-          <Label htmlFor="coupon" className="block text-sm font-medium">
+          <Label htmlFor="coupon" className="block text-sm font-regular">
             Coupon Code (Optional)
           </Label>
           <Input

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   AlertDialog,
@@ -8,7 +8,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-
 import { CreativeExamForMT } from "@/exams/components/molecules/packages/mtexam/CreativeExamForMT";
 import { McqExamCardForMT } from "@/exams/components/molecules/packages/mtexam/McqExamCardForMT";
 import { useUploadAnswerFileMutation } from "@/features/packages/mtExamsApi";
@@ -55,7 +54,8 @@ export default function MTExamOnGoingPage() {
   const [uploadAnswerFile, { isLoading: isUploading }] = useUploadAnswerFileMutation();
   const [finishAllMTExam, { isLoading: isFinishingExam }] = useFinishAllMTExamMutation();
   const isExamsActive = hasActiveExams(startTime, endTime);
-  
+  const submitFnRef = useRef();
+
 
   useEffect(() => {
     window.scrollTo({
@@ -101,11 +101,12 @@ export default function MTExamOnGoingPage() {
 
       navigate(
         `/model-test/${modelTestId}/mtexam-result/${studentId}/${attemptId}`,
-        { replace: true,
-          state:{
-            drawerOpen : true,
+        {
+          replace: true,
+          state: {
+            drawerOpen: true,
           }
-         },
+        },
       );
 
     } catch (err) {
@@ -115,23 +116,29 @@ export default function MTExamOnGoingPage() {
     }
   };
 
+
+
+  useEffect(() => {
+    submitFnRef.current = submitAllMTExams;
+  });
+
   useEffect(() => {
     if (!endTimes) return;
 
     const timer = setInterval(() => {
       const currentTime = Date.now();
 
-      if (currentTime >= endTimes) {
+      if(currentTime >= endTimes){
         clearInterval(timer);
 
-        if (!isSubmitting) {
-          submitAllMTExams();
+        if(!isSubmitting){
+          submitFnRef.current();
         }
       }
-    }, 250);
+    },250);
 
-    return () => clearInterval(timer);
-  }, [endTimes, isSubmitting]);
+    return () => clearTimeout(timer);
+  }, [endTimes]);
 
 
 

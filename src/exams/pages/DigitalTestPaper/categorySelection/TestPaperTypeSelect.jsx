@@ -133,7 +133,7 @@ function TestPaperTypeSelect() {
 
                 <BookOpen className="w-5 h-5 text-blue-600" />
 
-                <h3 className="font-semibold">
+                <h3 className="font-bold">
                   {type.title}
                 </h3>
 

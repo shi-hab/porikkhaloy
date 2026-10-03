@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Eye, EyeOff } from "lucide-react";
 import { LoaderSubmit } from "../components/atoms/LoaderSubmit";
 import { useResetPasswordMutation } from "@/features/auth/authApi";
 import { toast } from "sonner";
@@ -15,9 +15,17 @@ const ResetPassword = () => {
   const email = queryParams.get("email");
   const token = queryParams.get("token");
 
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
+
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
 
   // Redirect if email or token is missing
   useEffect(() => {
@@ -47,71 +55,107 @@ const ResetPassword = () => {
   };
 
   return (
-    <form
-      className="py-10 xl:pt-20 h-[80vh]"
-      onSubmit={handleSubmit(userResetPassword)}
-    >
-      <div className="grid gap-4 max-w-xl mx-auto bg-white rounded-md p-5 xl:p-10 shadow border">
-        <div className="grid gap-2">
-          <h1 className="text-2xl font-bold text-gray-600">Reset Password</h1>
-          <span className="text-base">Enter your new password below</span>
-        </div>
+    <div className="min-h-dvh flex items-center justify-center px-4">
+      <div className="w-full max-w-md lg:max-w-xl">
+        <form onSubmit={handleSubmit(userResetPassword)}>
+          <div className="grid gap-4">
+            {/* Password Field */}
+            <div className="grid gap-1 relative">
+              <div className="relative">
+                <Input
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Your password must be at least 8 characters",
+                    },
+                  })}
+                  id="password"
+                  name="password"
+                  placeholder="New password"
+                  type={showPass ? "text" : "password"}
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPass(!showPass)}
+                  className="
+                    absolute
+                    right-3
+                    top-1/2
+                    -translate-y-1/2
+                    flex
+                    items-center
+                    justify-center
+                    text-muted-foreground
+                    hover:text-foreground
+                    transition-colors
+                  "
+                >
+                  {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="text-red-600 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
 
-        {/* Password Field */}
-        <div className="grid gap-1">
-          <Label htmlFor="password" className="text-base">
-            Password
-          </Label>
-          <Input
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 8,
-                message: "Your password must be at least 8 characters",
-              },
-            })}
-            id="password"
-            type="password"
-            placeholder="New password"
-          />
-          {errors.password && (
-            <p className="text-red-600">{errors.password.message}</p>
-          )}
-        </div>
+            {/* Confirm Password Field */}
+            <div className="grid gap-1 relative">
+              <div className="relative">
+                <Input
+                  {...register("password_confirmation", {
+                    required: "Confirm password is required",
+                    validate: (value) =>
+                      value === watch("password") ||
+                      "Passwords do not match",
+                  })}
+                  id="password_confirmation"
+                  name="password_confirmation"
+                  placeholder="Confirm password"
+                  type={showConfirmPass ? "text" : "password"}
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPass(!showConfirmPass)}
+                  className="
+                    absolute
+                    right-3
+                    top-1/2
+                    -translate-y-1/2
+                    flex
+                    items-center
+                    justify-center
+                    text-muted-foreground
+                    hover:text-foreground
+                    transition-colors
+                  "
+                >
+                  {showConfirmPass ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
+                </button>
+              </div>
+              {errors.password_confirmation && (
+                <p className="text-red-600 text-sm">
+                  {errors.password_confirmation.message}
+                </p>
+              )}
+            </div>
 
-        {/* Confirm Password Field */}
-        <div className="grid gap-1">
-          <Label htmlFor="password_confirmation" className="text-base">
-            Confirm Password
-          </Label>
-          <Input
-            {...register("password_confirmation", {
-              required: "Confirm password is required",
-              minLength: {
-                value: 8,
-                message: "Your password must be at least 8 characters",
-              },
-            })}
-            id="password_confirmation"
-            type="password"
-            placeholder="Confirm password"
-          />
-          {errors.password_confirmation && (
-            <p className="text-red-600">
-              {errors.password_confirmation.message}
-            </p>
-          )}
-        </div>
-
-        {/* Submit Button */}
-        <Button
-          className="!py-6 bg-blue-700 font-bold text-white border-blue-900 border-b-4 dark:bg-blue-600 dark:border-blue-800"
-          disabled={isLoading}
-        >
-          {isLoading ? <LoaderSubmit /> : "Change Password"}
-        </Button>
+            {/* Submit Button */}
+            <Button disabled={isLoading}>
+              {isLoading ? <LoaderSubmit /> : "Change Password"}
+            </Button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 };
 

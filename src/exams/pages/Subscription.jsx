@@ -134,7 +134,7 @@ const Subscription = () => {
           <div className="my-6">
             <div
               onClick={() => setNotice(!notice)}
-              className="text-center py-3 cursor-pointer text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-200 font-semibold"
+              className="text-center py-3 cursor-pointer text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-200 font-bold"
             >
               {notice ? "হাইড করে রাখো" : "সাবক্রিপশন সম্পর্কে বিস্তারিত দেখো"}
             </div>
@@ -147,14 +147,14 @@ const Subscription = () => {
               <div className="bg-blue-50 p-5 rounded-lg border border-blue-200 shadow-sm leading-relaxed text-gray-800  text-[16px]">
                 <p>
                   এই সাবস্ক্রিপশনটি ক্রয়ের মাধ্যমে তুমি{" "}
-                  <span className="font-semibold text-blue-800">
+                  <span className="font-bold text-blue-800">
                     পরীক্ষালয় প্ল্যাটফর্মে আনলিমিটেড এক্সেস
                   </span>{" "}
                   পাবে।
                   <br />
                   <br />
                   এখান থেকে তুমি নিজের পছন্দ অনুযায়ী যেকোনো সময় প্রশ্নের{" "}
-                  <span className="font-semibold">
+                  <span className="font-bold">
                     স্ট্যান্ডার্ড, বিষয়, অধ্যায়, টপিক এবং সাব-টপিক
                   </span>{" "}
                   নির্বাচন করে পরীক্ষা দিতে পারবে। পাশাপাশি, প্রশ্নসংখ্যা ও
@@ -162,14 +162,14 @@ const Subscription = () => {
                   <br />
                   <br />
                   প্রতিটি পরীক্ষার শেষে তুমি জানতে পারবে কোন প্রশ্নে{" "}
-                  <span className="text-red-600 font-medium">ভুল</span> করেছো,
-                  কোনটি <span className="text-green-600 font-medium">সঠিক</span>{" "}
+                  <span className="text-red-600 font-regular">ভুল</span> করেছো,
+                  কোনটি <span className="text-green-600 font-regular">সঠিক</span>{" "}
                   হয়েছে এবং পাবে{" "}
-                  <span className="font-semibold">ব্যাখ্যাসহ সমাধান</span>।
+                  <span className="font-bold">ব্যাখ্যাসহ সমাধান</span>।
                   <br />
                   <br />
                   সবকিছু থাকবে একটি{" "}
-                  <span className="font-semibold text-blue-700">
+                  <span className="font-bold text-blue-700">
                     স্মার্ট ডিজিটাল প্রোগ্রেস কার্ডে
                   </span>{" "}
                   — যেটা দিয়ে তুমি সহজেই নিজের উন্নতি পর্যবেক্ষণ করতে পারবে।
@@ -247,7 +247,7 @@ const Subscription = () => {
                 <h4 className="text-3xl font-bold mt-8 font-solaiman-lipi">
                   {subscription?.title}
                 </h4>
-                <p className="text-lg font-semibold ">
+                <p className="text-lg font-bold ">
                   <span className="font-serif">৳</span>
                   {subscription?.price}
                 </p>
@@ -263,18 +263,18 @@ const Subscription = () => {
                 </p>
                 <p>মোট পরীক্ষা দিয়েছো : {profile?.exams_count} টি</p>
                 <div className="flex items-center gap-2">
-                  <p className="absolute top-0 left-0 px-3 font-solaiman-lipi font-semibold bg-green-800 text-white rounded">
+                  <p className="absolute top-0 left-0 px-3 font-solaiman-lipi font-bold bg-green-800 text-white rounded">
                     পেইড
                   </p>
                   {expiresIn === "Not started yet" &&
                     (verified === 0 || verified === null) && (
-                      <p className="px-3 py-1 font-semibold text-red-800 bg-red-200 rounded-sm">
+                      <p className="px-3 py-1 font-bold text-red-800 bg-red-200 rounded-sm">
                         এখনও এক্সেস দেওয়া হয়নি!
                       </p>
                     )}
                   {expiresIn == 0 && verified == true && (
                     <div className="w-full">
-                      <p className="absolute top-0 right-0 px-3 font-solaiman-lipi font-semibold text-white bg-red-700 rounded-sm">
+                      <p className="absolute top-0 right-0 px-3 font-solaiman-lipi font-bold text-white bg-red-700 rounded-sm">
                         মেয়াদ শেষ
                       </p>
                       <button

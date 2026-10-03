@@ -15,7 +15,7 @@ export function CreativeQuesForSubmissionView({ queIndex, question ,file=''}) {
       {/* View File Section */}
       {fileUrl && (
         <div className="mb-4">
-          <p className="text-sm font-medium">উত্তরপত্র জমা দেও :</p>
+          <p className="text-sm font-regular">উত্তরপত্র জমা দেও :</p>
           <a
             href={file}
             target="_blank"

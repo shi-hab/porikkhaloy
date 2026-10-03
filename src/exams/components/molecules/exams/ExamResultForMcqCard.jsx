@@ -115,7 +115,7 @@ export const ExamResultForMcqCard = ({
 
       {/* Question Title */}
       <div>
-        <p className="text-[17px] font-semibold">
+        <p className="text-[17px] font-bold">
           <span className="inline float-left h-fit mr-2">{queIndex + 1}.</span>
           <span className="inline">{parseHtmlContent(title)}</span>
         </p>
@@ -146,7 +146,7 @@ export const ExamResultForMcqCard = ({
 
       {/* MCQ Options */}
       <div className="mt-3">
-        <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 text-sm font-semibold">
+        <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 text-sm font-bold">
           {mcq_questions?.map((option, index) => {
             const isCorrect = Number(option?.is_correct);
             const isSubmitted =
@@ -190,12 +190,12 @@ export const ExamResultForMcqCard = ({
           })}
 
           {/* Explanation or Subscription Lock */}
-          <div className="col-span-2 font-semibold">
+          <div className="col-span-2 font-bold">
             {maxFreeExamData?.verified == "active" || data == "mt" ? (
               mcq_questions
                 ?.filter((option) => option?.is_correct && option?.description)
                 ?.map((option) => (
-                  <p key={option.id}>
+                  <div key={option.id}>
                     <p
                       className="
                             flex items-center
@@ -212,7 +212,7 @@ export const ExamResultForMcqCard = ({
                     >
                       {parseHtmlContent(option.description?.trim())}
                     </p>
-                  </p>
+                  </div>
                 ))
             ) : (
               <Link to="/user/subscription">

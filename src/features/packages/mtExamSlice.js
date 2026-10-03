@@ -4,9 +4,9 @@ const initialState = {
     attemptId: null,
     allMTExams: [],
     activeExam: null,
-    activeExamId:[],
+    activeExamId: [],
     activeExamsTotalTimes: null,
-    endTimes : null,
+    endTimes: null,
 };
 
 const mtExamSlice = createSlice({
@@ -14,7 +14,7 @@ const mtExamSlice = createSlice({
     initialState,
     reducers: {
         saveMTExamInfo: (state, action) => {
-            const exams = action.payload; 
+            const exams = action.payload;
 
 
             exams.forEach((examData) => {
@@ -42,7 +42,7 @@ const mtExamSlice = createSlice({
                 // Add to activeExamId and calculate total time
                 if (!state.activeExamId?.includes(examData.exam.id)) {
                     state.activeExamId?.push(examData?.exam?.id);
-                    
+
                 }
             });
 
@@ -84,33 +84,33 @@ const mtExamSlice = createSlice({
             }
         },
         updateMTMcqAnswer: (state, action) => {
-    const { examId, question_id, mcq_question_id, submitted_mcq_option } = action.payload;
+            const { examId, question_id, mcq_question_id, submitted_mcq_option } = action.payload;
 
-    // Find exam in allMTExams
-    const examIndex = state.allMTExams.findIndex((item) => item.exam.id === examId);
-    if (examIndex === -1) return; // Exam not found
+            // Find exam in allMTExams
+            const examIndex = state.allMTExams.findIndex((item) => item.exam.id === examId);
+            if (examIndex === -1) return; // Exam not found
 
-    const examData = state.allMTExams[examIndex];
+            const examData = state.allMTExams[examIndex];
 
-    // Utility to update answers array
-    const updateAnswersArray = (answersArray) => {
-        const idx = answersArray.findIndex(ans => ans.question_id === question_id);
-        if (idx !== -1) {
-            answersArray[idx] = { question_id, mcq_question_id, submitted_mcq_option };
-        } else {
-            answersArray.push({ question_id, mcq_question_id, submitted_mcq_option });
-        }
-        return [...answersArray];
-    };
+            // Utility to update answers array
+            const updateAnswersArray = (answersArray) => {
+                const idx = answersArray.findIndex(ans => ans.question_id === question_id);
+                if (idx !== -1) {
+                    answersArray[idx] = { question_id, mcq_question_id, submitted_mcq_option };
+                } else {
+                    answersArray.push({ question_id, mcq_question_id, submitted_mcq_option });
+                }
+                return [...answersArray];
+            };
 
-    // Update mcqAnswers in allMTExams
-    examData.mcqAnswers = updateAnswersArray(examData.mcqAnswers || []);
+            // Update mcqAnswers in allMTExams
+            examData.mcqAnswers = updateAnswersArray(examData.mcqAnswers || []);
 
-    // Optional: If this exam is the activeExam, update it too
-    if (state.activeExam?.exam.id === examId) {
-        state.activeExam.mcqAnswers = [...examData.mcqAnswers];
-    }
-},
+            // Optional: If this exam is the activeExam, update it too
+            if (state.activeExam?.exam.id === examId) {
+                state.activeExam.mcqAnswers = [...examData.mcqAnswers];
+            }
+        },
 
         updateFileUrl: (state, action) => {
             const { examId, fileUrl } = action.payload;
@@ -134,21 +134,18 @@ const mtExamSlice = createSlice({
             }
         },
 
-        // updateRemainingTime: (state, action) => {
-        //     const { decrementBy } = action.payload;
-        //     state.activeExamsTotalTimes -= decrementBy;
-        // },
+
         addTimes: (state, action) => {
             const { times } = action.payload;
-            state.activeExamsTotalTimes = times*60;
+            state.activeExamsTotalTimes = times * 60;
         },
-       setAttemptId: (state, action) => {
+        setAttemptId: (state, action) => {
             state.attemptId = action.payload;
         },
-       endTimes: (state) => {
+        endTimes: (state) => {
             const totalTimes = state.activeExamsTotalTimes;
             const endTime = Date.now() + totalTimes * 1000;
-            
+
             state.endTimes = endTime;
 
             localStorage.setItem("end_time", endTime);
@@ -157,8 +154,8 @@ const mtExamSlice = createSlice({
         clearMTExamInfo: (state) => {
             state.allMTExams = [];
             state.activeExam = null;
-            state.activeExamId=[]
-            state.activeExamsTotalTimes= 0
+            state.activeExamId = []
+            state.activeExamsTotalTimes = 0
         },
     },
 });
@@ -171,7 +168,6 @@ export const {
     updateFileUrl,
     addTimes,
     setAttemptId,
-    // updateRemainingTime,
     endTimes,
 } = mtExamSlice.actions;
 export default mtExamSlice.reducer;

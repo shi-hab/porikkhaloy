@@ -53,13 +53,13 @@ const ExamStartingForm = () => {
       <div className="w-full text-center  pb-20">
         <div className="hidden">
           <div className="flex flex-wrap items-center justify-center gap-4 mt-5">
-            <div className="bg-blue-900 text-white text-base duration-500 font-medium w-fit shadow rounded-full px-4 py-2">
+            <div className="bg-blue-900 text-white text-base duration-500 font-regular w-fit shadow rounded-full px-4 py-2">
               MCQ
             </div>
 
             <div
               onClick={() => setExamFormat("creative")}
-              className={`bg-white text-gray-500 text-base duration-500 font-medium w-fit shadow rounded-full cursor-pointer px-4 py-2 ${
+              className={`bg-white text-gray-500 text-base duration-500 font-regular w-fit shadow rounded-full cursor-pointer px-4 py-2 ${
                 examFormat === "creative"
                   ? "!bg-blue-900 text-white"
                   : "bg-white text-black"
@@ -70,7 +70,7 @@ const ExamStartingForm = () => {
 
             <div
               onClick={() => setExamFormat("normal")}
-              className={`bg-white text-gray-500 text-base duration-500 font-medium w-fit shadow rounded-full cursor-pointer px-4 py-2 ${
+              className={`bg-white text-gray-500 text-base duration-500 font-regular w-fit shadow rounded-full cursor-pointer px-4 py-2 ${
                 examFormat === "normal"
                   ? "!bg-blue-900 text-white"
                   : "bg-white text-black"
@@ -97,7 +97,7 @@ const ExamStartingForm = () => {
                               : [...prev, examType.id]
                           )
                         }
-                        className={`bg-white border-2 border-blue-900 text-gray-500 text-base duration-500 font-medium w-fit shadow rounded-md cursor-pointer px-2 py-2 ${
+                        className={`bg-white border-2 border-blue-900 text-gray-500 text-base duration-500 font-regular w-fit shadow rounded-md cursor-pointer px-2 py-2 ${
                           selectExamType.includes(examType.id)
                             ? "!bg-blue-900 text-white"
                             : " "
@@ -139,7 +139,7 @@ const ExamStartingForm = () => {
                               : [...prev, examType.id]
                           )
                         }
-                        className={`bg-white border-2 border-blue-900 text-gray-500 text-base duration-500 font-medium w-fit shadow rounded-md cursor-pointer px-2 py-2 ${
+                        className={`bg-white border-2 border-blue-900 text-gray-500 text-base duration-500 font-regular w-fit shadow rounded-md cursor-pointer px-2 py-2 ${
                           examSubType.includes(examType.id)
                             ? "!bg-blue-900 text-white"
                             : "bg-white text-black"

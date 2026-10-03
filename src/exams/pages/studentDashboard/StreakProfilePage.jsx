@@ -32,7 +32,7 @@ function StreakProfilePage() {
 
           {/* Streak Society */}
           <div className="py-6 px-2 bg-orange-50">
-            <h1 className="text-2xl ml-2 font-extrabold  mb-3 text-gray-800 dark:text-gray-100">
+            <h1 className="text-2xl ml-2 font-bold  mb-3 text-gray-800 dark:text-gray-100">
               স্ট্রিক সোসাইটি
             </h1>
 

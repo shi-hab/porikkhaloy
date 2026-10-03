@@ -119,7 +119,7 @@ export const MTExamCard = ({ exam, isSubscribed, packageId, modelTestId, allExam
                                 )
                             }
                             <span
-                                className={`text-sm font-medium px-2 py-1 rounded-[2px] ${isExamEnded
+                                className={`text-sm font-regular px-2 py-1 rounded-[2px] ${isExamEnded
                                     ? "bg-red-100 text-red-600"
                                     : isExamNotStarted
                                         ? "bg-yellow-100 text-yellow-600"
@@ -139,12 +139,12 @@ export const MTExamCard = ({ exam, isSubscribed, packageId, modelTestId, allExam
 
             <h3 className="text-xl font-bold text-gray-800 capitalize">{exam?.title}</h3>
             <p className="space-x-3 text-sm text-gray-600">
-                <span className="font-semibold" >Duration:</span> {exam.time_limit} Minute
-                <span className="font-semibold">Questions:</span> {questionCount}
+                <span className="font-bold" >Duration:</span> {exam.time_limit} Minute
+                <span className="font-bold">Questions:</span> {questionCount}
             </p>
             <div className="grid gap-1 text-sm text-gray-500">
-                <p className="flex items-center gap-1"> <span className="font-semibold">Start Time:</span> {isoDateFormatter(startTime)}</p>
-                <p className="flex items-center gap-1 text-red-500"><span className="font-semibold text-red-500">End Time:</span> {isoDateFormatter(endTime)}</p>
+                <p className="flex items-center gap-1"> <span className="font-bold">Start Time:</span> {isoDateFormatter(startTime)}</p>
+                <p className="flex items-center gap-1 text-red-500"><span className="font-bold text-red-500">End Time:</span> {isoDateFormatter(endTime)}</p>
             </div>
 
             {/* Exam Action Buttons */}

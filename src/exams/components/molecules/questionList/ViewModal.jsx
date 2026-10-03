@@ -106,7 +106,7 @@ export function ViewModal({ data, tagIds, verified }) {
                     </div> */}
 
           {/* <div className="flex items-start gap-2">
-                        <span className="font-medium">Description:</span>
+                        <span className="font-regular">Description:</span>
                         <span  >
                             {parseHtmlContent(title)}
                         </span>
@@ -134,10 +134,10 @@ export function ViewModal({ data, tagIds, verified }) {
           </div>
           {/* <div className="text-sm ">
                         <div id="section" className="mt-1">
-                            <p><span className="font-medium">Section:</span>  &rarr; exam-type &rarr; exam sub-type</p>
+                            <p><span className="font-regular">Section:</span>  &rarr; exam-type &rarr; exam sub-type</p>
                         </div>
                         <div id="group" className="mb-2">
-                            <p> <span className="font-medium"> Group: </span> &rarr; level &rarr; subject &rarr; exam topic &rarr; exam sub-topic</p>
+                            <p> <span className="font-regular"> Group: </span> &rarr; level &rarr; subject &rarr; exam topic &rarr; exam sub-topic</p>
                         </div>
                     </div> */}
         </DialogHeader>

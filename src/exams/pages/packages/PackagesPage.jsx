@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Spin, Empty } from "antd";
 import { useGetAllPackagesQuery } from "@/features/packages/packagesApi";
 import { PackageCard } from "@/exams/components/molecules/packages/PackageCard";
 import toBanglaNumeral from "@/utils/Tobangla";
+import PackagesPageSkeleton from "@/exams/components/atoms/skeletons/PackagePage/PackagesPageSkeleton"
 
 const PackagesPage = () => {
   const { data: allPackages, isLoading } = useGetAllPackagesQuery();
@@ -71,15 +71,13 @@ const PackagesPage = () => {
   return (
     <div className="container mx-auto px-4 pt-4 ">
       {isLoading ? (
-        <div className="h-[70vh] grid place-content-center">
-          <Spin />
+        <div>
+          <PackagesPageSkeleton />
         </div>
-      ) : categories.length === 0 ? (
-        <Empty />
       ) : (
         <>
           {/* Sticky Category Bar */}
-          <div className="sticky top-14 md:top-0 z-50 backdrop-blur-md bg-[#f4f4f5] dark:bg-gray-900/70 border-b border-gray-200/50 dark:border-gray-700/50 py-2.5 px-1">
+          <div className="sticky top-14 md:top-0 z-50 backdrop-blur-md rounded-md bg-[#f4f4f5] dark:bg-gray-900/70 border-b border-gray-200/50 dark:border-gray-700/50 py-2.5 px-1">
             <div className="flex gap-2 overflow-x-auto ">
               {categories.map((cat) => (
                 <button
@@ -116,7 +114,7 @@ const PackagesPage = () => {
                 >
                   {/* Header */}
                   <div className="flex items-center justify-between mb-4 text-[1.25rem] ">
-                    <h2 className="font-semibold text-blue-800">{cat.name} <span>({toBanglaNumeral(
+                    <h2 className="font-bold text-blue-800">{cat.name} <span>({toBanglaNumeral(
                       cat.packages?.filter(
                         (pkg) => pkg?.is_admission == true
                       ).length ?? 0

@@ -20,11 +20,10 @@ import { FaBookReader } from "react-icons/fa";
 export const NavLinks = [
   {
     title: "হোম",
-    href: "/",
+    href: "/dashboard",
     icon: <Home size={20} />,
-    urlActive: ["/"],
+    urlActive: ["/dashboard"],
     showInBottomNav: true,
-
   },
   {
     title: "মক টেস্ট",
@@ -58,14 +57,14 @@ export const NavLinks = [
     showInBottomNav: true,
 
   },
-  {
-    title: "টেস্ট পেপার",
-    href: "/digital-testpaper",
-    icon: <FaBookReader size={20} />,
-    urlActive: ["/digital-testpaper"],
-    showInBottomNav: true,
+  // {
+  //   title: "টেস্ট পেপার",
+  //   href: "/digital-testpaper",
+  //   icon: <FaBookReader size={20} />,
+  //   urlActive: ["/digital-testpaper"],
+  //   showInBottomNav: true,
 
-  },
+  // },
   {
     title: "এক্সাম ব্যাচ",
     href: "/package",
@@ -111,13 +110,13 @@ export const NavLinks = [
     urlActive: ["/user/question-feedback"],
     showInBottomNav: false,
   },
-  // {
-  //   title: "পার্সোনাল মেন্টরিং",
-  //   href: "/user/mentor-feedback",
-  //   icon: <Users size={20} />,
-  //   urlActive: ["/user/mentor-feedback"],
-  //   showInBottomNav: false,
-  // },
+  {
+    title: "পার্সোনাল মেন্টরিং",
+    href: "/user/mentor-feedback",
+    icon: <Users size={20} />,
+    urlActive: ["/user/mentor-feedback"],
+    showInBottomNav: false,
+  },
   // {
   //   title: "Privacy Policy",
   //   href: "/privacy-policy",

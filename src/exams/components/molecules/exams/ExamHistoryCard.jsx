@@ -56,7 +56,7 @@ const ExamHistoryCard = ({ exam, handleStartExam }) => {
         <div className="flex items-center justify-between text-sm">
           <div>
             {totalQuestions > 0 && (
-              <span className="font-medium text-purple-700 dark:text-purple-400">
+              <span className="font-regular text-purple-700 dark:text-purple-400">
                 {totalMarks}/{maxMarks}
               </span>
             )}
@@ -72,12 +72,12 @@ const ExamHistoryCard = ({ exam, handleStartExam }) => {
             {examDescription}
           </div>
           <p className="text-sm mt-1">
-            <span className="font-semibold">Time Limit:</span> 00:
+            <span className="font-bold">Time Limit:</span> 00:
             {exam?.time_limit}m
           </p>
           {exam?.answers?.[0]?.submission_time && (
             <p className="text-sm">
-              <span className="font-semibold">Duration:</span>{" "}
+              <span className="font-bold">Duration:</span>{" "}
               {calculateTimeDifference(
                 exam?.answers[0]?.exam_start_time,
                 exam?.answers[0]?.submission_time
@@ -88,7 +88,7 @@ const ExamHistoryCard = ({ exam, handleStartExam }) => {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-2 mt-3">
-          <div className="uppercase text-xs font-semibold bg-cyan-100 text-cyan-800 px-2 py-1 rounded-md dark:bg-cyan-900 dark:text-cyan-200">
+          <div className="uppercase text-xs font-bold bg-cyan-100 text-cyan-800 px-2 py-1 rounded-md dark:bg-cyan-900 dark:text-cyan-200">
             {exam?.type || "Unknown Type"}
           </div>
 

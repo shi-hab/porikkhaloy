@@ -26,13 +26,13 @@ export default function WithdrawHistory() {
 
       {/* Empty State */}
       {history.length === 0 ? (
-        <div className="text-center text-gray-500 py-20 text-lg font-semibold">
+        <div className="text-center text-gray-500 py-20 text-lg font-bold">
           এখনো কোনো Withdraw Request পাওয়া যায়নি 🕊️
         </div>
       ) : (
         <div className="space-y-4">
           {/* Desktop Table Head */}
-          <div className="hidden md:flex bg-gray-100 rounded-t-lg font-semibold text-gray-700 p-3 border-b border-gray-200 text-sm">
+          <div className="hidden md:flex bg-gray-100 rounded-t-lg font-bold text-gray-700 p-3 border-b border-gray-200 text-sm">
             <div className="flex-1">ID</div>
             <div className="flex-1">Status</div>
             <div className="flex-1">Requested</div>
@@ -52,11 +52,11 @@ export default function WithdrawHistory() {
                 className="flex flex-col md:flex-row bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all p-3"
               >
                 {/* Desktop Columns */}
-                <div className="hidden md:flex flex-1 py-1 text-gray-700 font-medium">
+                <div className="hidden md:flex flex-1 py-1 text-gray-700 font-regular">
                   #{item.id}
                 </div>
                 <div
-                  className={`hidden md:flex flex-1 py-1 font-semibold capitalize ${
+                  className={`hidden md:flex flex-1 py-1 font-bold capitalize ${
                     item.status === "pending"
                       ? "text-yellow-500"
                       : item.status === "approved"
@@ -91,19 +91,19 @@ export default function WithdrawHistory() {
                 <div className="flex flex-col md:hidden space-y-2 text-gray-700 text-sm">
                   {/* ID */}
                   <div className="flex justify-between">
-                    <span className="font-semibold text-gray-600">ID :</span>
-                    <span className="font-medium text-gray-800">
+                    <span className="font-bold text-gray-600">ID :</span>
+                    <span className="font-regular text-gray-800">
                       #{item.id}
                     </span>
                   </div>
 
                   {/* Status */}
                   <div className="flex justify-between">
-                    <span className="font-semibold text-gray-600">
+                    <span className="font-bold text-gray-600">
                       Status :
                     </span>
                     <span
-                      className={`px-2 py-1 rounded-full text-white font-semibold text-sm ${
+                      className={`px-2 py-1 rounded-full text-white font-bold text-sm ${
                         item.status === "pending"
                           ? "bg-yellow-500"
                           : item.status === "approved"
@@ -121,7 +121,7 @@ export default function WithdrawHistory() {
 
                   {/* Requested Date */}
                   <div className="flex justify-between">
-                    <span className="font-semibold text-gray-600">
+                    <span className="font-bold text-gray-600">
                       Requested :
                     </span>
                     <span className="text-gray-800">
@@ -131,7 +131,7 @@ export default function WithdrawHistory() {
 
                   {/* Payment Method */}
                   <div className="flex justify-between">
-                    <span className="font-semibold text-gray-600">
+                    <span className="font-bold text-gray-600">
                       Method :
                     </span>
                     <span className="text-gray-800">
@@ -141,7 +141,7 @@ export default function WithdrawHistory() {
 
                   {/* Payment Number */}
                   <div className="flex justify-between">
-                    <span className="font-semibold text-gray-600">
+                    <span className="font-bold text-gray-600">
                       Payment Number :
                     </span>
                     <span className="text-gray-800">{item.payment_number}</span>
@@ -149,7 +149,7 @@ export default function WithdrawHistory() {
 
                   {/* Amount */}
                   <div className="flex justify-between">
-                    <span className="font-semibold text-gray-600">
+                    <span className="font-bold text-gray-600">
                       Amount :
                     </span>
                     <span className="text-gray-800">
@@ -159,7 +159,7 @@ export default function WithdrawHistory() {
 
                   {/* Balance */}
                   <div className="flex justify-between">
-                    <span className="font-semibold text-gray-600">
+                    <span className="font-bold text-gray-600">
                       Balance :
                     </span>
                     <span className="text-gray-800">

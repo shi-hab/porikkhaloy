@@ -143,10 +143,10 @@
 }
 @layer components {
     .list {
-        @apply relative after:absolute after:w-0 after:top-10 after:left-0 after:bg-gray-500 !px-0 hover:after:w-full after:mx-auto after:duration-300 cursor-pointer after:h-[2px] font-semibold ;
+        @apply relative after:absolute after:w-0 after:top-10 after:left-0 after:bg-gray-500 !px-0 hover:after:w-full after:mx-auto after:duration-300 cursor-pointer after:h-[2px] font-bold ;
     }
     .actives {
-        @apply relative after:absolute after:w-full after:mx-auto after:top-10 !px-0 after:left-0 after:bg-gray-500 after:h-[2px] font-semibold;
+        @apply relative after:absolute after:w-full after:mx-auto after:top-10 !px-0 after:left-0 after:bg-gray-500 after:h-[2px] font-bold;
     }
 }
 
@@ -169,32 +169,10 @@
     font-display: swap; /* Optimize Font Loading */
 }
 
-@font-face {
-    font-family: "Hind Siliguri"; /* Define .hover-effect name for your font */
-    src: url("./assets/fonts/bangla/Hind_Siliguri/HindSiliguri-Medium.ttf")
-        format("truetype"); /* Path to your TTF file */
-    font-weight: 500; /* Medium weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Optimize Font Loading */
-}
 
-@font-face {
-    font-family: "Hind Siliguri"; /* Define .hover-effect name for your font */
-    src: url("./assets/fonts/bangla/Hind_Siliguri/HindSiliguri-Light.ttf")
-        format("truetype"); /* Path to your TTF file */
-    font-weight: 300; /* Light weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Optimize Font Loading */
-}
 
-@font-face {
-    font-family: "Hind Siliguri"; /* Define .hover-effect name for your font */
-    src: url("./assets/fonts/bangla/Hind_Siliguri/HindSiliguri-SemiBold.ttf")
-        format("truetype"); /* Path to your TTF file */
-    font-weight: 600; /* SemiBold weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Optimize Font Loading */
-}
+
+
 
 /* fonts */
 @font-face {
@@ -217,53 +195,12 @@
     font-display: swap; /* Optimize Font Loading */
 }
 
-@font-face {
-    font-family: "Noto Serif"; /* Define .hover-effect name for your font */
-    src: url("./assets/fonts/bangla/Noto_Serif/NotoSerifBengali-Medium.ttf")
-        format("truetype"); /* Path to your TTF file */
-        unicode-range: U+0980-09FF; /* বাংলা অক্ষরের ইউনিকোড রেঞ্জ */
-    font-weight: 500; /* Medium weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Optimize Font Loading */
-}
 
-@font-face {
-    font-family: "Noto Serif"; /* Define .hover-effect name for your font */
-    src: url("./assets/fonts/bangla/Noto_Serif/NotoSerifBengali-Light.ttf")
-        format("truetype"); /* Path to your TTF file */
-        unicode-range: U+0980-09FF; /* বাংলা অক্ষরের ইউনিকোড রেঞ্জ */
-    font-weight: 300; /* Light weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Optimize Font Loading */
-}
 
-@font-face {
-    font-family: "Noto Serif"; /* Define .hover-effect name for your font */
-    src: url("./assets/fonts/bangla/Noto_Serif/NotoSerifBengali-SemiBold.ttf")
-        format("truetype"); /* Path to your TTF file */
-        unicode-range: U+0980-09FF; /* বাংলা অক্ষরের ইউনিকোড রেঞ্জ */
-    font-weight: 600; /* SemiBold weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Optimize Font Loading */
-}
-@font-face {
-    font-family: "Noto Serif"; /* Define .hover-effect name for your font */
-    src: url("./assets/fonts/bangla/Noto_Serif/NotoSerifBengali-ExtraBold.ttf")
-        format("truetype"); /* Path to your TTF file */
-        unicode-range: U+0980-09FF; /* বাংলা অক্ষরের ইউনিকোড রেঞ্জ */
-    font-weight: 800; /* SemiBold weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Optimize Font Loading */
-}
-@font-face {
-    font-family: "Noto Serif"; /* Define .hover-effect name for your font */
-    src: url("./assets/fonts/bangla/Noto_Serif/NotoSerifBengali-Black.ttf")
-        format("truetype"); /* Path to your TTF file */
-        unicode-range: U+0980-09FF; /* বাংলা অক্ষরের ইউনিকোড রেঞ্জ */
-    font-weight: 900; /* SemiBold weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Optimize Font Loading */
-}
+
+
+
+
 
 
 

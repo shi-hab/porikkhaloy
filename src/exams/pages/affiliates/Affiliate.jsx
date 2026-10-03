@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 function Affiliate() {
   return (
     <div className="  leading-relaxed m-2 p-4 bg-gradient-to-r from-blue-900 via-indigo-800 to-blue-600 rounded-sm shadow-lg text-white">
-      <h1 className="text-3xl font-extrabold mb-4">
+      <h1 className="text-3xl font-bold mb-4">
         অ্যাফিলিয়েট সিস্টেম — ঘরে বসেই আয় করুন
       </h1>
 
@@ -15,7 +15,7 @@ function Affiliate() {
       </p>
 
       <div className="bg-white/10 rounded-lg p-4 mb-7">
-        <h2 className="text-xl font-semibold mb-2">মূল নিয়মাবলী — সারমর্ম</h2>
+        <h2 className="text-xl font-bold mb-2">মূল নিয়মাবলী — সারমর্ম</h2>
         <ul className="list-disc text-sm list-inside space-y-1 text-blue-100">
           <li>
             <strong>কুপন ডিসকাউন্ট:</strong> কুপন ব্যবহারকারীরা পায় অতিরিক্ত ১০%
@@ -37,10 +37,10 @@ function Affiliate() {
       </div>
 
       <div className="bg-white/8 rounded-lg  mb-7">
-        <h3 className="text-lg font-semibold mb-4">দুইটি উদাহরণ (সহজ হিসাব)</h3>
+        <h3 className="text-lg font-bold mb-4">দুইটি উদাহরণ (সহজ হিসাব)</h3>
 
         <div className="mb-6">
-          <p className="font-medium">
+          <p className="font-regular">
             উদাহরণ ১ — প্যাকেজ মূল্য: <strong>৳৫০০</strong>
           </p>
           <ol className="list-decimal text-sm leading-5 list-inside ml-2 text-blue-100">
@@ -63,7 +63,7 @@ function Affiliate() {
         </div>
 
         <div>
-          <p className="font-medium">
+          <p className="font-regular">
             উদাহরণ ২ — প্যাকেজ মূল্য: <strong>৳১,০০০</strong>
           </p>
           <ol className="list-decimal text-sm  leading-5 list-inside ml-2 text-blue-100">
@@ -89,7 +89,7 @@ function Affiliate() {
       <div className="flex justify-center mt-10 items-center gap-3">
         <Link
           to="/affiliate/dashboard"
-          className="inline-block px-5 py-2 bg-white text-blue-800 font-semibold rounded-full shadow hover:bg-white/90 transition"
+          className="inline-block px-5 py-2 bg-white text-blue-800 font-bold rounded-full shadow hover:bg-white/90 transition"
         >
           অ্যাফিলিয়েট ড্যাশবোর্ড
         </Link>

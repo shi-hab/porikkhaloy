@@ -12,7 +12,7 @@ const PrivacyPolicy = () => {
           information when you use our mobile app.
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           1. Information We Collect
         </h2>
         <ul className="list-disc list-inside text-gray-700 mb-4 space-y-1">
@@ -26,7 +26,7 @@ const PrivacyPolicy = () => {
           </li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           2. How We Use Your Information
         </h2>
         <ul className="list-disc list-inside text-gray-700 mb-4 space-y-1">
@@ -35,7 +35,7 @@ const PrivacyPolicy = () => {
           <li>To send updates, notifications, and important announcements.</li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           3. Data Sharing and Security
         </h2>
         <p className="text-gray-700 mb-4">
@@ -44,7 +44,7 @@ const PrivacyPolicy = () => {
           ensure it is secure and used only for app-related purposes.
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           4. Your Rights
         </h2>
         <p className="text-gray-700 mb-4">
@@ -52,7 +52,7 @@ const PrivacyPolicy = () => {
           contacting us. You may also opt-out of marketing communications.
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           5. Changes to This Policy
         </h2>
         <p className="text-gray-700 mb-4">
@@ -60,7 +60,7 @@ const PrivacyPolicy = () => {
           be posted here with an updated effective date.
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           Contact Us
         </h2>
         <p className="text-gray-700">

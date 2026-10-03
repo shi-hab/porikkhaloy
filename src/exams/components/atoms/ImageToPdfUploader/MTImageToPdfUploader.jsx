@@ -99,11 +99,11 @@ export const MTImageToPdfUploader = ({
     <div className="space-y-4 p-4 border rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800">
       {/* Header */}
       <div className="flex justify-between items-center border-b pb-2">
-        <label className="text-md font-siliguri font-medium text-gray-700 dark:text-gray-300">
+        <label className="text-md font-siliguri font-regular text-gray-700 dark:text-gray-300">
           উত্তরপত্র সিলেক্ট করো
         </label>
 
-        <span className="text-xs text-blue-600 font-medium">
+        <span className="text-xs text-blue-600 font-regular">
           প্রতি বার সর্বোচ্চ {MAX_FILES_PER_UPLOAD} টি ছবি
         </span>
       </div>
@@ -165,11 +165,11 @@ export const MTImageToPdfUploader = ({
       {/* Footer Info */}
       {selectedImages.length > 0 && (
         <div className="space-y-2">
-          <p className="text-[11px] text-green-600 font-medium bg-green-50 p-2 rounded border border-green-100">
+          <p className="text-[11px] text-green-600 font-regular bg-green-50 p-2 rounded border border-green-100">
             মোট {selectedImages.length} টি পেজ আপলোড হয়েছে
           </p>
 
-          <p className="text-[10px] text-orange-600 font-medium bg-orange-50 p-2 rounded border border-orange-100">
+          <p className="text-[10px] text-orange-600 font-regular bg-orange-50 p-2 rounded border border-orange-100">
             * একবারে সর্বোচ্চ {MAX_FILES_PER_UPLOAD} টি ছবি আপলোড করা যাবে।
             প্রয়োজনে আবার “Add More” এ ক্লিক করে বাকি পেজ আপলোড করো।
           </p>

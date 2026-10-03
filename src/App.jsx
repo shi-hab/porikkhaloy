@@ -4,23 +4,40 @@ import Navbar from "./exams/components/molecules/ui/Navbar";
 import AnalyticsTracker from "./GA4_hooks/AnalyticsTracker";
 
 function App() {
-  const location = useLocation();
-  const paths = ["exam-on-going"];
-  const noHeaderOrFooter = paths.some(path => location.pathname.includes(path));
+  const { pathname } = useLocation();
+
+  const hideLayoutRoutes = [
+    "/",
+    "/login",
+    "/registration",
+    "/forgot-password",
+    "/reset-password",
+    "/verify-email",
+    "/terms-and-conditions",
+    "/privacy-policy",
+    "/refund-policy",
+  ];
+
+  const hideLayout =
+    hideLayoutRoutes.includes(pathname) ||
+    pathname.startsWith("/social-login-success") ;
+
+  const hideFooter =
+    pathname.includes("exam-on-going") || pathname.includes("/quiz-battle-running") || hideLayout;
 
   return (
     <div className="relative mx-auto">
       <AnalyticsTracker />
 
-      <Navbar />
+      {!hideLayout && <Navbar />}
 
-      <div className="lg:pl-96 lg:pr-28">
-        <div className="w-full max-w-6xl mx-auto">
+      <div className={!hideLayout ? "lg:pl-96 lg:pr-28" : ""}>
+        <div className={!hideLayout ? "w-full max-w-6xl mx-auto" : ""}>
           <Outlet />
         </div>
       </div>
 
-      {(noHeaderOrFooter || false) ? null : (
+      {!hideFooter && (
         <div className="lg:pl-64">
           <Footer />
         </div>
@@ -28,4 +45,5 @@ function App() {
     </div>
   );
 }
+
 export default App;

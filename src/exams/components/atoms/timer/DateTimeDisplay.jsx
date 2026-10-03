@@ -16,7 +16,7 @@ const DateTimeDisplay = ({ value, type, isDanger, isHidden }) => {
         {toBanglaNumeral(value)}
       </p>
 
-      <span className="absolute bottom-0 py-0.5 font-semibold text-white dark:text-gray-500 bg-[#0077ff] dark:bg-gray-200 w-full rounded-b-md">
+      <span className="absolute bottom-0 py-0.5 font-bold text-white dark:text-gray-500 bg-[#0077ff] dark:bg-gray-200 w-full rounded-b-md">
         {type}
       </span>
     </Card>

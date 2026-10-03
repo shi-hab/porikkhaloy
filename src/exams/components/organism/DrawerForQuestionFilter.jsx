@@ -51,7 +51,7 @@ export function DrawerForQuestionFilter({ onFilterQuestions }) {
 
                             {/* select question type */}
                             <div className="w-[95%] mx-auto md:w-1/2 space-y-1 ">
-                                <Label className="text-md font-semibold">Question Type: </Label>
+                                <Label className="text-md font-bold">Question Type: </Label>
                                 <Controller
                                     name="questionType"
                                     control={control}

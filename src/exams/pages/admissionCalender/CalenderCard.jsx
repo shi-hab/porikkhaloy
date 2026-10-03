@@ -110,7 +110,7 @@ function CalenderCard({ calender, onToggleFavorite }) {
             <span
               className={
                 calender?.unit
-                  ? "bg-red-500 text-white px-1.5 font-semibold rounded-sm text-lg"
+                  ? "bg-red-500 text-white px-1.5 font-bold rounded-sm text-lg"
                   : ""
               }
             >

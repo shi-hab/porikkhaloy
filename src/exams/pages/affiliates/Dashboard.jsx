@@ -126,7 +126,7 @@ const pendingEarning = (affiliateData?.total_earned || 0) - (affiliateData?.tota
           {/* Top Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <div className="bg-blue-900 text-white rounded-xl p-4 shadow-md">
-              <h3 className="text-lg font-semibold">মোট ব্যাচ</h3>
+              <h3 className="text-lg font-bold">মোট ব্যাচ</h3>
               <p className="text-2xl font-bold mt-2">
                 {Number(affiliateData?.total_enrollments ?? 0).toLocaleString(
                   "bn-BD"
@@ -135,7 +135,7 @@ const pendingEarning = (affiliateData?.total_earned || 0) - (affiliateData?.tota
               </p>
             </div>
             <div className="bg-green-600 text-white rounded-xl p-4 shadow-md">
-              <h3 className="text-lg font-semibold">মোট আয়</h3>
+              <h3 className="text-lg font-bold">মোট আয়</h3>
               <p className="text-2xl font-bold mt-2">
                 ৳
                 {Number(affiliateData?.total_earned ?? 0).toLocaleString(
@@ -144,13 +144,13 @@ const pendingEarning = (affiliateData?.total_earned || 0) - (affiliateData?.tota
               </p>
             </div>
             <div className="bg-purple-600 text-white rounded-xl p-4 shadow-md">
-              <h3 className="text-lg font-semibold">পেন্ডিং আয়</h3>
+              <h3 className="text-lg font-bold">পেন্ডিং আয়</h3>
               <p className="text-2xl font-bold mt-2">
                 ৳{pendingEarning.toLocaleString("bn-BD")}
               </p>
             </div>
             <div className="bg-red-700 text-white rounded-xl p-4 shadow-md">
-              <h3 className="text-lg font-semibold">মোট উইথড্র</h3>
+              <h3 className="text-lg font-bold">মোট উইথড্র</h3>
               <p className="text-2xl font-bold mt-2">
                 ৳
                 {Number(affiliateData?.total_withdrawn ?? 0).toLocaleString(
@@ -233,7 +233,7 @@ const pendingEarning = (affiliateData?.total_earned || 0) - (affiliateData?.tota
                   <div className="relative flex flex-col gap-3">
                     {/* Payment Method Selector */}
                     <div>
-                      <label className="block text-white/90 mt-4  mb-2 font-semibold text-lg">
+                      <label className="block text-white/90 mt-4  mb-2 font-bold text-lg">
                         পেমেন্ট মেথড
                       </label>
                       <div className="grid grid-cols-3 gap-2">
@@ -241,7 +241,7 @@ const pendingEarning = (affiliateData?.total_earned || 0) - (affiliateData?.tota
                           <div
                             key={method.label}
                             onClick={() => setpaymentMethod(method.key)}
-                            className={`cursor-pointer py-2 rounded-lg text-center font-semibold capitalize transition-all duration-100 ${
+                            className={`cursor-pointer py-2 rounded-lg text-center font-bold capitalize transition-all duration-100 ${
                               paymentMethod === method.key
                                 ? "bg-red-600 text-white shadow-md scale-105"
                                 : "bg-white text-gray-800 hover:bg-gray-100"
@@ -282,7 +282,7 @@ const pendingEarning = (affiliateData?.total_earned || 0) - (affiliateData?.tota
                     {/* Withdraw Button */}
                     <Button
                       type="submit"
-                      className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-lg mt-2 transition-all duration-200"
+                      className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-lg mt-2 transition-all duration-200"
                     >
                       {withdrawLoading ? <Spin /> : "Withdraw"}
                     </Button>

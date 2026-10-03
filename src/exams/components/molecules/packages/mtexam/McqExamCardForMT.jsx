@@ -42,7 +42,7 @@ export function McqExamCardForMT({ queIndex, question, examId }) {
   return (
     <Card className="relative text-start p-2 my-2 duration-500 shadow-md group hover:shadow-lg">
       {/* Question title */}
-      <div className=" text-lg dark:text-white font-semibold">
+      <div className=" text-lg dark:text-white font-bold">
         <span className="text-base inline float-left h-fit mr-2">
           {queIndex + 1}.{" "}
         </span>

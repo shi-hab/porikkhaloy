@@ -32,7 +32,7 @@ export const MTExamHeader = ({ title, modelTestId, packageId, loading }) => {
       ) : (
         isSubscribed && (
           <header className="text-center p-1 bg-white border border-gray-300 rounded-sm shadow-sm">
-            <h1 className="text-sm font-semibold text-gray-900">
+            <h1 className="text-sm font-bold text-gray-900">
               {title ? title : "এখনো কেউ এক্সাম দেইনি"}
             </h1>
           </header>

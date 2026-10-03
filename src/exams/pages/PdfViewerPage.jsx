@@ -30,7 +30,6 @@ const SheetIndexPage = () => {
 
 
   // Placeholder PDF icon (can replace this with your custom icon)
-  const placeholderImage = "/logo/pdf-logo.svg";
 
   return (
     <div className="container py-8 mx-auto">
@@ -44,14 +43,14 @@ const SheetIndexPage = () => {
             <div className="relative">
               {/* Image stretched to cover the top of the card */}
               <img
-                src={pdf.img ? `${BASE_URL}${pdf.img}` : placeholderImage} // Use placeholder PDF icon if img is missing
+                src={pdf.img ? `${BASE_URL}${pdf.img}` : "placeholderImage"} // Use placeholder PDF icon if img is missing
                 alt={pdf.title}
                 className="object-cover w-full h-48 rounded-t-lg"
               />
             </div>
             <div className="p-4">
               <CardHeader>
-                <CardTitle className="mb-2 text-lg font-semibold text-center">
+                <CardTitle className="mb-2 text-lg font-bold text-center">
                   {pdf.title}
                 </CardTitle>
               </CardHeader>

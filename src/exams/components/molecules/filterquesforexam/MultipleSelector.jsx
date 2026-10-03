@@ -80,7 +80,7 @@ export function MultipleSelector({
                   <div className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm hover:shadow-md transition-shadow duration-200">
                     {selectedValues.length === 0 ? (
                       <div className="flex items-center justify-between">
-                        <span className="text-gray-400 text-sm font-medium">
+                        <span className="text-gray-400 text-sm font-regular">
                           {label} বাছাই করো...
                         </span>
                         <ChevronDown
@@ -94,7 +94,7 @@ export function MultipleSelector({
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className="h-2 w-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
-                          <span className="font-semibold text-gray-800 text-sm">
+                          <span className="font-bold text-gray-800 text-sm">
                             {options.find((item) => item.id === selectedValues[0])
                               ?.title || "Unknown"}
                           </span>
@@ -111,7 +111,7 @@ export function MultipleSelector({
                         <div className="flex items-center gap-3">
                           <div className="flex items-center gap-2">
                             <div className="h-2 w-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
-                            <span className="font-semibold text-gray-800 text-sm">
+                            <span className="font-bold text-gray-800 text-sm">
                               {options.find(
                                 (item) => item.id === selectedValues[0]
                               )?.title || "Unknown"}
@@ -176,7 +176,7 @@ export function MultipleSelector({
                               className={cn(
                                 "text-sm transition-colors duration-200",
                                 selectedValues.includes(item.id)
-                                  ? "font-semibold text-gray-900"
+                                  ? "font-bold text-gray-900"
                                   : "text-gray-700"
                               )}
                             >
@@ -191,7 +191,7 @@ export function MultipleSelector({
               </PopoverContent>
             </Popover>
             {errors[name] && (
-              <span className="text-sm text-red-500 font-medium">
+              <span className="text-sm text-red-500 font-regular">
                 {errors[name]?.message}
               </span>
             )}

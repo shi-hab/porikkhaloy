@@ -23,7 +23,7 @@ function QuestionTypeWithYear() {
           {/* Question Type */}
 
           <div>
-            <p className="mb-3 text-sm font-semibold text-gray-700">
+            <p className="mb-3 text-sm font-bold text-gray-700">
               প্রশ্নের ধরন
             </p>
 
@@ -44,7 +44,7 @@ function QuestionTypeWithYear() {
           {/* Year */}
 
           <div>
-            <p className="mb-3 text-sm font-semibold text-gray-700">
+            <p className="mb-3 text-sm font-bold text-gray-700">
               বছর নির্বাচন
             </p>
 

@@ -55,7 +55,7 @@ const VerifyAccount = () => {
   return (
     <div className='flex justify-center items-center'>
       <div className='w-full max-w-2xl bg-white p-5 rounded-md xl:p-10 shadow'>
-        <h1 className='text-xl mb-1 font-semibold'>Verify Account</h1>
+        <h1 className='text-xl mb-1 font-bold'>Verify Account</h1>
         <form onSubmit={handleSubmit(onSubmit)} className="flex items-center gap-5">
           <Controller
             name="email"

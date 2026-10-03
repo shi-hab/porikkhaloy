@@ -55,7 +55,7 @@ export default function CalenderDetailsCard({ calenderDetails }) {
 
   return (
     <div className="p-2 bg-white rounded-lg shadow-sm">
-      <h2 className="text-2xl font-semibold text-center text-indigo-700 mb-6 border-b pb-3">
+      <h2 className="text-2xl font-bold text-center text-indigo-700 mb-6 border-b pb-3">
         {calenderDetails?.basic_info?.university_name}{" "}
         {calenderDetails?.basic_info?.unit}
       </h2>

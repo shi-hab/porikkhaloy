@@ -115,7 +115,7 @@ const StudentReviewSlider = () => {
                     alt={review.name}
                     className="w-20 h-20 rounded-full mb-4 shadow-lg border-4 border-green-500"
                   />
-                  <h4 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
+                  <h4 className="text-xl font-bold text-gray-800 dark:text-gray-100">
                     {review.name}
                   </h4>
                   <span className="text-sm text-gray-500 dark:text-gray-400">

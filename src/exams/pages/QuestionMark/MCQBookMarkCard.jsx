@@ -132,13 +132,13 @@ function MCQBookMarkCard({
 
         {/* Display Question */}
         <div>
-          <p className="text-[17px] font-semibold">
+          <p className="text-[17px] font-bold">
             <span className="inline float-left h-fit mr-2">{index + 1}.</span>
             <span className="inline">{parseHtmlContent(title)}</span>
           </p>
           <div className="flex items-center justify-end gap-2 ">
             {tagIds?.length > 0 && (
-              <div className="flex flex-wrap justify-end gap-1 font-normal">
+              <div className="flex flex-wrap justify-end gap-1 font-regular">
                 {tagIds.map((tagId) => (
                   <TagsTitle key={tagId} tagId={tagId} />
                 ))}
@@ -184,7 +184,7 @@ function MCQBookMarkCard({
         )}
 
         <div className="mt-3">
-          <ul className="grid grid-cols-1 gap-2 lg:grid-cols-2 text-sm font-semibold">
+          <ul className="grid grid-cols-1 gap-2 lg:grid-cols-2 text-sm font-bold">
             {mcq_questions?.map((option, index) => {
               const isCorrect = option?.is_correct;
               const isSelected = selectedAnswer?.id === option.id;
@@ -249,7 +249,7 @@ function MCQBookMarkCard({
               );
             })}
 
-            <div className="col-span-2 font-semibold">
+            <div className="col-span-2 font-bold">
               {(!hideAns || answered) && (
                 <div>
                   {mcq_questions

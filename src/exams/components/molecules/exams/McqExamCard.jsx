@@ -39,7 +39,7 @@ export default function McqExamCard({ queIndex, question }) {
     return (
       <Card className="text-left relative h-full p-2 overflow-hidden duration-500 rounded-md shadow-sm group hover:shadow-lg">
         {/* question title */}
-        <p className="text-lg dark:text-white font-semibold">
+        <p className="text-lg dark:text-white font-bold">
           <span className="inline float-left h-fit mr-2">{queIndex + 1}.</span>
           <span className="inline">{parseHtmlContent(title)}</span>
         </p>

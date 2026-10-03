@@ -24,14 +24,14 @@ function ExamStartingForm({ setExamData }) {
         <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
           <div
             onClick={() => setExamFormat(["mcq"])}
-            className="bg-blue-900  text-white text-base font-medium w-fit shadow rounded-full duration-500 cursor-pointer px-4 py-2"
+            className="bg-blue-900  text-white text-base font-regular w-fit shadow rounded-full duration-500 cursor-pointer px-4 py-2"
           >
             {" "}
             MCQ{" "}
           </div>
           {/* <div
             onClick={() => setExamFormat(["mcq"])}
-            className={`bg-white text-gray-500 text-base font-medium w-fit shadow rounded-full duration-500 cursor-pointer px-4 py-2 ${
+            className={`bg-white text-gray-500 text-base font-regular w-fit shadow rounded-full duration-500 cursor-pointer px-4 py-2 ${
               examFormat.includes("mcq")
                 ? "!bg-blue-900 text-white"
                 : "bg-white text-black"
@@ -42,7 +42,7 @@ function ExamStartingForm({ setExamData }) {
 
           <div
             onClick={() => setExamFormat(["creative"])}
-            className={`bg-white text-gray-500 text-base font-medium w-fit shadow rounded-full duration-500 cursor-pointer px-4 py-2 ${
+            className={`bg-white text-gray-500 text-base font-regular w-fit shadow rounded-full duration-500 cursor-pointer px-4 py-2 ${
               examFormat.includes("creative")
                 ? "!bg-blue-900 text-white"
                 : "bg-white text-black"
@@ -52,7 +52,7 @@ function ExamStartingForm({ setExamData }) {
           </div>
           <div
             onClick={() => setExamFormat(["normal"])}
-            className={`bg-white text-gray-500 text-base font-medium w-fit shadow rounded-full duration-500 cursor-pointer px-4 py-2 ${
+            className={`bg-white text-gray-500 text-base font-regular w-fit shadow rounded-full duration-500 cursor-pointer px-4 py-2 ${
               examFormat.includes("normal")
                 ? "!bg-blue-900 text-white"
                 : "bg-white text-black"
@@ -82,7 +82,7 @@ function ExamStartingForm({ setExamData }) {
                           : [...prev, examType.id]
                       )
                     }
-                    className={`bg-white border-2 border-blue-900 text-gray-500  font-medium w-fit text-sm shadow rounded-sm cursor-pointer p-1 ${
+                    className={`bg-white border-2 border-blue-900 text-gray-500  font-regular w-fit text-sm shadow rounded-sm cursor-pointer p-1 ${
                       selectExamType.includes(examType.id)
                         ? "!bg-blue-900 text-white"
                         : "bg-white text-black"
@@ -132,7 +132,7 @@ function ExamStartingForm({ setExamData }) {
                           : [...prev, examType.id]
                       )
                     }
-                    className={`bg-white border-2 border-blue-900 text-gray-500  font-medium w-fit text-sm shadow rounded-sm cursor-pointer p-1 ${
+                    className={`bg-white border-2 border-blue-900 text-gray-500  font-regular w-fit text-sm shadow rounded-sm cursor-pointer p-1 ${
                       examSubType.includes(examType.id)
                         ? "!bg-blue-900 text-white"
                         : "bg-white text-black"
@@ -175,7 +175,7 @@ function ExamStartingForm({ setExamData }) {
                     : [...prev, paper.id]
                 )
               }
-              className={`bg-white border-2 border-blue-900 text-gray-500  font-medium w-fit text-sm shadow rounded-sm cursor-pointer p-1 ${
+              className={`bg-white border-2 border-blue-900 text-gray-500  font-regular w-fit text-sm shadow rounded-sm cursor-pointer p-1 ${
                 examPaper.includes(paper.id)
                   ? "!bg-blue-900 text-white"
                   : "bg-white text-black"

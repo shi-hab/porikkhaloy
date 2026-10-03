@@ -39,8 +39,8 @@ export const MTExamListForResult = ({
 }) => {
 
   const handleDownload = (e, isReviewed, url) => {
-    e.preventDefault(); 
-    e.stopPropagation(); 
+    e.preventDefault();
+    e.stopPropagation();
 
     if (isReviewed == false || isReviewed == 0) {
       toast.error("Your script is not reviewed yet!");
@@ -89,7 +89,7 @@ export const MTExamListForResult = ({
 
           {/* Left Side: Marks Breakdown Tags */}
           <div className="flex flex-wrap items-center gap-x-1 gap-y-1.5">
-            <span className="font-black text-gray-800 dark:text-white font-siliguri leading-none">
+            <span className="font-bold text-gray-800 dark:text-white font-siliguri leading-none">
               প্রাপ্ত মার্ক ({toBanglaNumeral(marksBreakDown.total)}) :
             </span>
             {marksBreakDown?.mcq && (
@@ -137,8 +137,8 @@ export const MTExamListForResult = ({
                 <button
                   type="button"
                   onClick={(e) => {
-                    e.preventDefault(); 
-                    e.stopPropagation(); 
+                    e.preventDefault();
+                    e.stopPropagation();
                     handleDownload(e, is_reviewed, fullPdfUrl);
                   }}
                   className="flex items-center gap-1.5 bg-red-500 hover:bg-red-600 text-white text-[10px] font-bold py-1 px-3 rounded-md transition-all shadow-sm shadow-red-200 dark:shadow-none active:scale-95 cursor-pointer outline-none border-none"

@@ -40,11 +40,11 @@ export const MTExamTimer = ({ startTime, endTime }) => {
     return (
         <div className="bg-gray-400 px-4 py-2 w-full rounded shadow-md text-center">
             {timeLeft.message ? (
-                <p className="text-red-500 text-sm font-semibold">{timeLeft.message}</p>
+                <p className="text-red-500 text-sm font-bold">{timeLeft.message}</p>
             ) : (
                 <div className="flex items-center justify-center gap-2">
-                    <h3 className="font-semibold">Time Left:</h3>
-                    <p className="font-semibold">
+                    <h3 className="font-bold">Time Left:</h3>
+                    <p className="font-bold">
                         {`${timeLeft.remaining.hours}h ${timeLeft.remaining.minutes}m ${timeLeft.remaining.seconds}s`}
                     </p>
                 </div>

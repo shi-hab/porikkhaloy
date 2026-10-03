@@ -6,7 +6,7 @@ export const MTExamSection = ({ title, exams, isLoading, description, isSubscrib
     <section className=" mt-6 ">
         <div className="grid mb-5">
             {
-                isLoading ? <Skeleton.Input className="!mb-1" active /> : <h2 className="text-2xl font-semibold">{title}</h2>
+                isLoading ? <Skeleton.Input className="!mb-1" active /> : <h2 className="text-2xl font-bold">{title}</h2>
             }
 
             {description && (isLoading ? <Skeleton.Input className="!w-96 !h-5" active /> : <p className="text-gray-600 text-sm ">{description}</p>)}

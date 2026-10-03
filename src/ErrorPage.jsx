@@ -9,7 +9,7 @@ export default function ErrorPage() {
         <div className='h-svh'>
             <div className='m-auto flex h-full w-full flex-col items-center justify-center gap-2'>
                 <h1 className='text-[7rem] font-bold leading-tight'>Oops!</h1>
-                <p className='font-medium'>Sorry, an unexpected error has occurred.</p>
+                <p className='font-regular'>Sorry, an unexpected error has occurred.</p>
                 <p className='text-center text-muted-foreground'>
                     <i>{error.statusText || error.message}</i>
                 </p>

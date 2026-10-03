@@ -48,7 +48,7 @@ export function MultipleSelector({
 
     return (
         <div className="space-y-1 min-w-full text-left ">
-            <Label className="font-semibold">{label}</Label>
+            <Label className="font-bold">{label}</Label>
             <Controller
                 name={name}
                 control={control}
@@ -68,7 +68,7 @@ export function MultipleSelector({
                                         {
                                             selectedValues.length ?
                                                 selectedValues?.map((val) => (
-                                                    <div key={val} className="px-2 my-1 p-1 rounded  text-sm font-medium text-wrap">
+                                                    <div key={val} className="px-2 my-1 p-1 rounded  text-sm font-regular text-wrap">
                                                         {options.find((item) => item.id === val)?.title || "Unknown"}
                                                     </div>
                                                 ))

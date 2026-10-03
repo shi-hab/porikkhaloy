@@ -1,15 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useRegistrationMutation } from "@/features/auth/authApi";
+import { useRegistrationMutation, useLoggedInMutation } from "@/features/auth/authApi";
 import { useGetCategoryQuery } from "@/features/categories/categoriesApi";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { useCategoryData } from "../filterquesforexam/useCategoryData";
 import { Select } from "antd";
+import { LoaderSubmit } from "../../atoms/LoaderSubmit";
+import { getPostAuthRedirect, setPostAuthRedirect } from "../../utils/authRedirect";
 
 const fetchUserIP = async () => {
   try {
@@ -22,9 +23,12 @@ const fetchUserIP = async () => {
 };
 
 export default function RegisterForm() {
-  const navigate = useNavigate();
+  const location = useLocation();
   const [ipAddress, setIpAddress] = useState("");
   const [showPass, setShowPass] = useState(false);
+
+  // Where to redirect after auth — GuestRoute will read this and navigate
+  const from = getPostAuthRedirect(location.state, "/dashboard");
 
   const {
     register,
@@ -46,6 +50,9 @@ export default function RegisterForm() {
 
   const [registration, { data, isSuccess, isLoading, error }] =
     useRegistrationMutation();
+
+  // Auto-login mutation — called directly after successful registration
+  const [loggedIn, { isLoading: loginLoading }] = useLoggedInMutation();
 
   // Fetch user IP on component mount
   useEffect(() => {
@@ -83,147 +90,199 @@ export default function RegisterForm() {
     payload.append("phone", formData.phone);
     payload.append("group_name", formData.group_name);
     payload.append("hsc_batch", formData.hsc_batch);
-    payload.append("active_status", 1);
+    payload.append("active_status", "1");
     payload.append("ip_address", ipAddress);
     payload.append("section_id", formData.section);
     payload.append("group_id", formData.group);
-    payload.append("level_id", formData.level);
+    payload.append("level_id", formData.level || "19");
 
     registration(payload);
   };
 
-  // Handle errors and success messages
+  // Handle registration errors
   useEffect(() => {
-    if (error?.data) {
-      toast.error(error?.data?.message);
+    const res = error?.data;
+    if (!res) return;
 
-      if (error.data.errors) {
-        Object.entries(error?.data?.errors).forEach(([field, messages]) => {
-          setError(field, {
-            type: "manual",
-            message: messages[0],
-          });
-        });
-      } else {
-        setError("root.random", {
-          type: "random",
-          message: `Something went wrong: ${error?.data?.message}`,
-        });
-      }
+    const errs = res?.errors || {};
+
+    // reset previous server errors first (IMPORTANT)
+    Object.keys(errs).forEach((key) => {
+      setError(key, {
+        type: "server",
+        message: Array.isArray(errs[key]) ? errs[key][0] : errs[key],
+      });
+    });
+
+    if (Object.keys(errs).length === 0 && res.message) {
+      setError("root.serverError", {
+        type: "server",
+        message: res.message,
+      });
     }
+  }, [error, setError]);
 
+  // After successful registration — auto-login directly (no localStorage hack)
+  useEffect(() => {
     if (isSuccess && data?.data) {
-      // Email & Password localStorage তে রাখি
-      localStorage.setItem("login_email", watch("email"));
-      localStorage.setItem("login_password", watch("password"));
+      toast.success("রেজিস্ট্রেশন সফল! লগইন হচ্ছে...");
 
-      toast.success("You’ve logged in successfully!");
-      navigate("/user/profile");
+      // Persist the redirect target so GuestRoute can pick it up after
+      // the login mutation updates Redux auth state
+      setPostAuthRedirect(from);
+
+      // Call login API directly — no page navigation needed
+      loggedIn({
+        email: watch("email"),
+        password: watch("password"),
+      });
     }
-  }, [error, setError, isSuccess, data, navigate]);
+  }, [isSuccess, data]);
 
   return (
     <form onSubmit={handleSubmit(handleRegister)}>
       <input type="hidden" name="active_status" value={1} />
 
-      <div className="grid gap-4 space-y-1 text-left">
+      <div className="grid gap-4 ">
+        {/* নাম */}
         <div className="grid gap-1">
-          <Label className="mb-0.5">তোমার নাম</Label>
-          <Input {...register("firstName", { required: "Name is Required" })} />
+          <Input
+            {...register("firstName", { required: "Name is Required" })}
+            id="firstName"
+            name="firstName"
+            placeholder="তোমার নাম"
+          />
+          {errors.firstName && (
+            <p className="text-red-600 text-sm">{errors.firstName.message}</p>
+          )}
         </div>
 
         {/* Email Field */}
         <div className="grid gap-1">
-          <Label className="mb-0.5">ইমেইল আইডি</Label>
           <Input
             {...register("email", { required: "Email is Required" })}
             id="email"
             name="email"
             type="email"
+            placeholder="ইমেইল আইডি"
           />
           {errors.email && (
-            <span className="text-red-600">{errors.email.message}</span>
+            <p className="text-red-600 text-sm">{errors.email.message}</p>
           )}
         </div>
 
         {/* Phone Field */}
         <div className="grid gap-1">
-          <Label className="mb-0.5">ফোন নাম্বার</Label>
           <Input
             {...register("phone", { required: "Phone number is Required" })}
+            id="phone"
             name="phone"
             type="tel"
+            placeholder="ফোন নাম্বার"
           />
           {errors.phone && (
-            <span className="text-red-600">{errors.phone.message}</span>
+            <p className="text-red-600 text-sm">{errors.phone.message}</p>
           )}
         </div>
 
-        {/* গ্রুপ সিলেক্ট করো */}
-        <div className="grid gap-1">
-          <Label className="mb-0.5">গ্রুপ সিলেক্ট করো</Label>
+        {/* গ্রুপ ও ব্যাচ সিলেক্ট করো */}
+        <div className="flex gap-4">
+          <div className="grid gap-1 w-full">
+            <Select
+              placeholder="গ্রুপ নির্বাচন করুন"
+              className="
+                w-full
+                [&_.ant-select-selector]:!h-10
+                [&_.ant-select-selector]:!rounded-md
+                [&_.ant-select-selector]:!border-input
+                [&_.ant-select-selector]:!bg-background
+                [&_.ant-select-selector]:!px-3
+                [&_.ant-select-selector]:!flex
+                [&_.ant-select-selector]:!items-center
+                [&_.ant-select-selection-item]:!text-sm
+                [&_.ant-select-selection-placeholder]:!text-sm
+                [&_.ant-select-selection-placeholder]:!text-muted-foreground
+                [&_.ant-select-selection-search-input]:!h-10
+              "
+              value={watch("group_name")}
+              onChange={(value) => setValue("group_name", value)}
+              options={[
+                { label: "Science", value: "Science" },
+                { label: "Arts", value: "Arts" },
+                { label: "Commerce", value: "Commerce" },
+              ]}
+            />
+          </div>
 
-          <Select
-            placeholder="গ্রুপ নির্বাচন করুন"
-            className="border rounded-md"
-            value={watch("group_name")}
-            onChange={(value) => setValue("group_name", value)}
-            options={[
-              { label: "Science", value: "Science" },
-              { label: "Arts", value: "Arts" },
-              { label: "Commerce", value: "Commerce" },
-            ]}
-          />
-        </div>
-
-        {/* ব্যাচ সিলেক্ট করো */}
-        <div className="grid gap-1">
-          <Label className="mb-0.5">ব্যাচ সিলেক্ট করো</Label>
-
-          <Select
-            placeholder="ব্যাচ নির্বাচন করুন"
-            className="border rounded-md "
-            value={watch("hsc_batch")}
-            onChange={(value) => setValue("hsc_batch", value)}
-            options={[
-              { label: "HSC-24", value: "HSC-24" },
-              { label: "HSC-25", value: "HSC-25" },
-              { label: "HSC-26", value: "HSC-26" },
-              { label: "HSC-27", value: "HSC-27" },
-            ]}
-          />
+          <div className="grid gap-1 w-full">
+            <Select
+              placeholder="ব্যাচ নির্বাচন করুন"
+              className="
+                w-full
+                [&_.ant-select-selector]:!h-10
+                [&_.ant-select-selector]:!rounded-md
+                [&_.ant-select-selector]:!border-input
+                [&_.ant-select-selector]:!bg-background
+                [&_.ant-select-selector]:!px-3
+                [&_.ant-select-selector]:!flex
+                [&_.ant-select-selector]:!items-center
+                [&_.ant-select-selection-item]:!text-sm
+                [&_.ant-select-selection-placeholder]:!text-sm
+                [&_.ant-select-selection-placeholder]:!text-muted-foreground
+                [&_.ant-select-selection-search-input]:!h-10
+              "
+              value={watch("hsc_batch")}
+              onChange={(value) => setValue("hsc_batch", value)}
+              options={[
+                { label: "HSC-24", value: "HSC-24" },
+                { label: "HSC-25", value: "HSC-25" },
+                { label: "HSC-26", value: "HSC-26" },
+                { label: "HSC-27", value: "HSC-27" },
+              ]}
+            />
+          </div>
         </div>
 
         {/* Password Field */}
-        <div className="grid gap-1 relative">
-          <Label className="mb-0.5">নতুন পাসওয়ার্ড</Label>
-          <Input
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 8,
-                message: "Your password must be at least 8 characters",
-              },
-            })}
-            id="password"
-            name="password"
-            type={showPass ? "text" : "password"}
-          />
-          {showPass ? (
-            <EyeOff
-              onClick={() => setShowPass(!showPass)}
-              size={18}
-              className="absolute right-3 top-[35px] cursor-pointer"
+        <div className="grid gap-1 relative mt-2">
+          <div className="relative">
+            <Input
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 8,
+                  message: "Your password must be at least 8 characters",
+                },
+              })}
+              id="password"
+              name="password"
+              placeholder="নতুন পাসওয়ার্ড"
+              type={showPass ? "text" : "password"}
+              className="pr-10"
             />
-          ) : (
-            <Eye
+
+            <button
+              type="button"
               onClick={() => setShowPass(!showPass)}
-              size={18}
-              className="absolute right-3 top-[35px] cursor-pointer"
-            />
-          )}
+              className="
+                absolute
+                right-3
+                top-1/2
+                -translate-y-1/2
+                flex
+                items-center
+                justify-center
+                text-muted-foreground
+                hover:text-foreground
+                transition-colors
+              "
+            >
+              {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
           {errors.password && (
-            <span className="text-red-600">{errors.password.message}</span>
+            <p className="text-red-600 text-sm">{errors.password.message}</p>
           )}
         </div>
 
@@ -237,19 +296,21 @@ export default function RegisterForm() {
           })}
         />
 
-        {/* Submit Button */}
-        <Button
-          variant="green"
-          type="submit"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            </>
-          ) : (
-            "রেজিস্ট্রেশন করো"
-          )}
+        {/* Root / Server error display */}
+        {errors?.root?.serverError?.message && (
+          <div className="text-sm text-red-600 text-center">
+            {errors.root.serverError.message}
+          </div>
+        )}
+        {errors?.root?.random?.message && (
+          <div className="text-sm text-red-600 text-center">
+            {errors.root.random.message}
+          </div>
+        )}
+
+        {/* Submit Button — shows loading during registration OR auto-login */}
+        <Button disabled={isLoading || loginLoading} className="mt-10">
+          {isLoading ? <LoaderSubmit /> : loginLoading ? <LoaderSubmit /> : "Registration"}
         </Button>
       </div>
     </form>

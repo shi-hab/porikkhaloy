@@ -88,7 +88,7 @@ const ExamHistoryPage = () => {
   return (
     <div className="mx-auto pb-20 xl:p-10 md:ml-[50px] flex-grow xl:ml-0 space-y-6 pt-12 lg:pt-0 dark:bg-gray-900 dark:text-white">
       <div className="flex justify-between mb-6 w-[95%] md:w-[85%] mx-auto">
-        <h1 className="font-semibold text-xl">
+        <h1 className="font-bold text-xl">
           মোট প্র্যাকটিস পরীক্ষা : {allExams?.exams?.length || 0}
         </h1>
 
@@ -103,7 +103,7 @@ const ExamHistoryPage = () => {
       {filteredByDate && (
         <div>
           <div className="w-[95%] md:w-[85%] mx-auto">
-            <h2 className="bg-green-200 dark:bg-green-700 py-2 rounded-sm border-2 border-b-4 border-green-400 dark:border-green-600 mb-3 text-center text-lg font-semibold text-gray-700 dark:text-white">
+            <h2 className="bg-green-200 dark:bg-green-700 py-2 rounded-sm border-2 border-b-4 border-green-400 dark:border-green-600 mb-3 text-center text-lg font-bold text-gray-700 dark:text-white">
               📅 {dayjs(selectedDate).format("DD MMMM YYYY")} তারিখে প্র্যাকটিস
               করা এক্সাম
             </h2>
@@ -159,7 +159,7 @@ const ExamHistoryPage = () => {
           {Object.keys(groupedExams.others).map((date) => (
             <div key={date} className="my-2">
               <div className="w-[95%] md:w-[85%] mx-auto">
-                <h2 className="bg-green-200 dark:bg-green-700 py-2 rounded-sm border-2 border-b-4 border-green-400 dark:border-green-600 mb-3 text-center text-lg font-semibold text-gray-700 dark:text-white">
+                <h2 className="bg-green-200 dark:bg-green-700 py-2 rounded-sm border-2 border-b-4 border-green-400 dark:border-green-600 mb-3 text-center text-lg font-bold text-gray-700 dark:text-white">
                   📅 {date}
                 </h2>
               </div>

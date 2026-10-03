@@ -33,11 +33,11 @@ export const McqQuesForSubmissionView = ({ question, queIndex }) => {
 
           // Background color logic
           if (isSubmittedOptionCorrect && isCorrect) {
-            bgColor = "bg-green-500 text-white font-semibold"; // Correct submitted
+            bgColor = "bg-green-500 text-white font-bold"; // Correct submitted
           } else if (isSubmitted && !isSubmittedOptionCorrect) {
-            bgColor = "bg-red-600 text-white font-semibold"; // Incorrect submitted
+            bgColor = "bg-red-600 text-white font-bold"; // Incorrect submitted
           } else if (isCorrect) {
-            bgColor = "bg-green-500 text-white font-semibold"; // Correct but not submitted
+            bgColor = "bg-green-500 text-white font-bold"; // Correct but not submitted
           }
 
           return (
@@ -84,7 +84,7 @@ const parseHtmlContentWithBadge = (htmlContent, badgeText) => {
     // Create a span for the badge element
     const badgeElement = document.createElement("span");
     badgeElement.className =
-      "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80 ml-2";
+      "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80 ml-2";
     badgeElement.textContent = badgeText;
 
     // Append the badge after the text content in the found element

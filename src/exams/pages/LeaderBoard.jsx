@@ -28,7 +28,7 @@ function LeaderBoard() {
         </div>
       ) : (
         <div className="p-2  mx-auto">
-          <h2 className="text-2xl font-extrabold mb-1 text-center">
+          <h2 className="text-2xl font-bold mb-1 text-center">
             🏆 সেরা ২৫ জনের লিডারবোর্ড
           </h2>
           <p className="text-sm mb-4 text-center">
@@ -69,7 +69,7 @@ function LeaderBoard() {
 
                     {/* Name and Section */}
                     <div className="flex-1">
-                      <div className="text-sm md:text-base font-semibold dark:text-white leading-4">
+                      <div className="text-sm md:text-base font-bold dark:text-white leading-4">
                         {item?.name}
                         {isCurrentUser && (
                           <span className="ml-1 px-2 py-0.5 text-xs bg-purple-200 text-purple-800 rounded-full">
@@ -88,7 +88,7 @@ function LeaderBoard() {
                       <div className=" text-green-900 dark:text-white font-bold">
                         র‍্যাংক : #{item?.position}
                       </div>
-                      <div className=" text-blue-800 dark:text-white font-semibold">
+                      <div className=" text-blue-800 dark:text-white font-bold">
                         PP : {item?.total_marks ? item.total_marks : 0}
                       </div>
                     </div>

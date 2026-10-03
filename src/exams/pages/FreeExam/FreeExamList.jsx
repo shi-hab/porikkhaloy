@@ -104,13 +104,13 @@
 //           <div className="flex items-center gap-2 sm:gap-3 text-gray-500 dark:text-gray-400">
 //             <div className="flex items-center gap-1">
 //               <Clock size={12} className="text-green-600" />
-//               <span className="text-sm font-semibold">
+//               <span className="text-sm font-bold">
 //                 {toBanglaNumeral(total_time)} মি.
 //               </span>
 //             </div>
 //             <div className="flex items-center gap-1">
 //               <FileText size={12} className="text-blue-600" />
-//               <span className="text-sm font-semibold">
+//               <span className="text-sm font-bold">
 //                 {toBanglaNumeral(total_questions)}টি
 //               </span>
 //             </div>
@@ -119,7 +119,7 @@
 //           {/* Status Area */}
 //           <div className="flex items-center">
 //             {isExamEnded ? (
-//               <span className="flex items-center gap-1 text-gray-400 text-sm font-medium">
+//               <span className="flex items-center gap-1 text-gray-400 text-sm font-regular">
 //                 <CheckCircle2 size={11} /> পরীক্ষা শেষ
 //               </span>
 //             ) : (

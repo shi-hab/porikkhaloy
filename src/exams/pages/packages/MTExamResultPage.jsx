@@ -7,10 +7,10 @@ const MTExamResultPage = ({ allAttempts, modelTestId, studentId }) => {
         {/* Section Header */}
         <div className="flex items-center justify-center  text-center mt-10 gap-3 border-b border-gray-200/60 dark:border-gray-700/60 pb-4">
           <div className="">
-            <h2 className="text-lg md:text-xl font-black text-gray-800 dark:text-gray-100 font-siliguri leading-tight">
+            <h2 className="text-lg md:text-xl font-bold text-gray-800 dark:text-gray-100 font-siliguri leading-tight">
               তোমার সকল সলভ শীট
             </h2>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
+            <p className="text-[11px] text-gray-500 dark:text-gray-400 font-regular">
               পূর্ববর্তী সকল পরীক্ষার ফলাফল এবং উত্তরপত্র এখানে পাবে
             </p>
           </div>

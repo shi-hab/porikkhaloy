@@ -13,7 +13,7 @@ const TermsAndConditions = () => {
           carefully before using our services.
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           1. Acceptance of Terms
         </h2>
         <p className="text-gray-700 mb-4">
@@ -21,7 +21,7 @@ const TermsAndConditions = () => {
           these terms. If you do not agree, please do not use our app.
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           2. Use of the App
         </h2>
         <ul className="list-disc list-inside text-gray-700 mb-4 space-y-1">
@@ -32,7 +32,7 @@ const TermsAndConditions = () => {
           <li>Respect intellectual property rights of the content provided.</li>
         </ul>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           3. Account Responsibilities
         </h2>
         <p className="text-gray-700 mb-4">
@@ -41,7 +41,7 @@ const TermsAndConditions = () => {
           us immediately if you suspect any unauthorized use.
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           4. Limitation of Liability
         </h2>
         <p className="text-gray-700 mb-4">
@@ -50,7 +50,7 @@ const TermsAndConditions = () => {
           to access it.
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           5. Modification of Terms
         </h2>
         <p className="text-gray-700 mb-4">
@@ -58,7 +58,7 @@ const TermsAndConditions = () => {
           will be posted here with the updated effective date.
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           6. Governing Law
         </h2>
         <p className="text-gray-700 mb-4">
@@ -66,7 +66,7 @@ const TermsAndConditions = () => {
           laws of Bangladesh.
         </p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-gray-800 mt-6 mb-3">
           Contact Us
         </h2>
         <p className="text-gray-700">

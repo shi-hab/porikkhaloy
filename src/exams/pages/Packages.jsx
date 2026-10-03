@@ -1,7 +1,8 @@
+import { Empty } from "antd";
 import { PackageCard } from "@/exams/components/molecules/packages/PackageCard";
-import { Empty, Spin } from "antd";
-
 import { useGetAllPackagesQuery } from "@/features/packages/packagesApi";
+import EnrollPackagesPageSkeleton from "@/exams/components/atoms/skeletons/PackagePage/EnrollPackagesPageSkeleton";
+import toBanglaNumeral from "@/utils/Tobangla";
 
 const PackagesPage = () => {
   const { data: res, isLoading } = useGetAllPackagesQuery();
@@ -15,23 +16,25 @@ const PackagesPage = () => {
     (item) => item?.is_subscribed === true
   );
 
+  if (isLoading) {
+    return <EnrollPackagesPageSkeleton />;
+  }
+
   return (
     <div className="container px-2 pt-6 mx-auto dark:text-white">
+      {subscribedPackages.length > 0 ? (
+        <div className=" rounded-xl border border-emerald-200 bg-emerald-100 p-4">
+          {/* Header */}
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-[1.25rem] font-bold text-blue-800 font-siliguri">
+              এনরোল করা এক্সাম ব্যাচ{" "}
+              <span>({toBanglaNumeral(subscribedPackages.length)})</span>
+            </h2>
+          </div>
 
-      {/* TITLE */}
-      <h1 className="mb-4 ml-1 text-xl font-siliguri font-bold md:ml-[40px] lg:ml-0">
-        এনরোল করা এক্সাম ব্যাচ
-      </h1>
-
-      {isLoading ? (
-        <div className="h-[70vh] grid place-content-center">
-          <Spin />
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-4">
-
-          {subscribedPackages.length > 0 ? (
-            subscribedPackages.map((item) => (
+          {/* Grid */}
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {subscribedPackages.map((item) => (
               <PackageCard
                 key={item.id}
                 packageId={item.id}
@@ -39,13 +42,23 @@ const PackagesPage = () => {
                 pkgImg={item.img}
                 isSubscribed={item.is_subscribed}
               />
-            ))
-          ) : (
-            <div className="col-span-full">
-              <Empty description="No subscribed packages found" />
-            </div>
-          )}
-
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="flex justify-center py-16">
+          <Empty
+            description={
+              <div className="space-y-1">
+                <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                  তুমি এখনো কোনো এক্সাম ব্যাচে এনরোল করো নি।
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  একটি এক্সাম ব্যাচে এনরোল করে তোমার প্রস্তুতি শুরু করো।
+                </p>
+              </div>
+            }
+          />
         </div>
       )}
     </div>

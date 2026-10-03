@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, RotateCcw } from "lucide-react";
 import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useLayoutEffect  } from "react";
 import { useForm } from "react-hook-form";
 import QuesCategoryForFilter from "../components/molecules/filterquesforexam/QuesCategoryForFilter";
 import { Drawer, FloatButton, Spin } from "antd";
@@ -66,7 +66,7 @@ const QuestionListForStudentPage = () => {
     }
   }, [currentPage]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (paginationData?.data?.data) {
       if (currentPage === 1) {
         setQuestions(paginationData.data.data);
@@ -182,6 +182,7 @@ const QuestionListForStudentPage = () => {
   };
 
   const totalQuestion = correctTotal + wrongTotal;
+  const showSkeleton = (isLoadingGetQuestions || isFetching) && currentPage === 1 && questions.length === 0;
   return (
     <div className="relative w-full px-2 pt-1">
       <div className="py-3 px-2 text-center text-2xl bg-green-50 dark:bg-gray-800 border border-green-500 dark:border-gray-700 border-b-4 rounded-lg mt-2 text-blue-900 dark:text-white font-bold md:text-4xl">
@@ -200,7 +201,7 @@ const QuestionListForStudentPage = () => {
               <div className="flex justify-between items-center  shadow-2xl bg-blue-900">
                 {/* Total Question */}
                 <div className="flex items-center justify-center space-x-2 w-32 px-2 py-3  font-bold ">
-                  <span className="text-white dark:text-indigo-400 font-semibold text-center truncate">
+                  <span className="text-white dark:text-indigo-400 font-bold text-center truncate">
                     মোট : {toBanglaNumeral(totalQuestion)} টি
                   </span>
                 </div>
@@ -208,7 +209,7 @@ const QuestionListForStudentPage = () => {
                 {/* Correct */}
                 <div className="flex items-center justify-center space-x-2 w-32 px-2 py-3  font-bold border-l-[3px] border-r-[3px] border-gray-200/50 dark:border-gray-700/50">
                   <SquareCheck className="w-5 h-5 text-white dark:text-green-400" />
-                  <span className="text-white dark:text-green-400 font-semibold text-center truncate">
+                  <span className="text-white dark:text-green-400 font-bold text-center truncate">
                     {toBanglaNumeral(correctTotal)} টি
                   </span>
                 </div>
@@ -216,14 +217,14 @@ const QuestionListForStudentPage = () => {
                 {/* Wrong */}
                 <div className="flex items-center justify-center space-x-2 w-32 px-2 py-3  font-bold  border-r-[3px] border-gray-200/50 dark:border-gray-700/50">
                   <CircleX className="w-5 h-5 text-white dark:text-red-400" />
-                  <span className="text-white dark:text-red-400 font-semibold text-center truncate">
+                  <span className="text-white dark:text-red-400 font-bold text-center truncate">
                     {toBanglaNumeral(wrongTotal)} টি
                   </span>
                 </div>
 
                 {/* Marks */}
                 <div className="flex items-center justify-center space-x-2 w-32 px-2 py-3  font-bold ">
-                  <span className="text-white dark:text-yellow-400 font-semibold text-center truncate">
+                  <span className="text-white dark:text-yellow-400 font-bold text-center truncate">
                     মার্ক :{" "}
                     {toBanglaNumeral(correctTotal * 1 - wrongTotal * 0.25)}
                   </span>
@@ -316,7 +317,7 @@ const QuestionListForStudentPage = () => {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={reStart}
-                  className="flex items-center gap-2 ml-4 px-3 py-1 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded shadow dark:bg-red-600 dark:hover:bg-red-700 transition-colors"
+                  className="flex items-center gap-2 ml-4 px-3 py-1 text-sm font-bold text-white bg-red-500 hover:bg-red-600 rounded shadow dark:bg-red-600 dark:hover:bg-red-700 transition-colors"
                 >
                   <RotateCcw className="w-4 h-4" />
                   রিস্টার্ট
@@ -344,13 +345,13 @@ const QuestionListForStudentPage = () => {
 
       {/* Questions */}
       <div className="grid gap-2 mt-3">
-        {isLoadingGetQuestions &&
+        {showSkeleton &&
           currentPage === 1 &&
           Array.from({ length: 4 }).map((_, i) => (
             <MCQCardSkeleton key={`first-${i}`} />
           ))}
 
-        {!isLoadingGetQuestions &&
+        {!showSkeleton &&
           questions.map((question, index) => {
             const key = `${question.id}-${index}`;
 

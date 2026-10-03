@@ -1,4 +1,4 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Checkbox, Spin, Empty } from "antd";
 import { toast } from "sonner";
@@ -23,6 +23,7 @@ import { useGetSingleStuResultQuery } from "@/features/packages/mtExamsApi";
 import toBanglaNumeral from "@/utils/Tobangla";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { parseHtmlContent } from "@/utils/parseHtmlContent";
+import { setPostAuthRedirect } from "@/exams/components/utils/authRedirect";
 
 function ModelTestExamDetails() {
   const { packageIdurl, modelTestIdurl } = useParams();
@@ -32,6 +33,7 @@ function ModelTestExamDetails() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const auth = useSelector((state) => state.auth);
   const userAuth = useAuth();
 
@@ -101,7 +103,10 @@ function ModelTestExamDetails() {
     event.preventDefault();
 
     if (!userAuth) {
-      return toast.error("Please Login First!");
+      const returnTo = `${location.pathname}${location.search}`;
+      setPostAuthRedirect(returnTo);
+      navigate("/login", { state: { from: returnTo } });
+      return;
     }
 
     if (selectedExams.length < singleMT?.optional_subject) {
@@ -219,14 +224,14 @@ function ModelTestExamDetails() {
       {/* Compulsory */}
       {compulsoryQuestionsCount > 0 && (
         <div className="bg-white shadow rounded border p-3 space-y-5">
-          <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+          <h2 className="text-lg font-bold text-gray-700 dark:text-gray-200">
             মেইন বিষয়
           </h2>
 
           <ul
             className={`mt-2 grid ${initialData?.compulsoryExams.length > 1
-                ? "grid-cols-2 md:grid-cols-3"
-                : ""
+              ? "grid-cols-2 md:grid-cols-3"
+              : ""
               } lg:grid-cols-4 gap-3`}
           >
             {initialData?.compulsoryExams?.map((exam) => (
@@ -234,7 +239,7 @@ function ModelTestExamDetails() {
                 key={exam?.id}
                 className="flex justify-between bg-gray-50 dark:bg-gray-900 px-3 py-2 rounded text-base text-gray-700 dark:text-gray-200"
               >
-                <span className="font-medium">{exam?.title}</span>
+                <span className="font-regular">{exam?.title}</span>
                 <span className="font-bold">
                   {toBanglaNumeral(
                     exam?.questions
@@ -253,7 +258,7 @@ function ModelTestExamDetails() {
       {/* Optional */}
       {singleMT.optional_subject > 0 && (
         <div>
-          <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+          <h2 className="text-lg font-bold text-gray-700 dark:text-gray-200">
             অপশনাল বিষয়{" "}
             <span className="text-sm text-gray-500 dark:text-gray-400">
               (কমপক্ষে {singleMT?.optional_subject} টি সিলেক্ট করো)
@@ -279,7 +284,7 @@ function ModelTestExamDetails() {
                       onClick={(e) => e.stopPropagation()}
                       onChange={() => handleCheckboxChange(exam?.id)}
                     />
-                    <span className="font-medium text-gray-700 dark:text-gray-200">
+                    <span className="font-regular text-gray-700 dark:text-gray-200">
                       {exam?.title}
                     </span>
                   </div>
@@ -310,7 +315,7 @@ function ModelTestExamDetails() {
             <span className="mx-1">{formattedEndTime} টা</span>
           </div>
 
-          <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+          <p className="text-sm font-bold text-gray-700 dark:text-gray-200">
             এই সময়ের মধ্যে পরীক্ষা দিলেই মেরিট লিস্টে নাম যোগ হবে। সময় শেষ হলে
             আনলিমিটেড প্রাক্টিস পরীক্ষা দেওয়া যাবে।
           </p>
@@ -318,40 +323,38 @@ function ModelTestExamDetails() {
       )}
 
       {/* Start Exam Button */}
-      {
-        <div
-          className={`left-0 w-full ${isExamNotStarted || allAttempts.length === 0 || !userAuth
-              ? "grid grid-cols-1 gap-2"
-              : "grid grid-cols-2 gap-2"
-            } `}
-        >
-          {/* Start Exam Button */}
-          <Button
-            onClick={handleExamStart}
-            className={`
+      <div
+        className={`left-0 w-full ${isExamNotStarted || allAttempts.length === 0
+          ? "grid grid-cols-1 gap-2"
+          : "grid grid-cols-2 gap-2"
+          } `}
+      >
+        {/* Start Exam Button */}
+        <Button
+          onClick={handleExamStart}
+          className={`
             ${isExamNotStarted || isExamStarting ? "cursor-not-allowed " : ""}`}
-          >
-            {isExamStarting ? (
-              <LoaderSubmit />
-            ) : isExamEnded ? (
-              "প্রাক্টিস পরীক্ষা দেও"
-            ) : (
-              "শুরু করো"
-            )}
-          </Button>
-
-          {/* Merit List Button */}
-          {!isExamNotStarted && userAuth && allAttempts.length > 0 && (
-            <Link
-              to={`/package/${packageId}/model-test-merit-list/${singleMT?.id}`}
-            >
-              <Button variant="green" className="w-full">
-                মেরিট লিস্ট
-              </Button>
-            </Link>
+        >
+          {isExamStarting ? (
+            <LoaderSubmit />
+          ) : isExamEnded ? (
+            "প্রাক্টিস পরীক্ষা দেও"
+          ) : (
+            "শুরু করো"
           )}
-        </div>
-      }
+        </Button>
+
+        {/* Merit List Button */}
+        {!isExamNotStarted && allAttempts.length > 0 && (
+          <Link
+            to={`/package/${packageId}/model-test-merit-list/${singleMT?.id}`}
+          >
+            <Button variant="green" className="w-full">
+              মেরিট লিস্ট
+            </Button>
+          </Link>
+        )}
+      </div>
 
       {/* Result Page */}
       {auth?.student?.id && allAttempts.length > 0 && (

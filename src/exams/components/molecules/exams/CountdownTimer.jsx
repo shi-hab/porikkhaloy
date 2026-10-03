@@ -31,16 +31,16 @@ function CountdownTimer() {
 
   return (
     <div>
-      <h1 className="font-semibold">Time Left: {formatTime()}</h1>
+      <h1 className="font-bold">Time Left: {formatTime()}</h1>
 
       {showWarning && (
-        <p className="text-red-500 font-semibold">
+        <p className="text-red-500 font-bold">
           Your exam will end soon!
         </p>
       )}
 
       {timeFinished && (
-        <p className="text-red-500 font-semibold">
+        <p className="text-red-500 font-bold">
           Time Over!
         </p>
       )}

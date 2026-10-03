@@ -1,11 +1,20 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { setPostAuthRedirect } from "../components/utils/authRedirect";
 
-const PrivateRoutes = ({ children }) => {
+export default function PrivateRoutes() {
   const isLoggedIn = useAuth();
+  const location = useLocation();
 
-  // Render children if logged in; otherwise, redirect to the login page
-  return isLoggedIn ? children : <Navigate to="/login" />;
-};
+  if (!isLoggedIn) {
+    const returnTo = `${location.pathname}${location.search}`;
+    // Same belt-and-suspenders approach as the exam-row click handler:
+    // router state for the immediate redirect, sessionStorage as a
+    // backup that survives a refresh or a hard navigation to /login.
+    setPostAuthRedirect(returnTo);
 
-export default PrivateRoutes;
+    return <Navigate to="/login" state={{ from: returnTo }} replace />;
+  }
+
+  return <Outlet />;
+}

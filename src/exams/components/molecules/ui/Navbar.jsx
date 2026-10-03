@@ -12,6 +12,7 @@ import DarkModeToggle from "./DarkModeToggle";
 import { useGetAllForNavbarQuery } from "@/features/topNavBar/navBarApi";
 import toBanglaNumeral from "@/utils/Tobangla";
 import { PiFireSimpleFill } from "react-icons/pi";
+import { isApp } from './../../../../utils/device';
 
 export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
   const checkingUser = useAuth();
@@ -105,12 +106,15 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
               <Link to="/user/streak" >
                 <div className="flex w-fit bg-gray-100 dark:bg-gray-800 rounded-full px-4 h-6 text-body items-center justify-center">
                   <PiFireSimpleFill className="text-orange-600" />
-                  <span className="font-extrabold ml-1 text-orange-500">
+                  <span className="font-bold ml-1 text-orange-500">
                     {isLoading ? "০" : banglaStreak}
                   </span>
                 </div>
               </Link>
             )}
+            {/* <div>
+              <DarkModeToggle/>
+            </div> */}
           </div>
 
           {/* Vertical nav links */}
@@ -119,12 +123,15 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
               <NavLink
                 key={link.href}
                 to={link.href}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 font-bold text-sm transition-all duration-200
+                className={`group relative flex items-center gap-3 p-3 rounded-lg text-sm transition-colors
                   ${isActiveCustom(link)
-                    ? "bg-blue-200 dark:bg-blue-900 text-blue-600 dark:text-blue-300 shadow-[0_0_8px] shadow-blue-400/70 ring-1 ring-blue-300/60"
-                    : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    ? "bg-primary/10 text-primary font-regular"
+                    : "text-foreground hover:bg-muted"
                   }`}
               >
+                {isActiveCustom(link) && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 rounded-r-full bg-primary" />
+                )}
                 <span className="text-lg">{link.icon}</span>
                 <span>{link.title}</span>
               </NavLink>
@@ -134,7 +141,7 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
           {/* Bottom: auth area */}
           <div className=" pt-4 border-t dark:border-gray-800">
             {checkingUser ? (
-              <div className="bg-gray-300 flex justify-between items-center px-2 py-2 rounded-lg">
+              <div>
                 <UserNav />
               </div>
             ) : (
@@ -166,54 +173,56 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
               } w-full bg-black/80 dark:bg-black/90 md:hidden`}
           />
 
-          <Layout
-            fixed
-            className={`${navOpened ? "h-svh" : ""
-              } w-full flex flex-col items-center justify-between md:flex-row`}
-          >
-            <Layout.Header
-              sticky
-              className="z-50 flex items-center justify-between w-full sm:h-14 px-3"
+          {(!isApp() || checkingUser)  && (
+            <Layout
+              fixed
+              className={`${navOpened ? "h-svh" : ""
+                } w-full flex flex-col items-center justify-between md:flex-row`}
             >
-              {checkingUser && (
-                <div className="flex gap-2">
-                  <Link to="/user/streak">
-                    <div className="flex bg-gray-100 rounded px-2 h-7 text-[17px] items-center justify-center">
-                      <PiFireSimpleFill className="text-orange-600" />
-                      <span className="font-extrabold ml-0.5 text-orange-500">
-                        {isLoading ? "০" : banglaStreak}
-                      </span>
-                    </div>
-                  </Link>
-                </div>
-              )}
-
-              <div className={`flex items-center ${!isCollapsed ? "gap-2" : ""}`}>
-                <Logo />
-              </div>
-
-              {/* Right Side */}
-              <div className="flex items-center gap-2">
-                {checkingUser ? (
-                  <UserNav />
-                ) : (
-                  <>
-                    <Button
-                      onClick={() => navigate("/login")}
-                    >
-                      লগইন
-                    </Button>
-                    <Button
-                      onClick={() => navigate("/registration")}
-                      variant="green"
-                    >
-                      রেজিস্ট্রেশন
-                    </Button>
-                  </>
+              <Layout.Header
+                sticky
+                className="z-50 flex items-center justify-between w-full sm:h-14 px-3"
+              >
+                {checkingUser && (
+                  <div className="flex gap-2">
+                    <Link to="/user/streak">
+                      <div className="flex bg-gray-100 rounded px-2 h-7 text-[17px] items-center justify-center">
+                        <PiFireSimpleFill className="text-orange-600" />
+                        <span className="font-bold ml-0.5 text-orange-500">
+                          {isLoading ? "০" : banglaStreak}
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
                 )}
-              </div>
-            </Layout.Header>
-          </Layout>
+
+                <div className={`flex items-center ${!isCollapsed ? "gap-2" : ""}`}>
+                  <Logo />
+                </div>
+
+                {/* Right Side */}
+                <div className="flex items-center gap-2">
+                  {checkingUser ? (
+                    <UserNav />
+                  ) : (
+                    <>
+                      <Button
+                        onClick={() => navigate("/login")}
+                      >
+                        লগইন
+                      </Button>
+                      <Button
+                        onClick={() => navigate("/registration")}
+                        variant="green"
+                      >
+                        রেজিস্ট্রেশন
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </Layout.Header>
+            </Layout>
+          )}
 
           {/* Mobile Bottom Nav */}
           {!isHideNavbar && (

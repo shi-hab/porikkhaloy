@@ -10,7 +10,7 @@ export function NormalQuesForSubmissionView({ queIndex, question }) {
       {/* View File Section */}
       {fileUrl && (
         <div className="mb-4">
-          <p className="text-sm font-medium">উত্তরপত্র জমা দেও :</p>
+          <p className="text-sm font-regular">উত্তরপত্র জমা দেও :</p>
           <a
             href={fileUrl}
             target="_blank"
@@ -24,7 +24,7 @@ export function NormalQuesForSubmissionView({ queIndex, question }) {
 
       {/* Question Title */}
       <div className="flex items-center gap-2 mb-4">
-        <p className="text-base font-medium">{queIndex + 1}. </p>
+        <p className="text-base font-regular">{queIndex + 1}. </p>
         <p className="text-base">{parseHtmlContent(title)}</p>
       </div>
       {description ? (

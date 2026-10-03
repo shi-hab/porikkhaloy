@@ -1,30 +1,42 @@
 import { parseHtmlContent } from "@/utils/parseHtmlContent";
 import { Link } from "react-router-dom";
-import placeholder from "@/assets/Placeholder.svg";
 import { EncodeURL } from "../../atoms/urlHashCode/EncodeURL";
+import { useState } from "react";
+import PackageCardSkeleton from "@/exams/components/atoms/skeletons/PackagePage/PackageCardSkeleton";
+import {useRef, useEffect}  from "react"
 
 export const PackageCard = ({ packageId, name, pkgImg, isSubscribed = null }) => {
   const packageIdURL = EncodeURL(packageId);
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const imgRef = useRef(null);
+
+  useEffect(() => {
+    if (imgRef.current?.complete) {
+      setImgLoaded(true);
+    }
+  }, [pkgImg]);
 
   return (
     <Link
       to={`/package/${packageIdURL}`}
       className="relative flex flex-col justify-between overflow-hidden text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg drop-shadow hover:shadow-md transition-all duration-300"
     >
-      {pkgImg ? (
-        <div className="relative bg-inherit">
+      {pkgImg && (
+        <div className="relative w-full aspect-[14/13] bg-inherit overflow-hidden rounded-lg">
+          <div
+            className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${imgLoaded ? "opacity-0 pointer-events-none" : "opacity-100"
+              }`}
+          >
+            <PackageCardSkeleton />
+          </div>
           <img
             src={pkgImg}
             alt={parseHtmlContent(name)}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      ) : (
-        <div className="relative bg-inherit">
-          <img
-            src={placeholder}
-            alt={parseHtmlContent(name)}
-            className="w-56 h-52 object-contain"
+            onLoad={() => setImgLoaded(true)}
+            loading="lazy"
+            decoding="async"
+            className={`w-full h-full object-cover transition-opacity duration-500 ease-in-out ${imgLoaded ? "opacity-100" : "opacity-0"
+              }`}
           />
         </div>
       )}
@@ -36,12 +48,6 @@ export const PackageCard = ({ packageId, name, pkgImg, isSubscribed = null }) =>
           </p>
         </div>
       )}
-      {/* লাইভ ব্যাজ */}
-      {/* {valid && (
-        <p className="absolute top-1 left-1 z-10 px-1 overflow-hidden text-sm text-white bg-red-600 dark:bg-red-500 rounded-lg animate-borderSpark">
-          লাইভ
-        </p>
-      )} */}
     </Link>
   );
 };

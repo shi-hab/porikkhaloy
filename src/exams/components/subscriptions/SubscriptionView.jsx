@@ -1,9 +1,10 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Spin, Empty, Button } from "antd";
+import { Spin, Empty} from "antd";
 import { parseHtmlContent } from "@/utils/parseHtmlContent";
 import { EncodeURL } from "../atoms/urlHashCode/EncodeURL";
 import { useExamSubscriptionsQuery } from "@/features/exams/examsApi.js";
+import { Button } from '@/components/ui/button';
 
 
 function SubscriptionView() {
@@ -59,7 +60,7 @@ function SubscriptionView() {
                 <div className="flex flex-col lg:flex-row lg:gap-6 lg:items-start">
                     {/* ================= EXAM BATCHES (top on mobile, left on desktop) ================= */}
                     <div className="order-1 lg:order-1 lg:w-1/2 bg-gradient-to-r from-blue-50 via-white to-indigo-50 p-4 rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition mb-6 lg:mb-0">
-                        <h2 className="text-heading font-semibold mb-4 lg:mb-6">
+                        <h2 className="text-heading font-bold mb-4 lg:mb-6">
                             Included Exam Batches
                         </h2>
 
@@ -95,7 +96,7 @@ function SubscriptionView() {
                                     <button
                                         type="button"
                                         onClick={() => setShowAllBatches((prev) => !prev)}
-                                        className="mt-3 w-full text-sm font-semibold text-blue-700 hover:text-blue-900 hover:underline transition"
+                                        className="mt-3 w-full text-sm font-bold text-blue-700 hover:text-blue-900 hover:underline transition"
                                     >
                                         {showAllBatches
                                             ? "Show less"
@@ -110,7 +111,7 @@ function SubscriptionView() {
 
                     {/* ================= FEATURES (bottom on mobile, right on desktop) ================= */}
                     <div className="order-2 lg:order-2 lg:w-1/2 bg-gradient-to-r from-emerald-50 via-white to-green-50 p-4 rounded-xl border border-emerald-100 shadow-sm hover:shadow-md transition">
-                        <h2 className="text-heading font-semibold mb-4">
+                        <h2 className="text-heading font-bold mb-4">
                             Included Features
                         </h2>
 
@@ -122,7 +123,7 @@ function SubscriptionView() {
                                         className={`
                                     relative h-32 sm:h-36 rounded-2xl shadow-lg overflow-hidden
                                     flex items-center justify-center text-center p-3
-                                    text-white font-semibold
+                                    text-white font-bold
                                     ${colors[index % colors.length]}
                                 `}
                                     >
@@ -151,18 +152,18 @@ function SubscriptionView() {
 
 
 
-            </div>
             {/* Button */}
-            <div className="mt-10">
+            <div className="mt-10 flex justify-center items-center">
                 <Button
                     onClick={(e) => {
                         e.stopPropagation(); // important fix
                         handleSubscriptionClick(id);
                     }}
-                    className="bg-white h-10 text-blue-900 hover:bg-blue-200 hover:text-blue-900 font-bold w-full border-blue-900 border-2 border-b-4 dark:bg-blue-600 dark:border-blue-800"
+                    className="mt-6 w-full"
                 >
                     Subscribe this plan
                 </Button>
+            </div>
             </div>
         </>
     );

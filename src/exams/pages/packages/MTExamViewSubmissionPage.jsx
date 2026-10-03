@@ -2,9 +2,12 @@ import { Card } from "@/components/ui/card";
 import { CreativeExamForMT } from "@/exams/components/molecules/packages/mtexam/CreativeExamForMT";
 import ExamResultForMcq from "@/exams/components/organism/exams/ExamResultForMcq";
 import { useGetMtExamStudentAnswersQuery } from "@/features/exams/examsApi";
-import { useEffect, useState } from "react";
-import { GoCheckCircleFill } from "react-icons/go";
-import { MdOutlineTimer } from "react-icons/md";
+import { useEffect, useMemo, useState } from "react";
+import { GoCheckCircleFill, GoTrophy } from "react-icons/go";
+import { MdOutlineTimer, MdRemoveCircle } from "react-icons/md";
+import { IoMdCheckmarkCircle } from "react-icons/io";
+import { FaMedal } from "react-icons/fa";
+import { BsBarChartFill } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import { Spin } from "antd";
 import TimerForUI from "@/exams/components/atoms/timer/TimerForUI";
@@ -22,6 +25,161 @@ import RatingButton from "@/components/ui/ratingButton";
 import { Textarea } from "@/components/ui/textarea";
 import SocialIcon from "@/components/ui/SocialIcon ";
 import { Loader } from "lucide-react";
+import { isoDateFormatter } from "@/helpers/dateFormatter";
+
+// ---------------------------------------------------------------------------
+// Summary card — original stat-pill layout, modernized + fully responsive
+// ---------------------------------------------------------------------------
+
+const StatPill = ({ label, value, gradient, iconBg, icon }) => (
+  <div className="rounded-xl overflow-hidden border border-gray-100 shadow-sm">
+    <div
+      className={`${gradient} text-white text-[10px] sm:text-xs font-semibold tracking-wide text-center py-1.5`}
+    >
+      {label}
+    </div>
+    <div className="bg-white py-2 sm:py-3 flex items-center justify-center gap-1.5">
+      <span
+        className="flex items-center justify-center w-5 h-5 rounded-full flex-shrink-0"
+        style={{ backgroundColor: iconBg }}
+      >
+        {icon}
+      </span>
+      <span className="font-bold text-slate-800 text-[13px] sm:text-sm truncate">
+        {value}
+      </span>
+    </div>
+  </div>
+);
+
+const ExamResultSummaryCard = ({
+  modelTestName,
+  lastSubmissionTime,
+  aggregate,
+  position,
+  topScore,
+  meritListLink,
+  activeFilter,
+  onFilterChange,
+  counts,
+}) => {
+  const filters = [
+    { key: "all", label: `All ${counts.total}`, dot: null },
+    { key: "correct", label: `Right ${counts.correct}`, dot: "bg-emerald-500" },
+    { key: "skipped", label: `Skipped ${counts.skipped}`, dot: "bg-amber-400" },
+    { key: "incorrect", label: `Wrong ${counts.incorrect}`, dot: "bg-rose-500" },
+  ];
+
+  return (
+    <Card className="p-3 sm:p-5 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow font-hind-siliguri">
+      {/* Title */}
+      <h2 className="text-center font-bold text-sm sm:text-lg leading-snug text-slate-800 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-1">
+        <span>{modelTestName}</span>
+      </h2>
+      {lastSubmissionTime && (
+        <p className="text-center text-gray-400 text-[11px] sm:text-sm mt-1">
+          Exam Date: {isoDateFormatter(lastSubmissionTime)}
+        </p>
+      )}
+
+      {/* Stat pills — 2 cols on mobile, 4 on larger screens */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mt-4">
+        <StatPill
+          label="MARKS"
+          value={`${aggregate.obtainedMarks.toFixed(2)}/${aggregate.totalMarks}`}
+          gradient="bg-gradient-to-r from-emerald-500 to-emerald-400"
+          iconBg="#D1FAE5"
+          icon={<GoCheckCircleFill className="text-emerald-500" size={12} />}
+        />
+        <StatPill
+          label="ACCURACY"
+          value={`${aggregate.accuracy}%`}
+          gradient="bg-gradient-to-r from-sky-500 to-sky-400"
+          iconBg="#DBEAFE"
+          icon={<IoMdCheckmarkCircle className="text-sky-500" size={12} />}
+        />
+        <StatPill
+          label="TIME"
+          value={aggregate.timeLabel}
+          gradient="bg-gradient-to-r from-sky-500 to-sky-400"
+          iconBg="#DBEAFE"
+          icon={<MdOutlineTimer className="text-sky-500" size={12} />}
+        />
+        <StatPill
+          label="NEGATIVE"
+          value={aggregate.negativeScore}
+          gradient="bg-gradient-to-r from-rose-500 to-rose-400"
+          iconBg="#FEE2E2"
+          icon={<MdRemoveCircle className="text-rose-500" size={12} />}
+        />
+      </div>
+
+      {/* Position / Leaderboard — stacks on mobile */}
+      {(position || topScore || meritListLink) && (
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-0 mt-3 text-xs sm:text-sm text-gray-600">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            {position && (
+              <span className="flex items-center gap-1">
+                <FaMedal className="text-amber-500" size={13} /> Pos:{" "}
+                <span className="font-medium text-gray-700">{position}</span>
+              </span>
+            )}
+            {position && topScore && (
+              <span className="text-gray-300 hidden sm:inline">|</span>
+            )}
+            {topScore && (
+              <span className="flex items-center gap-1">
+                <GoTrophy className="text-amber-500" size={13} /> Top:{" "}
+                <span className="font-medium text-gray-700">{topScore}</span>
+              </span>
+            )}
+          </div>
+          {meritListLink && (
+            <Link
+              to={meritListLink}
+              className="flex items-center gap-1 text-blue-600 font-semibold hover:underline"
+            >
+              <BsBarChartFill className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              LEADERBOARD
+            </Link>
+          )}
+        </div>
+      )}
+
+      {/* Filter pills — functional, wraps and shrinks nicely on mobile */}
+      <div className="grid grid-cols-4 sm:flex sm:flex-wrap items-center justify-center gap-1.5 sm:gap-2 mt-4">
+        {filters.map((f) => {
+          const isActive = activeFilter === f.key;
+          return (
+            <button
+              key={f.key}
+              type="button"
+              onClick={() => onFilterChange(f.key)}
+              className={`flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-sm font-medium transition-all ${
+                isActive
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-200"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              {isActive ? (
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white inline-block flex-shrink-0" />
+              ) : (
+                <span
+                  className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full inline-block flex-shrink-0 ${f.dot}`}
+                />
+              )}
+              <span className="truncate">{f.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// Page component
+// ---------------------------------------------------------------------------
 
 const MTExamViewSubmissionPage = () => {
   const location = useLocation();
@@ -32,6 +190,9 @@ const MTExamViewSubmissionPage = () => {
   const [hasSubmittedReview, setHasSubmittedReview] = useState(false);
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState();
+
+  // active status filter for the mcq question list: all | correct | incorrect | skipped
+  const [activeFilter, setActiveFilter] = useState("all");
 
   const handleSubmitReview = async () => {
     try {
@@ -53,16 +214,18 @@ const MTExamViewSubmissionPage = () => {
     }
   };
 
-  const calculateTime = (ms) => {
-    const totalSeconds = Math.floor(ms / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
+  // (avoids always rounding small durations down to "0m")
+  const formatMinutesLabel = (totalSeconds) => {
+    const total = Math.round(totalSeconds || 0);
 
-    return hours === 0
-      ? `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`
-      : `${hours}:${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds
-      }`;
+    if (total < 60) {
+      return `${total}s`;
+    }
+
+    const minutes = Math.floor(total / 60);
+    const seconds = total % 60;
+
+    return seconds === 0 ? `${minutes}m` : `${minutes}m ${seconds}s`;
   };
 
   const getTimeDifferenceInSeconds = (startTime, endTime) => {
@@ -71,6 +234,35 @@ const MTExamViewSubmissionPage = () => {
     const end = new Date(endTime);
     const diffInSeconds = Math.floor((end - start) / 1000);
     return diffInSeconds < 0 || diffInSeconds > 10800 ? 0 : diffInSeconds;
+  };
+
+  // Given one mcq exam's answer + question list, work out the per-question
+  // status (correct / incorrect / skipped). This is what powers both the
+  // aggregate numbers AND the functional filter buttons.
+  const getMcqQuestionStatus = (question, mcqAnswers, negativeMark) => {
+    const ans = mcqAnswers.find(
+      (a) => String(a.question_id) === String(question.id),
+    );
+
+    if (!ans || !ans.mcq_question_id) {
+      return { status: "skipped", ans: ans || null };
+    }
+
+    // Prefer the flag already computed by the backend when present.
+    if (typeof ans.is_submitted_correct === "boolean") {
+      return {
+        status: ans.is_submitted_correct ? "correct" : "incorrect",
+        ans,
+      };
+    }
+
+    // Fallback: work it out from the options list.
+    const correctOptionId = question?.mcq_questions?.find(
+      (opt) => opt.is_correct == 1 || opt.is_correct === "1" || opt.is_correct === true,
+    )?.id;
+
+    const isCorrect = String(ans.mcq_question_id) === String(correctOptionId);
+    return { status: isCorrect ? "correct" : "incorrect", ans, negativeMark };
   };
 
   const {
@@ -82,10 +274,12 @@ const MTExamViewSubmissionPage = () => {
     studentId,
     attemptId,
   });
+  
 
   const solve_sheet = examData?.canView_solve_sheet;
   const exam_end_time = examData?.exam_end_time;
   const has_review = examData?.hasReview;
+  const modelTestName = examData?.modelTestName;
 
   const package_id = examData?.exams?.[0]?.package_id;
 
@@ -98,6 +292,92 @@ const MTExamViewSubmissionPage = () => {
   useEffect(() => {
     if (modelTestId) refetchExam();
   }, [modelTestId]);
+
+  // ---- Compute aggregate + per-exam per-question status list ----
+  // (recomputed only when the fetched exam data changes)
+const { aggregate, examStatusMap, lastSubmissionTime } = useMemo(() => {
+  const agg = {
+    totalQuestions: 0,
+    totalMarks: 0,
+    correct: 0,
+    incorrect: 0,
+    skipped: 0,
+    negativeScore: 0,
+    correctMarksSum: 0,
+    totalTimeSec: 0,
+  };
+
+  const statusMap = {};
+  let lastSubmissionTime = null;
+
+  (examData?.exams || []).forEach((examItem) => {
+    const exam = examItem.exam;
+    const answer = examItem.answer;
+    const questions_list = examItem.questions_list || [];
+
+    if (!answer) return;
+
+    // Last exam-এর submission time
+    lastSubmissionTime = answer?.submission_time || null;
+
+    agg.totalQuestions += Number(questions_list.length);
+
+    agg.totalMarks += questions_list.reduce(
+      (acc, q) => acc + Number(q.mark || 0),
+      0,
+    );
+
+    if (exam.type === "mcq" && answer.mcq_answers) {
+      const negativeMark = Number(exam.is_negative_mark_applicable || 0);
+      const mcqAnswers = JSON.parse(answer.mcq_answers);
+
+      const statuses = questions_list.map((question) => {
+        const { status, ans } = getMcqQuestionStatus(
+          question,
+          mcqAnswers,
+          negativeMark,
+        );
+
+        if (status === "correct") {
+          agg.correct++;
+          agg.correctMarksSum += Number(question.mark || 0);
+        } else if (status === "incorrect") {
+          agg.incorrect++;
+          agg.negativeScore += negativeMark;
+        } else {
+          agg.skipped++;
+        }
+
+        return { question, status, ans };
+      });
+
+      statusMap[exam.id] = statuses;
+    }
+
+    const timeTakenInSec = getTimeDifferenceInSeconds(
+      answer?.exam_start_time,
+      answer?.submission_time,
+    );
+
+    agg.totalTimeSec += Number(timeTakenInSec || 0);
+  });
+
+  const attempted = agg.correct + agg.incorrect;
+
+  agg.accuracy =
+    attempted > 0
+      ? Math.round((agg.correct / attempted) * 100)
+      : 0;
+
+  agg.obtainedMarks = agg.correctMarksSum - agg.negativeScore;
+  agg.timeLabel = formatMinutesLabel(agg.totalTimeSec);
+
+  return {
+    aggregate: agg,
+    examStatusMap: statusMap,
+    lastSubmissionTime,
+  };
+}, [examData]);
 
   if (isExamResultLoading) {
     return (
@@ -112,182 +392,99 @@ const MTExamViewSubmissionPage = () => {
       <p className="text-center mt-5">কোনো পরীক্ষার ডেটা পাওয়া যায়নি।</p>
     );
 
-  // initial aggregate
-  let aggregate = {
-    totalQuestions: 0,
-    totalMarks: 0,
-    correct: 0,
-    incorrect: 0,
-    skipped: 0,
-    negativeScore: 0,
-    totalTimeSec: 0,
-  };
+  // Title / date shown at the top of the summary card.
+  // Falls back gracefully if the backend hasn't sent a friendly title yet.
+  const examTitle =
+    examData?.title ||
+    examData?.model_test?.title ||
+    examData?.exams?.[0]?.exam?.title ||
+    "Model Test Result";
 
-  examData.exams.forEach((examItem) => {
-    const exam = examItem.exam;
-    const answer = examItem.answer;
-    const questions_list = examItem.questions_list || [];
+  const firstExamStart = examData?.exams?.[0]?.exam?.start_time;
+  const examDateLabel = firstExamStart
+    ? new Date(firstExamStart.replace(" ", "T")).toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+    : null;
 
-    if (answer) {
-      // প্রশ্ন সংখ্যা সঠিকভাবে যোগ
-      aggregate.totalQuestions += Number(questions_list.length);
+  // Position / top score aren't present in this endpoint's payload yet.
+  // Wire these up once the API returns them (e.g. from the merit-list endpoint).
+  const position = examData?.position ?? null;
+  const topScore = examData?.topScore ?? null;
 
-      // মোট মার্ক যোগ (NUMBER এ convert করে)
-      aggregate.totalMarks += questions_list.reduce(
-        (acc, q) => acc + Number(q.mark || 0),
-        0,
-      );
-
-      if (exam.type === "mcq" && answer.mcq_answers) {
-        const negativeMark = Number(exam.is_negative_mark_applicable || 0);
-
-        let attemptedQuestions = [];
-        const mcqAnswers = JSON.parse(answer.mcq_answers);
-
-        mcqAnswers.forEach((ans) => {
-          const question = questions_list.find(
-            (q) => String(q.id) === String(ans.question_id),
-          );
-
-          const correctOptionId = question?.mcq_questions?.find(
-            (opt) =>
-              opt.is_correct == 1 ||
-              opt.is_correct === "1" ||
-              opt.is_correct === true,
-          )?.id;
-
-          // skipped
-          if (!ans.mcq_question_id) {
-            aggregate.skipped++;
-          }
-          // correct
-          else if (String(ans.mcq_question_id) === String(correctOptionId)) {
-            aggregate.correct++;
-          }
-          // incorrect
-          else {
-            aggregate.incorrect++;
-            aggregate.negativeScore += Number(negativeMark);
-          }
-
-          attemptedQuestions.push(ans.question_id);
-        });
-
-        // মোট skipped বের করা (not attempted)
-        questions_list.forEach((q) => {
-          if (!attemptedQuestions.includes(q.id)) {
-            aggregate.skipped++;
-          }
-        });
-      }
-
-      // সময় যোগ
-      const timeTakenInSec = getTimeDifferenceInSeconds(
-        answer?.exam_start_time,
-        answer?.submission_time,
-      );
-
-      aggregate.totalTimeSec += Number(timeTakenInSec || 0);
-    }
-  });
-
+  const meritListLink =
+    package_id && modelTestId
+      ? `/package/${package_id}/model-test-merit-list/${modelTestId}`
+      : null;
 
   return (
     <>
-      <div className="pt-4 px-2 pb-20 space-y-10">
-        {/* Aggregate Summary Card */}
-        <Card className="p-4 text-center bg-green-50 border border-green-300 dark:bg-gray-900 dark:border-gray-700">
-          <div className="font-hind-siliguri">
-            <div className="relative flex flex-col items-center w-32 h-32 p-5 px-6 mx-auto border-8 border-purple-600 rounded-full">
-              <div className="text-center">
-                <p className="text-3xl font-bold text-gray-800 dark:text-gray-200">
-                  {aggregate.correct - aggregate.negativeScore}{" "}
-                  {/* Correct answers number */}
-                </p>
-                <hr className="!border-b border-2 border-purple-600" />
-                <p className="text-2xl text-gray-700 font-bold dark:text-gray-300">
-                  {aggregate.totalMarks}
-                </p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 mx-auto font-semibold max-w-96">
-              <div className="flex items-center justify-center gap-1 py-3 border-b border-r dark:border-gray-700">
-                <GoCheckCircleFill color="green" size={27} />
-                <span className="flex flex-col items-start text-gray-700 dark:text-gray-300">
-                  <span>সঠিক উত্তর</span>
-                  <span className="font-bold">{aggregate.correct} টি</span>
-                </span>
-              </div>
-              <div className="flex items-center justify-center gap-1 py-3 border-b dark:border-gray-700">
-                <span className="bg-red-500 p-[1px] text-[8px] px-[8px] text-white rounded-full">
-                  ⛌
-                </span>
-                <span className="flex flex-col items-start text-gray-700 dark:text-gray-300">
-                  <span>ভুল উত্তর</span>
-                  <span className="font-bold">{aggregate.incorrect} টি</span>
-                </span>
-              </div>
-              <div className="flex items-center justify-center gap-1 py-3 border-b border-r dark:border-gray-700">
-                <span className="bg-yellow-500 p-0.5 px-2.5 text-sm text-white rounded-full">
-                  !
-                </span>
-                <span className="flex flex-col items-start text-gray-700 dark:text-gray-300">
-                  <span>স্কিপ করেছে</span>
-                  <span className="font-bold">{aggregate.skipped} টি</span>
-                </span>
-              </div>
-              <div className="flex items-center justify-center gap-1 py-3 border-b dark:border-gray-700">
-                <span className="bg-red-700 w-fit text-[8px] py-[1px] px-[8px] rounded-full text-white">
-                  ━
-                </span>
-                <span className="flex flex-col items-start text-gray-700 dark:text-gray-300">
-                  <span>নেগ. স্কোর</span>
-                  <span className="font-bold">{aggregate.negativeScore}</span>
-                </span>
-              </div>
-              <div className="flex items-center justify-center col-span-2 gap-1 py-5">
-                <span className="bg-red-500 p-1.5 text-white rounded-full">
-                  <MdOutlineTimer size={15} />
-                </span>
-                <span className="flex flex-col text-left text-gray-700 dark:text-gray-300">
-                  <span>মোট সময়</span>
-                  <span className="font-bold">
-                    {calculateTime(aggregate.totalTimeSec * 1000)} মিনিট
-                  </span>
-                </span>
-              </div>
-            </div>
-            <Link
-              className="text-blue-600 underline "
-              to={`/package/${package_id}/model-test-merit-list/${modelTestId}`}
-            >
-              লিডারবোর্ড দেখো
-            </Link>
-          </div>
-        </Card>
+      <div className="pt-3 sm:pt-4 px-2 pb-20 space-y-8 sm:space-y-10">
+        {/* Aggregate Summary Card — modernized, mobile-responsive, filters functional */}
+        <ExamResultSummaryCard
+          title={examTitle}
+          examDate={examDateLabel}
+          aggregate={aggregate}
+          position={position}
+          topScore={topScore}
+          meritListLink={meritListLink}
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+          modelTestName={modelTestName}
+          lastSubmissionTime={lastSubmissionTime}
+          counts={{
+            total: aggregate.totalQuestions,
+            correct: aggregate.correct,
+            incorrect: aggregate.incorrect,
+            skipped: aggregate.skipped,
+          }}
+        />
 
         {/* Per Exam Questions Display */}
         {solve_sheet ? (
-          <div className="text-center grid grid-cols-1 mt-5 gap-5">
+          <div className="text-center grid grid-cols-1 mt-4 sm:mt-5 gap-4 sm:gap-5">
             {examData.exams.map((examItem, examIndex) => {
               const exam = examItem.exam;
               const answer = examItem.answer;
               const questions_list = examItem.questions_list || [];
 
+              // Apply the active filter only to mcq exams — that's the
+              // only type we can auto-classify as right/wrong/skipped.
+              let visibleQuestionsList = questions_list;
+              if (exam.type === "mcq" && examStatusMap[exam.id]) {
+                visibleQuestionsList =
+                  activeFilter === "all"
+                    ? questions_list
+                    : examStatusMap[exam.id]
+                        .filter((s) => s.status === activeFilter)
+                        .map((s) => s.question);
+              }
+
               return (
-                <div key={exam.id} className="space-y-5">
+                <div key={exam.id} className="space-y-4 sm:space-y-5">
                   {answer && (
                     <>
-                      <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200">
+                      <h2 className="text-base sm:text-lg font-bold text-gray-800 dark:text-gray-200">
                         {exam.title || `Exam ${examIndex + 1}`}
                       </h2>
-                      {exam.type === "mcq" && (
-                        <ExamResultForMcq
-                          answers={JSON.parse(answer.mcq_answers)}
-                          submittedQues={questions_list}
-                          data="mt"
-                        />
-                      )}
+
+                      {exam.type === "mcq" &&
+                        (visibleQuestionsList.length > 0 ? (
+                          <ExamResultForMcq
+                            answers={JSON.parse(answer.mcq_answers)}
+                            submittedQues={visibleQuestionsList}
+                            data="mt"
+                          />
+                        ) : (
+                          <p className="text-sm text-gray-400">
+                            এই ফিল্টারে কোনো প্রশ্ন নেই।
+                          </p>
+                        ))}
 
                       {exam.type === "creative" &&
                         questions_list?.map((question, index) => (
@@ -315,15 +512,15 @@ const MTExamViewSubmissionPage = () => {
             })}
           </div>
         ) : (
-          <div className="bg-white shadow-lg rounded-md px-4 py-6 text-center w-full  border border-gray-200">
+          <div className="bg-white shadow-lg rounded-md px-4 py-6 text-center w-full border border-gray-200">
             {/* Heading */}
-            <h3 className="text-xl font-bold font-siliguri text-gray-800 mb-3">
+            <h3 className="text-lg sm:text-xl font-bold font-siliguri text-gray-800 mb-3">
               ⏳ সল্ভ সীট দেখার কাউন্টডাউন চলছে
             </h3>
 
             {/* Sub text */}
             <p className="text-sm text-gray-600 mb-5">
-              প্রতিযোগিতামূলক পরিবেশ বজায় রাখার জন্য লাইভ পরীক্ষার সময় সল্ভ সীট
+              প্রতিযোগিতামূলক পরিবেশ বজায় রাখার জন্য লাইভ পরীক্ষার সময় সল্ভ সীট
               দেখতে পারবে না।
             </p>
 
@@ -337,7 +534,7 @@ const MTExamViewSubmissionPage = () => {
             />
 
             {/* Footer message */}
-            <p className="text-xs text-gray-500 mt-5">দয়া করে অপেক্ষা করো...</p>
+            <p className="text-xs text-gray-500 mt-5">দয়া করে অপেক্ষা করো...</p>
           </div>
         )}
       </div>
@@ -372,7 +569,7 @@ const MTExamViewSubmissionPage = () => {
             </div>
 
             <h2 className="text-lg font-bold text-gray-800 font-siliguri">
-              পরীক্ষাটি সফলভাবে সম্পন্ন হয়েছে
+              পরীক্ষাটি সফলভাবে সম্পন্ন হয়েছে
             </h2>
 
             <p className="text-sm text-gray-500 mt-1">
@@ -387,7 +584,7 @@ const MTExamViewSubmissionPage = () => {
 
                 {/* Rating */}
                 <div className="flex flex-col items-center gap-2">
-                  <p className="text-sm text-gray-600 font-medium">তোমার রেটিং</p>
+                  <p className="text-sm text-gray-600 font-regular">তোমার রেটিং</p>
                   <RatingButton
                     value={rating}
                     onChange={setRating}
@@ -414,7 +611,7 @@ const MTExamViewSubmissionPage = () => {
                     onClick={handleSubmitReview}
                     disabled={hasSubmittedReview || reviewLoading}
                     className="
-                    w-full h-11 rounded-xl text-base font-semibold
+                    w-full h-11 rounded-xl text-base font-bold
                     bg-gradient-to-r from-green-500 to-green-600
                     text-white shadow-md hover:opacity-90 transition
                   "
@@ -425,7 +622,7 @@ const MTExamViewSubmissionPage = () => {
                     <Button
                       variant="outline"
                       className="
-            w-full h-11 rounded-xl text-base text-white font-medium bg-black 
+            w-full h-11 rounded-xl text-base text-white font-regular bg-black 
             border-gray-300  hover:bg-gray-100
           "
                     >

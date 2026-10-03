@@ -52,7 +52,7 @@ export function NormalQueForMT({
     return (
         <div className="relative p-5 my-4 overflow-hidden rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-300 hover:shadow-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
             <Modal
-                title={<span className="text-lg font-semibold text-gray-800 dark:text-gray-200">Add Feedback</span>}
+                title={<span className="text-lg font-bold text-gray-800 dark:text-gray-200">Add Feedback</span>}
                 open={isModalOpen}
                 onCancel={() => setIsModalOpen(false)}
                 centered
@@ -132,7 +132,7 @@ export function NormalQueForMT({
                         onClick={() => setIsAnswerVisible(!isAnswerVisible)}
                         className="flex items-center justify-between w-full p-3 bg-gray-50/50 dark:bg-gray-800/30 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors duration-200 text-left"
                     >
-                        <span className="text-sm font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1.5 select-none">
+                        <span className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5 select-none">
                             <MdChevronRight
                                 className={`text-lg transition-transform duration-300 ${isAnswerVisible ? "rotate-90 text-blue-500" : "text-gray-400"}`}
                             />

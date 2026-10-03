@@ -30,7 +30,7 @@ export default function ExamReviewModal({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="dark:bg-gray-900">
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-lg font-semibold">
+          <AlertDialogTitle className="text-lg font-bold">
             Exam Review
           </AlertDialogTitle>
         </AlertDialogHeader>

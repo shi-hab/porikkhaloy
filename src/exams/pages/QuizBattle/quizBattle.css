@@ -1,0 +1,63 @@
+/* quizBattle.css — shared motion for the Quiz Battle experience.
+   Import this once in StartingPage.jsx / QuizBattleRunning.jsx. */
+
+@keyframes qb-shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+.qb-shake {
+  animation: qb-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes qb-pop {
+  0% { transform: scale(0.9); opacity: 0; }
+  60% { transform: scale(1.03); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.qb-pop {
+  animation: qb-pop 0.28s ease-out both;
+}
+
+@keyframes qb-slide-up {
+  0% { transform: translateY(24px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.qb-slide-up {
+  animation: qb-slide-up 0.32s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes qb-fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.qb-fade-in {
+  animation: qb-fade-in 0.22s ease-out both;
+}
+
+@keyframes qb-shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.qb-skeleton {
+  background: linear-gradient(90deg, #eef1f6 25%, #e4e9f2 37%, #eef1f6 63%);
+  background-size: 800px 100%;
+  animation: qb-shimmer 1.3s linear infinite;
+}
+
+@keyframes qb-bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.08); opacity: 1; }
+  70% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+.qb-bounce-in {
+  animation: qb-bounce-in 0.45s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qb-shake, .qb-pop, .qb-slide-up, .qb-fade-in, .qb-skeleton, .qb-bounce-in {
+    animation: none !important;
+  }
+}

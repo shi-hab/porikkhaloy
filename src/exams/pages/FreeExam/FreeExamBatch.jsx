@@ -9,7 +9,7 @@ function FreeExamBatch() {
     return (
         <div className="container px-4 pt-4 mx-auto">
             <div className="flex items-center justify-between mb-6">
-                <p className="text-2xl md:text-4xl font-extrabold font-siliguri text-slate-800 leading-tight">
+                <p className="text-2xl md:text-4xl font-bold font-siliguri text-slate-800 leading-tight">
                     ফ্রি এক্সাম ব্যাচসমূহ
                 </p>
             </div>

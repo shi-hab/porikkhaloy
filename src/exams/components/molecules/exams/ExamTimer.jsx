@@ -55,7 +55,7 @@ function ExamTimer({ submitExam }) {
 
   return (
     <div className="-mt-2">
-      <h1 className="font-semibold text-sm">Left : {formatTime()}</h1>
+      <h1 className="font-bold text-sm">Left : {formatTime()}</h1>
     </div>
   );
 }

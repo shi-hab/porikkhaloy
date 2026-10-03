@@ -107,12 +107,12 @@ const ExamResultPage = () => {
               <p className="text-2xl text-gray-700">{totalExamMarks}</p>
             </div>
           </div>
-          <p className="py-3 mt-2 text-lg font-semibold text-gray-800">
+          <p className="py-3 mt-2 text-lg font-bold text-gray-800">
             তোমার স্কোর
           </p>
 
           {/* Score Details */}
-          <div className="grid grid-cols-2 mx-auto font-semibold max-w-96">
+          <div className="grid grid-cols-2 mx-auto font-bold max-w-96">
             <div className="flex items-center justify-center gap-1 py-3 border-b border-r">
               <GoCheckCircleFill color="green" size={27} />
               <span className="flex flex-col items-start text-gray-700">

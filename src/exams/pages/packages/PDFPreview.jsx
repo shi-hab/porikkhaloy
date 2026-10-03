@@ -18,7 +18,7 @@ const PDFPreview = ({ fileUrl, fileName }) => {
       <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50 dark:bg-slate-900">
         <div className="flex items-center gap-2 overflow-hidden">
           <FileText className="w-5 h-5 text-blue-500 shrink-0" />
-          <span className="text-sm font-medium truncate">
+          <span className="text-sm font-regular truncate">
             {fileName || "উত্তরপত্র.pdf"}
           </span>
         </div>

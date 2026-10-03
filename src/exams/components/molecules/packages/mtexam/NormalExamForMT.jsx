@@ -85,7 +85,7 @@ export function NormalExamForMT({
       </Modal>
       {/* Question title */}
       <div className="">
-        <p className="overflow-x-auto text-start max-w-full whitespace-normal text-[17px] dark:text-white font-semibold">
+        <p className="overflow-x-auto text-start max-w-full whitespace-normal text-[17px] dark:text-white font-bold">
           <span className="inline float-left h-fit mr-2">{queIndex + 1}.</span>
           <span className="inline ">{parseHtmlContent(title)}</span>
         </p>
@@ -110,7 +110,7 @@ export function NormalExamForMT({
       </div>
       {hideExp && (
         <>
-          <div className="col-span-2 font-semibold text-sm mt-3 text-start">
+          <div className="col-span-2 font-bold text-sm mt-3 text-start">
             {!pathname.includes("exam-ongoing") &&
               (verified?.verified === "active" ||
                 pathname === "/questions" ||

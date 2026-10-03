@@ -8,12 +8,12 @@ function StreakPageHeading({ StudentStreak, quizBattlePoint }) {
     <div className="flex relative  justify-between items-center mx-4">
       <div className="flex flex-col  items-start justify-center gap-1">
         <div>
-          <span className="streak-stroke font-sans text-[80px] font-extrabold animate-bounce">
+          <span className="streak-stroke font-sans text-[80px] font-bold animate-bounce">
             {current_streak || "0"}
           </span>
         </div>
 
-        <p className="text-2xl font-siliguri font-extrabold text-orange-400">
+        <p className="text-2xl font-siliguri font-bold text-orange-400">
           দিনের ধারাবাহিকতা!
         </p>
 

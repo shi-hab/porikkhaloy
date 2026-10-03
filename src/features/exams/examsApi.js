@@ -106,6 +106,7 @@ export const examsApi = apiSlice.injectEndpoints({
     getExamById: builder.query({
       query: (id) => `/exam-details/${id}`,
     }),
+    
     getMtExamStudentAnswers: builder.query({
       query: ({ modelTestId, studentId, attemptId }) =>
         `/exam-mt-result/${modelTestId}/${studentId}/${attemptId}`,

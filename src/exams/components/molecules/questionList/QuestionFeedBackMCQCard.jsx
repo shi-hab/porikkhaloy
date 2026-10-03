@@ -84,7 +84,7 @@ export default function QuestionFeedBackMCQCard({ data: questionData, index, ver
       </Modal>
       {/* Display Question */}
       <div className="">
-        <p className="font-solaiman-lipi tracking-wider text-sm  dark:text-white font-semibold">
+        <p className="font-solaiman-lipi tracking-wider text-sm  dark:text-white font-bold">
           <span className="inline float-left h-fit mr-2">{index + 1}.</span>
           <span className="inline">{parseHtmlContent(title)}</span>
         </p>

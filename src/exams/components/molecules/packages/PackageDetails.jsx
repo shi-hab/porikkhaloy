@@ -88,34 +88,51 @@ export function PackageDetails({ singlePackage, packageId }) {
                     href={singlePackage?.routine}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow hover:scale-105 transition-all duration-300"
+                    className="group inline-flex items-center gap-1 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-2 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:from-blue-500 hover:to-purple-500 active:scale-95"
                   >
-                    <span className="text-sm">🗓️</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 transition-transform duration-300 group-hover:rotate-12"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8 7V3m8 4V3M4 11h16M6 5h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2z"
+                      />
+                    </svg>
+
+                    <span>রুটিন মডিউল</span>
                   </a>
                 )}
               </div>
 
               {/* Toggle Button */}
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="w-full mt-3"
-              >
-                <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300">
+              {(singlePackage?.description?.trim() || singlePackage?.details?.trim()) && (
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="w-full mt-3"
+                >
+                  <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300">
 
-                  <h2 className="text-sm md:text-base font-semibold text-emerald-700 dark:text-emerald-400">
-                    {isSubscribed
-                      ? "📋 প্রয়োজনীয় সকল পিডিএফ"
-                      : "📖 কোর্সের বিস্তারিত দেখো"}
-                  </h2>
+                    <h2 className="text-sm md:text-base font-bold text-emerald-700 dark:text-emerald-400">
+                      {isSubscribed
+                        ? "📋 প্রয়োজনীয় সকল পিডিএফ"
+                        : "📖 কোর্সের বিস্তারিত দেখো"}
+                    </h2>
 
-                  <div
-                    className={`flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 dark:bg-emerald-700 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
-                      }`}
-                  >
-                    <FaChevronDown className="text-emerald-700 dark:text-white text-sm" />
+                    <div
+                      className={`flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 dark:bg-emerald-700 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+                        }`}
+                    >
+                      <FaChevronDown className="text-emerald-700 dark:text-white text-sm" />
+                    </div>
                   </div>
-                </div>
-              </button>
+                </button>
+              )}
 
               {/* Collapsible Content */}
               <div
@@ -147,22 +164,22 @@ export function PackageDetails({ singlePackage, packageId }) {
 
           {/* Tabs Section */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="sticky top-[60px] z-50 mb-6 w-fit mx-auto flex items-center justify-center space-x-4 bg-gray-100 dark:bg-gray-800 rounded-sm p-1 shadow-md">
+            <TabsList className="sticky top-[60px] lg:top-0 z-50 mb-6 w-fit mx-auto flex items-center justify-center space-x-4 bg-gray-100 dark:bg-gray-800 rounded-sm p-1 shadow-md">
               <TabsTrigger
                 value="ongoing"
-                className="px-2 py-2 rounded-lg text-green-800 dark:text-green-300 font-semibold hover:bg-green-200 dark:hover:bg-green-700 transition-colors duration-200 data-[state=active]:bg-green-500 data-[state=active]:text-white"
+                className="px-2 py-2 rounded-lg text-green-800 dark:text-green-300 font-bold hover:bg-green-200 dark:hover:bg-green-700 transition-colors duration-200 data-[state=active]:bg-green-500 data-[state=active]:text-white"
               >
                 Ongoing ({liveTests.length})
               </TabsTrigger>
               <TabsTrigger
                 value="upcoming"
-                className="px-2 py-2 rounded-lg text-blue-800 dark:text-blue-300 font-semibold hover:bg-blue-200 dark:hover:bg-blue-700 transition-colors duration-200 data-[state=active]:bg-blue-500 data-[state=active]:text-white"
+                className="px-2 py-2 rounded-lg text-blue-800 dark:text-blue-300 font-bold hover:bg-blue-200 dark:hover:bg-blue-700 transition-colors duration-200 data-[state=active]:bg-blue-500 data-[state=active]:text-white"
               >
                 Upcoming ({upcomingTests.length})
               </TabsTrigger>
               <TabsTrigger
                 value="completed"
-                className="px-2 py-2 rounded-lg text-gray-800 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 data-[state=active]:bg-gray-500 data-[state=active]:text-white"
+                className="px-2 py-2 rounded-lg text-gray-800 dark:text-gray-200 font-bold hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 data-[state=active]:bg-gray-500 data-[state=active]:text-white"
               >
                 Practice ({completedTests.length})
               </TabsTrigger>

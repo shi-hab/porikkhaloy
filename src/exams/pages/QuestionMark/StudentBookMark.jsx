@@ -28,7 +28,7 @@ function StudentBookMark() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center gap-2 p-2 border border-dashed rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">
             <span>🔖</span> Saved Questions
           </h3>
         </div>

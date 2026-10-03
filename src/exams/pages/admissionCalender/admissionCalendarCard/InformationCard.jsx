@@ -32,12 +32,12 @@ function InformationCard({ basic_info }) {
   return (
     <Card className="shadow-md rounded-2xl border border-gray-200">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold flex items-center gap-2">
+        <CardTitle className="text-xl font-bold flex items-center gap-2">
           <University className="w-5 h-5 text-primary" />
           {basic_info.university_name || "তথ্য পাওয়া যায়নি"}
         </CardTitle>
         <p className="text-sm text-gray-500">
-          ইউনিট: <span className="font-medium">{basic_info.unit || "N/A"}</span>
+          ইউনিট: <span className="font-regular">{basic_info.unit || "N/A"}</span>
         </p>
       </CardHeader>
 

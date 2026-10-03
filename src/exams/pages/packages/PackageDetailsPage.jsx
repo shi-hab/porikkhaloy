@@ -1,16 +1,19 @@
-import { useGetSinglePackageQuery } from "@/features/packages/packagesApi";
+import { useGetSinglePackageQuery, useGetModelTestsByPkgIdQuery } from "@/features/packages/packagesApi";
 import { useParams } from "react-router-dom";
 import { PackageDetails } from "../../components/molecules/packages/PackageDetails";
-import { SubscriptionCard } from "../../components/molecules/packages/SubscriptionCard";
+// import { SubscriptionCard } from "../../components/molecules/packages/SubscriptionCard";
 import { DecodeURL } from "@/exams/components/atoms/urlHashCode/DecodeURL";
 import { useEffect } from "react";
+import PackageLandingPage from "./landing/PackageLandingPage";
 
 export default function PackageDetailsPage() {
   const { id } = useParams();
   const packageId = DecodeURL(id);
-  const { data: singlePackage, isLoading } = useGetSinglePackageQuery(packageId);
+  const { data: singlePackage, isLoading: PackageIsLoading } = useGetSinglePackageQuery(packageId);
+  const { data: mtUnderPkg, isLoading: ModelTestIsLoading } = useGetModelTestsByPkgIdQuery(packageId);
 
-  const { is_subscribed, discount_type, discount, price  } = singlePackage?.data ?? {};
+  const { is_subscribed, discount_type, discount, price, } = singlePackage?.data ?? {};
+
 
   const discountedPrice =
     discount && discount_type === "percentage"
@@ -18,6 +21,7 @@ export default function PackageDetailsPage() {
       : discount && discount_type === "amount"
         ? price - discount
         : price;
+
 
   // Google Analytics 4 (GA4) event tracking for viewing a package
   useEffect(() => {
@@ -51,17 +55,22 @@ export default function PackageDetailsPage() {
   return (
     <div className="mx-auto px-2 pt-4 w-full max-w-7xl">
       <div className="md:col-span-8">
-        <PackageDetails
-          singlePackage={singlePackage?.data}
-          packageId={packageId}
-          loading={isLoading}
-        />
+        {(is_subscribed || discountedPrice === 0) ? (
+          <PackageDetails
+            singlePackage={singlePackage?.data}
+            packageId={packageId}
+            loading={PackageIsLoading}
+          />
+        ) : (
+          <PackageLandingPage
+            pkg={singlePackage?.data}
+            PackageIsLoading={PackageIsLoading}
+            ModelTestIsLoading={ModelTestIsLoading}
+            mtUnderPkg={mtUnderPkg}
+          />
+        )}
 
-        {!isLoading &&
-          !(discount_type === "percentage" && discount === "100") &&
-          !is_subscribed && (
-            <SubscriptionCard singlePackage={singlePackage?.data} />
-          )}
+
       </div>
     </div>
   );
