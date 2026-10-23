@@ -3,30 +3,77 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-    <meta />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark">
 
-    <!-- Theme color -->
     <link
       href="https://fonts.maateen.me/solaiman-lipi/font.css"
       rel="stylesheet"
     />
     <link rel="stylesheet" type="text/css" charset="UTF-8"
        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
-    <link rel="stylesheet" type="text/css" 
+    <link rel="stylesheet" type="text/css"
        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
 
     <title>Porikkhaloy</title>
+
+    <!-- Self-heal: পুরনো chunk / খালি স্ক্রিন হলে একবার reload -->
+    <script>
+      (function () {
+        var KEY = 'reload_guard_at';
+
+        function reloadOnce() {
+          try {
+            var last = Number(sessionStorage.getItem(KEY) || 0);
+            if (Date.now() - last < 15000) return; // ১৫ সেকেন্ডে একবারের বেশি নয় (loop আটকাতে)
+            sessionStorage.setItem(KEY, String(Date.now()));
+          } catch (e) {
+            return; // storage না চললে reload করব না, নইলে loop হতে পারে
+          }
+          window.location.reload();
+        }
+
+        // Vite lazy chunk load ফেল করলে
+        window.addEventListener('vite:preloadError', function (e) {
+          if (e && e.preventDefault) e.preventDefault();
+          reloadOnce();
+        });
+
+        // dynamic import ফেল করলে
+        window.addEventListener('unhandledrejection', function (e) {
+          var msg = String((e.reason && e.reason.message) || e.reason || '');
+          if (/dynamically imported module|Importing a module script failed|Unexpected token '<'/i.test(msg)) {
+            reloadOnce();
+          }
+        });
+
+        // HTML-কে JS ভেবে চালালে
+        window.addEventListener('error', function (e) {
+          if (e && e.message && e.message.indexOf("Unexpected token '<'") !== -1) {
+            reloadOnce();
+          }
+        }, true);
+
+        // ১০ সেকেন্ড পরেও React চালু না হলে reload
+        setTimeout(function () {
+          var r = document.getElementById('root');
+          if (!r) return;
+          var alive = false;
+          for (var k in r) {
+            if (k.indexOf('__reactContainer') === 0) { alive = true; break; }
+          }
+          if (!alive) reloadOnce();
+        }, 10000);
+      })();
+    </script>
   </head>
-  <body style="background-color: #f4f4f5;" class=" dark:bg-gradient-to-r dark:from-slate-900 dark:via-gray-900 dark:to-black select-none pb-20">
+  <body style="background-color: #f4f4f5;" class=" dark:bg-gradient-to-r dark:from-slate-900 dark:via-gray-900 dark:to-black  pb-20">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-  
+
     <noscript>
       <img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=1307006481094299&ev=PageView&noscript=1" />
     </noscript>
   </body>
-  
 </html>

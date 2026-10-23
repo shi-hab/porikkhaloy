@@ -9,34 +9,116 @@ import {
 } from "@/components/ui/dialog";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { MessageCircle, UserPlus, LogIn, ArrowLeft } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Check, Loader2, MessageCircle, UserPlus } from "lucide-react";
 import Logo from "../components/atoms/Logo";
+import { useCheckAccountMutation } from "@/features/auth/authApi";
 
 const WHATSAPP_NUMBER = "8801706429945";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^01[3-9]\d{8}$/;
+const normalizePhone = (p = "") => p.replace(/[\s-]/g, "").replace(/^(\+?88)/, "");
+
+// "abc@gmail.com" ba "01XXXXXXXXX" -> { kind, value } | null
+const parseIdentifier = (raw = "") => {
+  const t = raw.trim();
+  if (EMAIL_RE.test(t)) return { kind: "email", value: t.toLowerCase() };
+  const p = normalizePhone(t);
+  if (PHONE_RE.test(p)) return { kind: "phone", value: p };
+  return null;
+};
+
 const ForgetPass = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    watch,
+    setFocus,
     formState: { errors },
-  } = useForm();
-  const navigate = useNavigate();
+  } = useForm({ defaultValues: { identifier: "" } });
 
-  // step: "choose" | "new" | "old" | null (modal closed)
-  const [step, setStep] = useState(null);
-  const [email, setEmail] = useState("");
+  const [checkAccount] = useCheckAccountMutation();
 
-  const onSubmit = (formData) => {
-    setEmail(formData.email);
-    setStep("choose");
+  const [checking, setChecking] = useState(false);
+  const [exists, setExists] = useState(false);
+  const [modal, setModal] = useState(null); // "notfound" | "support" | null
+  const [target, setTarget] = useState(null); // { kind, value }
+  const timer = useRef(null);
+  const seq = useRef(0);
+
+  const idv = watch("identifier") || "";
+  const parsed = parseIdentifier(idv);
+  const kind = parsed?.kind ?? null;
+  const value = parsed?.value ?? null;
+
+  const lookup = async (p) => {
+    const res = await checkAccount({
+      email: p.kind === "email" ? p.value : "",
+      phone: p.kind === "phone" ? p.value : "",
+    }).unwrap();
+    const d = res?.data ?? {};
+    return p.kind === "email" ? !!d.email_exists : !!d.phone_exists;
   };
 
-  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    `আমার পাসওয়ার্ড চেঞ্জ করতে সাহায্য দরকার।\nআমার ইমেইল: ${email}`
-  )}`;
+  /* instant check (debounced) */
+  useEffect(() => {
+    clearTimeout(timer.current);
+    setExists(false);
 
-  const closeModal = () => setStep(null);
+    if (!kind) {
+      seq.current++;
+      setChecking(false);
+      return;
+    }
+
+    const mySeq = ++seq.current;
+    setChecking(true);
+
+    timer.current = setTimeout(async () => {
+      try {
+        const found = await lookup({ kind, value });
+        if (mySeq !== seq.current) return;
+
+        setTarget({ kind, value });
+        if (found) setExists(true);
+        else setModal("notfound"); // account nei -> registration modal
+      } catch {
+        // fail korle submit-e abar check hobe
+      } finally {
+        if (mySeq === seq.current) setChecking(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer.current);
+    // eslint-disable-next-line
+  }, [kind, value]);
+
+  /* Continue button */
+  const onSubmit = async (f) => {
+    const p = parseIdentifier(f.identifier);
+    if (!p) return;
+
+    try {
+      const found = await lookup(p);
+      setTarget(p);
+      setModal(found ? "support" : "notfound");
+    } catch {
+      // check korte na parle WhatsApp e pathabo na
+      setError("identifier", { message: "এখন চেক করা যাচ্ছে না, একটু পরে আবার চেষ্টা করো" });
+    }
+  };
+
+  const closeModal = () => {
+    setModal(null);
+    setTimeout(() => setFocus("identifier"), 50);
+  };
+
+  const label = target?.kind === "phone" ? "ফোন নাম্বার" : "ইমেইল";
+  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    `আমার পাসওয়ার্ড চেঞ্জ করতে সাহায্য দরকার।\nআমার ${label}: ${target?.value ?? ""}`
+  )}`;
 
   return (
     <div className="min-h-dvh flex items-center justify-center px-4">
@@ -45,29 +127,43 @@ const ForgetPass = () => {
           <Logo />
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="grid gap-4">
             <div className="grid gap-1">
-              <Input
-                {...register("email", { required: "Email is required" })}
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Email"
-              />
-              {errors.email && (
-                <p className="text-red-600 text-sm">{errors.email.message}</p>
+              <div className="relative">
+                <Input
+                  {...register("identifier", {
+                    required: "ইমেইল বা ফোন নাম্বার লিখো",
+                    validate: (val) =>
+                      !!parseIdentifier(val) || "সঠিক ইমেইল বা ফোন নাম্বার দাও",
+                  })}
+                  type="text"
+                  inputMode="email"
+                  autoComplete="username"
+                  autoCapitalize="none"
+                  placeholder="ইমেইল অথবা ফোন নাম্বার"
+                  className="pr-10"
+                />
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+                  {checking ? (
+                    <Loader2 size={16} className="animate-spin text-slate-400" />
+                  ) : exists ? (
+                    <Check size={16} strokeWidth={2.5} className="text-blue-600" />
+                  ) : null}
+                </span>
+              </div>
+              {errors.identifier && (
+                <p className="text-red-600 text-sm">{errors.identifier.message}</p>
               )}
 
-              <Link
-                to="/login"
-                className="text-sm text-right text-gray-500 hover:underline"
-              >
+              <Link to="/login" className="text-sm text-right text-gray-500 hover:underline">
                 Remember Password?
               </Link>
             </div>
 
-            <Button className="mt-10">Continue</Button>
+            <Button className="mt-10" disabled={checking}>
+              {checking ? <Loader2 className="animate-spin" size={18} /> : "Continue"}
+            </Button>
           </div>
         </form>
 
@@ -84,103 +180,82 @@ const ForgetPass = () => {
         </div>
       </div>
 
-      {/* ---------------- Modal ---------------- */}
-      <Dialog open={!!step} onOpenChange={(open) => !open && closeModal()}>
+      {/* ---------- Modal: account nei -> registration ---------- */}
+      <Dialog open={modal === "notfound"} onOpenChange={(o) => !o && closeModal()}>
         <DialogContent className="sm:max-w-md">
-          {step === "choose" && (
-            <>
-              <DialogHeader>
-                <DialogTitle>তোমার একাউন্ট আছে?</DialogTitle>
-                <DialogDescription>
-                  তুমি এই অ্যাপে নতুন, নাকি আগে থেকেই অ্যাকাউন্ট আছে — সেটা বেছে নাও
-                </DialogDescription>
-              </DialogHeader>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <UserPlus className="w-5 h-5 text-blue-600" />
+              কোনো একাউন্ট পাওয়া যায়নি
+            </DialogTitle>
+            <DialogDescription className="break-all">
+              {target?.value} দিয়ে কোনো একাউন্ট খোলা নেই।
+            </DialogDescription>
+          </DialogHeader>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-                <button
-                  type="button"
-                  onClick={() => setStep("new")}
-                  className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-colors p-5 text-center"
-                >
-                  <UserPlus className="w-7 h-7 text-blue-600" />
-                  <span className="font-semibold text-sm">আমি নতুন ইউজার</span>
-                  <span className="text-xs text-gray-500">এখনো অ্যাকাউন্ট নেই</span>
-                </button>
+          <div className="grid gap-2 rounded-xl bg-slate-50 p-3 text-[13px] leading-relaxed text-slate-600">
+            <p>
+              <span className="font-semibold text-slate-800">নতুন হলে:</span> এখনই একাউন্ট খুলে নাও, ১ মিনিটেই হয়ে যাবে।
+            </p>
+            <p>
+              <span className="font-semibold text-slate-800">আগে থেকে একাউন্ট থাকলে:</span> সঠিক ইমেইল বা ফোন নাম্বার দিয়ে আবার চেষ্টা করো।
+            </p>
+          </div>
 
-                <button
-                  type="button"
-                  onClick={() => setStep("old")}
-                  className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 hover:border-green-500 hover:bg-green-50 transition-colors p-5 text-center"
-                >
-                  <LogIn className="w-7 h-7 text-green-600" />
-                  <span className="font-semibold text-sm">আগে থেকে অ্যাকাউন্ট আছে</span>
-                  <span className="text-xs text-gray-500">পাসওয়ার্ড ভুলে গেছি</span>
-                </button>
-              </div>
-            </>
-          )}
+          <div className="flex flex-col gap-2 mt-2">
+            <Button
+              onClick={() =>
+                navigate("/registration", {
+                  state: {
+                    prefill:
+                      target?.kind === "phone"
+                        ? { phone: target.value }
+                        : { email: target?.value },
+                  },
+                })
+              }
+            >
+              নতুন একাউন্ট খোলো
+            </Button>
+            <button
+              type="button"
+              onClick={closeModal}
+              className="text-sm font-semibold text-blue-600 hover:underline mt-1"
+            >
+              সঠিক ইমেইল / নাম্বার দিই
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
-          {step === "new" && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2">
-                  <UserPlus className="w-5 h-5 text-blue-600" />
-                  নতুন অ্যাকাউন্ট প্রয়োজন
-                </DialogTitle>
-                <DialogDescription>
-                  তোমার এই ইমেইলে ({email}) এখনো কোনো অ্যাকাউন্ট খোলা নেই। প্রথমে একটা অ্যাকাউন্ট তৈরি করো।
-                </DialogDescription>
-              </DialogHeader>
+      {/* ---------- Modal: account ache -> WhatsApp support ---------- */}
+      <Dialog open={modal === "support"} onOpenChange={(o) => !o && closeModal()}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <MessageCircle className="w-5 h-5 text-green-600" />
+              সাপোর্ট এর সাথে কথা বলো
+            </DialogTitle>
+            <DialogDescription className="break-all">
+              তোমার {label} ({target?.value}) সহ একটা মেসেজ WhatsApp এ পাঠানো হবে। আমাদের টিম দ্রুত তোমার পাসওয়ার্ড রিসেট করে দেবে।
+            </DialogDescription>
+          </DialogHeader>
 
-              <div className="flex flex-col gap-2 mt-4">
-                <Button onClick={() => navigate("/registration")}>
-                  Create Account
-                </Button>
-                <button
-                  type="button"
-                  onClick={() => setStep("choose")}
-                  className="flex items-center justify-center gap-1 text-sm text-gray-500 hover:underline mt-1"
-                >
-                  <ArrowLeft className="w-4 h-4" /> পিছনে যাও
-                </button>
-              </div>
-            </>
-          )}
-
-          {step === "old" && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2">
-                  <MessageCircle className="w-5 h-5 text-green-600" />
-                  সাপোর্ট এর সাথে কথা বলো
-                </DialogTitle>
-                <DialogDescription>
-                  তোমার ইমেইল ({email}) সহ একটা মেসেজ WhatsApp এ পাঠানো হবে। আমাদের টিম দ্রুত তোমার পাসওয়ার্ড রিসেট করে দেবে।
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="flex flex-col gap-2 mt-4">
-                <a
-                  href={whatsappLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={closeModal}
-                >
-                  <Button className="w-full flex items-center gap-2 bg-green-600 hover:bg-green-700">
-                    <MessageCircle className="w-4 h-4" />
-                    WhatsApp এ মেসেজ করো
-                  </Button>
-                </a>
-                <button
-                  type="button"
-                  onClick={() => setStep("choose")}
-                  className="flex items-center justify-center gap-1 text-sm text-gray-500 hover:underline mt-1"
-                >
-                  <ArrowLeft className="w-4 h-4" /> পিছনে যাও
-                </button>
-              </div>
-            </>
-          )}
+          <div className="flex flex-col gap-2 mt-2">
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={closeModal}>
+              <Button className="w-full flex items-center gap-2 bg-green-600 hover:bg-green-700">
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp এ মেসেজ করো
+              </Button>
+            </a>
+            <button
+              type="button"
+              onClick={closeModal}
+              className="text-sm text-gray-500 hover:underline mt-1"
+            >
+              বন্ধ করো
+            </button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

@@ -6,36 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { useStartExamMutation } from "@/features/exams/examsApi";
 import { toast } from "sonner";
 import { Button } from '@/components/ui/button';
-import { Loader2 } from "lucide-react";
 import { LoaderSubmit } from './../components/atoms/LoaderSubmit';
 
-const Modal = ({ isOpen, onClose, onRedirect }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-full max-w-md p-6 bg-white rounded-md shadow-lg">
-        <h2 className="mb-4 text-xl font-bold">Exam Quota Limit Exceeded</h2>
-        <p className="mb-4 text-sm">
-          You have exceeded your free exam quota. Would you like to purchase
-          additional exam quota?
-        </p>
-        <div className="flex justify-end space-x-4">
-          <Button onClick={onClose} variant="outline">
-            Cancel
-          </Button>
-          <Button onClick={onRedirect}>Buy Quota</Button>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const ExamStart = () => {
   const { auth } = useSelector((state) => state);
   const navigate = useNavigate();
-
-  const [isModalOpen, setModalOpen] = useState(false);
   const [startExam, { isLoading: isExamStarting }] = useStartExamMutation();
   const [formData, setFormData] = useState({
     questions_limit: 20,
@@ -45,7 +21,7 @@ const ExamStart = () => {
   const data = JSON.parse(sessionStorage.getItem("data"));
 
   console.log(data);
-  
+
   const handleStartExam = async (e) => {
     e.preventDefault();
 
@@ -87,18 +63,11 @@ const ExamStart = () => {
         sessionStorage.removeItem("data");
         navigate("/exam-on-going");
       }
-      
+
     } catch (err) {
-      if (
-        err.data?.quota_info?.paid_quota_exceeded &&
-        err.data?.quota_info?.free_quota_exceeded
-      ) {
-        setModalOpen(true);
-      } else {
-        toast.error(
-          err?.data?.error || err?.data?.message || "An error occurred"
-        );
-      }
+      toast.error(
+        err?.data?.error || err?.data?.message || "An error occurred"
+      );
     }
   };
 
@@ -108,11 +77,6 @@ const ExamStart = () => {
         পছন্দমতো অধ্যায় সিলেক্ট করো!
       </h1>
       <hr className="my-2" />
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        onRedirect={() => navigate("/buy-quota")}
-      />
       <form onSubmit={handleStartExam} className="grid items-start w-full gap-4 mx-auto   xl:p-8">
         <QuesCategoryForFilter
           control={control}
@@ -125,7 +89,7 @@ const ExamStart = () => {
           variant="green"
           className="w-full"
         >
-          {isExamStarting ? <LoaderSubmit/> : "পরিক্ষা শুরু করো"}
+          {isExamStarting ? <LoaderSubmit /> : "পরিক্ষা শুরু করো"}
         </Button>
       </form>
     </div>

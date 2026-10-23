@@ -1,6 +1,6 @@
 import { persistor } from "@/app/store";
 import { apiSlice } from "../api/apiSlice";
-import { loggedIn, loggedOut } from "./authSlice";
+import { loggedIn, updateStudent, loggedOut } from "./authSlice";
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -9,6 +9,13 @@ export const authApi = apiSlice.injectEndpoints({
         url: "/register",
         method: "POST",
         body: data,
+      }),
+    }),
+    checkAccount: builder.mutation({
+      query: (body) =>
+      ({
+        url: "/check-account",
+        method: "POST", body
       }),
     }),
     loggedIn: builder.mutation({
@@ -31,7 +38,7 @@ export const authApi = apiSlice.injectEndpoints({
             })
           );
         } catch (err) {
-           (err);
+          (err);
         }
       },
     }),
@@ -54,7 +61,7 @@ export const authApi = apiSlice.injectEndpoints({
           );
           persistor.purge(["auth"]);
         } catch (err) {
-           (err);
+          (err);
         }
       },
     }),
@@ -71,7 +78,22 @@ export const authApi = apiSlice.injectEndpoints({
         method: "POST",
         body: formData,
       }),
-      invalidatesTags: ['Profile'], // Invalidate profile query after update
+
+      invalidatesTags: ["Profile"],
+
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+
+          const student = result.data?.data;
+
+          if (student) {
+            dispatch(updateStudent(student));
+          }
+        } catch (error) {
+          console.error("PROFILE UPDATE FAILED:", error);
+        }
+      },
     }),
     deleteAccount: builder.mutation({
       query: (token) => ({
@@ -91,7 +113,7 @@ export const authApi = apiSlice.injectEndpoints({
           );
           persistor.purge(["auth"]);
         } catch (err) {
-           (err);
+          (err);
         }
       },
     }),
@@ -120,6 +142,7 @@ export const {
   useLoggedOutMutation,
   useResetPasswordMutation,
   useRegistrationMutation,
+  useCheckAccountMutation,
   useResendEmailVerificationMutation,
   useDeleteAccountMutation
 } = authApi;

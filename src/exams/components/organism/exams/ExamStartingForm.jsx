@@ -3,33 +3,10 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useCategoryData } from "../../molecules/filterquesforexam/useCategoryData";
 
-const Modal = ({ isOpen, onClose, onRedirect }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-full max-w-md p-6 bg-white rounded-md shadow-lg">
-        <h2 className="mb-4 text-xl font-bold">Exam Quota Limit Exceeded</h2>
-        <p className="mb-4 text-sm">
-          You have exceeded your free exam quota. Would you like to purchase
-          additional exam quota?
-        </p>
-        <div className="flex justify-end space-x-4">
-          <Button onClick={onClose} variant="outline">
-            Cancel
-          </Button>
-          <Button onClick={onRedirect}>Buy Quota</Button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const ExamStartingForm = () => {
   const navigate = useNavigate();
-  const [isModalOpen, setModalOpen] = useState(false);
   const [selectExamType, setSelectExamType] = useState([]);
-  const [examSubType, setExamSubType] = useState([]);
+  // const [examSubType, setExamSubType] = useState([]);
   const [examFormat, setExamFormat] = useState(null);
   const { categories: examTypes } = useCategoryData("exam-types");
 
@@ -37,7 +14,7 @@ const ExamStartingForm = () => {
     const data = {
       examFormat,
       selectExamType,
-      examSubType,
+      // examSubType,
     };
     sessionStorage.setItem("data", JSON.stringify(data));
     navigate("/exam/start");
@@ -45,11 +22,6 @@ const ExamStartingForm = () => {
 
   return (
     <>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        onRedirect={() => navigate("/buy-quota")}
-      />
       <div className="w-full text-center  pb-20">
         <div className="hidden">
           <div className="flex flex-wrap items-center justify-center gap-4 mt-5">

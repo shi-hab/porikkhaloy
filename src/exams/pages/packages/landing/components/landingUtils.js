@@ -17,6 +17,25 @@ export function useLandingFonts() {
   }, []);
 }
 
+
+// 1) Notun function add koro
+const MD_IMAGE = /!\[[^\]]*\]\(\s*(https?:\/\/[^\s)]+)[^)]*\)/;
+
+export function extractHeroImage(raw) {
+  if (!raw) return "";
+  const md = raw.match(MD_IMAGE);
+  if (md) return md[1];
+  // "# image" heading-er niche bare URL dile
+  const lines = raw.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  const i = lines.findIndex((l) => /^#+\s*image\s*$/i.test(l));
+  const next = i !== -1 ? lines[i + 1]?.replace(/^\*\s*/, "") : "";
+  return /^https?:\/\//.test(next || "") ? next : "";
+}
+
+// 2) parseStructuredDetails er lines.forEach er shurute eta boshao,
+//    jeno image line ta title/intro te dhuke na jay
+
+
 /** Price after discount, plus display-ready numbers. */
 export function getDiscountedPrice(pkg) {
   const price = Number(pkg?.price) || 0;
@@ -97,6 +116,8 @@ export function parseStructuredDetails(raw) {
     .filter(Boolean);
 
   let currentType = null;
+
+  if (MD_IMAGE.test(lines)) return;
 
   lines.forEach((line) => {
     if (line.startsWith("#")) {

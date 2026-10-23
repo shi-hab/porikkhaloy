@@ -78,6 +78,10 @@ import WithdrawHistory from "../pages/affiliates/WithdrawHistory";
 import Calender from "../pages/admissionCalender/Calender";
 import CalenderDetails from "../pages/admissionCalender/CalenderDetails";
 import { LeaderboardSkeleton } from "../pages/GamificationLeaderboard/components/LeaderboardSkeleton";
+import MockTestPage from './../pages/mockTestFeature/MockTestPage';
+import QuestionBankPage from "../pages/QuestionBankFeature/Questionbankpage";
+import AIChatbot from "../pages/aiFeature/AIChatbot";
+import AISharedChat from './../pages/aiFeature/components/AISharedChat';
 
 const Routes = createBrowserRouter([
   {
@@ -183,13 +187,15 @@ const Routes = createBrowserRouter([
             element: <QuizBattleRunning />,
           },
 
-
-
           // Exams
           {
-            path: "/exam",
-            element: <ExamStartingPage />,
+            path: "/mock-test",
+            element: <MockTestPage />,
           },
+          // {
+          //   path: "/exam",
+          //   element: <ExamStartingPage />,
+          // },
           {
             path: "/exam/start",
             element: <ExamStart />,
@@ -213,12 +219,24 @@ const Routes = createBrowserRouter([
             element: <VerifyAccount />,
           },
 
+          // ai feature
+          {
+            path: "/pori-ai/:uuid?", element: <AIChatbot />
+          },
+          {
+            path: "/pori-ai/share/:token", element: <AISharedChat />
+          },
+
           // Exam History
           {
             path: "/exam-history/:id",
             element: <ExamAnswersPageForHistory />,
           },
 
+          {
+            path: "/qb",
+            element: <QuestionBankPage />,
+          },
           {
             path: "/questions",
             element: <QuestionListForStudentPage />,

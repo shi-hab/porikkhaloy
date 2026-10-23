@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Carousel } from "antd";
 import { useGetAllHomePageDataQuery } from "@/features/packages/packagesApi";
 import { useSelector } from "react-redux";
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { BiSolidOffer, BiSolidMessageSquareEdit } from "react-icons/bi";
 import PartnerSlider from "./home/PartnerSlider";
 import FreeExamCard from "./home/FreeExamCard";
@@ -12,50 +12,101 @@ import { SiVitest } from "react-icons/si";
 import { FaBookReader } from "react-icons/fa";
 import SocialIcon from "./home/SocialIcon";
 import { isApp } from "@/File/device";
+import AppUpdateModal from "./AppUpdateModal";
+import CompleteProfileModal from "./studentDashboard/components/CompleteProfileModal";
+
+// redux theke value ta string e ane (id / object duto-i handle kore)
+const pick = (...values) => {
+  for (const v of values) {
+    if (v === undefined || v === null || v === "") continue;
+    const out = typeof v === "object" ? (v.id ?? "") : v;
+    if (out !== "") return String(out);
+  }
+  return "";
+};
 
 export default function HomePage() {
   const auth = useSelector((state) => state.auth?.student);
   const student_id = auth?.id ?? null;
-  const {
-    data: homePageData,
-    isFetching,
-    isLoading: examLoading,
-  } = useGetAllHomePageDataQuery(student_id);
-  const [images, setImages] = useState([]);
+
+  // ⚠️ Profile field er nam tomar student object er sathe milie nio
+  const profile = useMemo(
+    () => ({
+      section_id: pick(auth?.section_id, auth?.section),
+      group_id: pick(auth?.group_id, auth?.group),
+      level_id: pick(auth?.level_id, auth?.level),
+      target: pick(auth?.target, auth?.target_category),
+    }),
+    [auth]
+  );
+
+  // profile bodlale query arg bodlay -> instant notun carousel ashe
+  const { data: homePageData, isFetching } = useGetAllHomePageDataQuery({
+    student_id,
+    ...profile,
+  });
 
   const carousels = homePageData?.data?.carousels;
   const freeActiveExam = homePageData?.data?.freeActiveExam;
+  const images = Array.isArray(carousels) ? carousels : [];
   const [loadedImages, setLoadedImages] = useState({});
   const is_app = isApp();
 
-  useEffect(() => {
-    if (Array.isArray(carousels)) {
-      setImages(carousels);
-    }
-  }, [carousels]);
-
-
-
-  const handleImageLoad = (index) => {
-    setLoadedImages((prev) => ({ ...prev, [index]: true }));
+  const handleImageLoad = (id) => {
+    setLoadedImages((prev) => ({ ...prev, [id]: true }));
   };
 
-  const carouselItems = useMemo(() => {
-    if (isFetching) return null;
+  const renderSlide = (item, index) => {
+    const img = (
+      <img
+        src={item.image}
+        alt={item.title || `Slide ${index + 1}`}
+        onLoad={() => handleImageLoad(item.id)}
+        className={`w-full h-full object-cover rounded-md transition-opacity duration-500 ease-in-out ${
+          loadedImages[item.id] ? "opacity-100" : "opacity-0"
+        }`}
+        loading="lazy"
+      />
+    );
 
-    return images.map((item, index) => (
-      <div key={index} className="relative w-full h-full overflow-hidden rounded-md shadow-lg">
-        <img
-          src={item.image}
-          alt={item.title || `Slide ${index + 1}`}
-          onLoad={() => handleImageLoad(index)}
-          className={`w-full h-full object-cover rounded-md transition-opacity duration-500 ease-in-out ${loadedImages[index] ? "opacity-100" : "opacity-0"
-            }`}
-          loading="lazy"
-        />
+    const link = (item.link_url || "").trim();
+    let content = img;
+
+    if (link) {
+      if (/^https?:\/\//i.test(link)) {
+        // full url -> notun tab e
+        content = (
+          <a
+            href={link}
+            target="_blank"
+            rel="noreferrer"
+            className="block w-full h-full"
+          >
+            {img}
+          </a>
+        );
+      } else {
+        // main url er pore "/" diye internal page
+        content = (
+          <Link
+            to={link.startsWith("/") ? link : `/${link}`}
+            className="block w-full h-full"
+          >
+            {img}
+          </Link>
+        );
+      }
+    }
+
+    return (
+      <div
+        key={item.id}
+        className="relative w-full h-full overflow-hidden rounded-md shadow-lg"
+      >
+        {content}
       </div>
-    ));
-  }, [isFetching, images, loadedImages]);
+    );
+  };
 
   // Memoized Features Section
   const features = useMemo(
@@ -63,7 +114,7 @@ export default function HomePage() {
       {
         label: "মক টেস্ট",
         icon: <BiSolidMessageSquareEdit />,
-        url: "/exams",
+        url: "/mock-test",
         bgColor:
           "bg-gradient-to-br from-orange-300 to-orange-300 dark:from-orange-700 dark:to-orange-800",
         textColor: "text-orange-900 dark:text-orange-200",
@@ -92,14 +143,6 @@ export default function HomePage() {
           "bg-gradient-to-br from-purple-400 to-purple-600 dark:from-purple-700 dark:to-purple-800",
         textColor: "text-purple-900 dark:text-purple-200",
       },
-      // {
-      //   label: "FocusKit",
-      //   icon: <TbTargetArrow />,
-      //   url: "/FocusKit",
-      //   bgColor:
-      //     "bg-gradient-to-br from-purple-400 to-purple-600 dark:from-purple-700 dark:to-purple-800",
-      //   textColor: "text-purple-900 dark:text-purple-200",
-      // },
       {
         label: "সাবস্ক্রিপশন",
         icon: <BiSolidOffer />,
@@ -117,33 +160,41 @@ export default function HomePage() {
         textColor: "text-cyan-900 dark:text-cyan-200",
       },
     ],
-    [],
+    []
   );
 
-  const defaultSlider = (
-    <Carousel
-      autoplay
-      effect="fade"
-      autoplaySpeed={3000}
-      pauseOnHover
-      dots={false}
-      draggable
-    >
-      {carouselItems}
-    </Carousel>
-  );
+  const showSlider = isFetching || images.length > 0;
 
   return (
     <div className="px-2 pt-3">
-      {/* Carousel Section */}
-      <div className="relative w-full aspect-[3/1] bg-gray-200 overflow-hidden rounded-md">
-        {isFetching && <SliderImageSkeleton />}
-        {!isFetching && defaultSlider}
-      </div>
+      {/* Carousel Section (kono carousel na thakle hide hobe) */}
+      {showSlider && (
+        <div className="relative w-full aspect-[3/1] bg-gray-200 overflow-hidden rounded-md">
+          {isFetching ? (
+            <SliderImageSkeleton />
+          ) : (
+            <Carousel
+              autoplay
+              effect="fade"
+              autoplaySpeed={3000}
+              pauseOnHover
+              dots={false}
+              draggable
+            >
+              {images.map(renderSlide)}
+            </Carousel>
+          )}
+        </div>
+      )}
 
       {/* free exam card */}
       <div>
         <FreeExamCard freeActiveExam={freeActiveExam} />
+      </div>
+
+      <div>
+        <AppUpdateModal />
+        <CompleteProfileModal />
       </div>
 
       {/* Features Section */}
@@ -169,15 +220,12 @@ export default function HomePage() {
         <PartnerSlider />
       </div>
 
-
       {/* Social link */}
       {!is_app && (
         <div>
           <SocialIcon />
         </div>
       )}
-
-
     </div>
   );
 }

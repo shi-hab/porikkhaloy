@@ -12,9 +12,14 @@ import DarkModeToggle from "./DarkModeToggle";
 import { useGetAllForNavbarQuery } from "@/features/topNavBar/navBarApi";
 import toBanglaNumeral from "@/utils/Tobangla";
 import { PiFireSimpleFill } from "react-icons/pi";
-import { isApp } from './../../../../utils/device';
+import { isApp } from "./../../../../utils/device";
 
-export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
+export default function Navbar({
+  className,
+  isCollapsed,
+  setIsCollapsed,
+  hideMobileTopBar = false, // CHANGED: new prop
+}) {
   const checkingUser = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,7 +35,7 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
 
   useEffect(() => {
     if (streak > prevStreakRef.current) {
-      const timer = setTimeout(() => { }, 800);
+      const timer = setTimeout(() => {}, 800);
       return () => clearTimeout(timer);
     }
     prevStreakRef.current = streak;
@@ -58,7 +63,9 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
 
   const hideNavbarRoutes = [
     "/exam-on-going",
+    "/mock-test",
     "/exam-ongoing",
+    "/pori-ai",
     "/quiz-battle-running",
     "/registration",
     "/login",
@@ -82,10 +89,8 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
     return true;
   });
 
-
   // Mobile bottom nav-e khali showInBottomNav: true thaka link gula jabe
   const bottomNavLinks = filteredNavLinks.filter((link) => link.showInBottomNav);
-
 
   return (
     <>
@@ -103,7 +108,7 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
 
             {/* Streak badge */}
             {checkingUser && (
-              <Link to="/user/streak" >
+              <Link to="/user/streak">
                 <div className="flex w-fit bg-gray-100 dark:bg-gray-800 rounded-full px-4 h-6 text-body items-center justify-center">
                   <PiFireSimpleFill className="text-orange-600" />
                   <span className="font-bold ml-1 text-orange-500">
@@ -112,9 +117,6 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
                 </div>
               </Link>
             )}
-            {/* <div>
-              <DarkModeToggle/>
-            </div> */}
           </div>
 
           {/* Vertical nav links */}
@@ -124,9 +126,10 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
                 key={link.href}
                 to={link.href}
                 className={`group relative flex items-center gap-3 p-3 rounded-lg text-sm transition-colors
-                  ${isActiveCustom(link)
-                    ? "bg-primary/10 text-primary font-regular"
-                    : "text-foreground hover:bg-muted"
+                  ${
+                    isActiveCustom(link)
+                      ? "bg-primary/10 text-primary font-regular"
+                      : "text-foreground hover:bg-muted"
                   }`}
               >
                 {isActiveCustom(link) && (
@@ -139,18 +142,14 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
           </nav>
 
           {/* Bottom: auth area */}
-          <div className=" pt-4 border-t dark:border-gray-800">
+          <div className="pt-4 border-t dark:border-gray-800">
             {checkingUser ? (
               <div>
                 <UserNav />
               </div>
             ) : (
               <div className="flex flex-col gap-2">
-                <Button
-                  onClick={() => navigate("/login")}
-                >
-                  লগইন
-                </Button>
+                <Button onClick={() => navigate("/login")}>লগইন</Button>
                 <Button
                   onClick={() => navigate("/registration")}
                   variant="green"
@@ -164,20 +163,28 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
       </aside>
 
       {/* ============ MOBILE / TABLET: top bar + bottom tab nav ============ */}
-      <nav className="sticky top-0 z-50 bg-white dark:bg-black border-b shadow-sm lg:hidden">
+      {/* CHANGED: border/shadow shudhu top bar thakle */}
+      <nav
+        className={`sticky top-0 z-50 bg-white dark:bg-black lg:hidden ${
+          hideMobileTopBar ? "" : "border-b shadow-sm"
+        }`}
+      >
         <div className="flex items-center justify-between w-full mx-auto max-w-7xl">
           {/* Overlay */}
           <div
             onClick={() => setNavOpened(false)}
-            className={`absolute top-14 inset-0 transition-[opacity] delay-100 duration-700 z-50 ${navOpened ? "h-svh opacity-100" : "h-0 opacity-0"
-              } w-full bg-black/80 dark:bg-black/90 md:hidden`}
+            className={`absolute top-14 inset-0 transition-[opacity] delay-100 duration-700 z-50 ${
+              navOpened ? "h-svh opacity-100" : "h-0 opacity-0"
+            } w-full bg-black/80 dark:bg-black/90 md:hidden`}
           />
 
-          {(!isApp() || checkingUser)  && (
+          {/* CHANGED: !hideMobileTopBar condition add */}
+          {!hideMobileTopBar && (!isApp() || checkingUser) && (
             <Layout
               fixed
-              className={`${navOpened ? "h-svh" : ""
-                } w-full flex flex-col items-center justify-between md:flex-row`}
+              className={`${
+                navOpened ? "h-svh" : ""
+              } w-full flex flex-col items-center justify-between md:flex-row`}
             >
               <Layout.Header
                 sticky
@@ -196,7 +203,9 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
                   </div>
                 )}
 
-                <div className={`flex items-center ${!isCollapsed ? "gap-2" : ""}`}>
+                <div
+                  className={`flex items-center ${!isCollapsed ? "gap-2" : ""}`}
+                >
                   <Logo />
                 </div>
 
@@ -206,11 +215,7 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
                     <UserNav />
                   ) : (
                     <>
-                      <Button
-                        onClick={() => navigate("/login")}
-                      >
-                        লগইন
-                      </Button>
+                      <Button onClick={() => navigate("/login")}>লগইন</Button>
                       <Button
                         onClick={() => navigate("/registration")}
                         variant="green"
@@ -224,7 +229,7 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
             </Layout>
           )}
 
-          {/* Mobile Bottom Nav */}
+          {/* Mobile Bottom Nav (unchanged) */}
           {!isHideNavbar && (
             <nav className="fixed bottom-0 left-0 right-0 z-[9999] bg-white dark:bg-gray-900 border-t border-gray-400 dark:border-gray-700 shadow-lg h-[48px] lg:hidden">
               <ul className="flex items-center justify-between h-full">
@@ -236,10 +241,11 @@ export default function Navbar({ className, isCollapsed, setIsCollapsed }) {
                     >
                       <span
                         className={`transition-all duration-300 px-4 py-[1px] rounded-2xl ease-in-out
-                        ${isActiveCustom(link)
+                        ${
+                          isActiveCustom(link)
                             ? "bg-blue-200 dark:bg-blue-900 text-blue-600 dark:text-blue-300 shadow-[0_0_8px] shadow-blue-400/70 ring-1 ring-blue-300/60"
                             : "text-gray-500 dark:text-gray-400"
-                          }`}
+                        }`}
                       >
                         {link.icon}
                       </span>

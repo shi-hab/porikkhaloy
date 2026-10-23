@@ -125,7 +125,7 @@ export default function ExamStartingPage() {
                 পরিক্ষালয়ের এক্সেস পেতে হলে তোমাকে সাবস্ক্রিপশন কিনতে হবে।
               </p>
               <Link
-                to="/user/subscription"
+                to="/subscriptions"
                 className="mt-4 inline-block text-center bg-green-700 text-white px-5 py-2 rounded hover:bg-green-600 transition-all duration-300 text-lg font-bold"
               >
                 সাবস্ক্রিপশন কিনো &rarr;
@@ -169,7 +169,7 @@ export default function ExamStartingPage() {
                         হবে।
                       </p>
                       <Link
-                        to="/user/subscription"
+                        to="/subscriptions"
                         className="mt-4 inline-block text-center bg-green-700 text-white px-5 py-2 rounded hover:bg-green-600 transition-all duration-300 text-lg font-bold"
                       >
                         সাবস্ক্রিপশন কিনো &rarr;
@@ -223,7 +223,7 @@ const EnrollmentForm = ({
     payload.append("coupon", formData.coupon || null);
 
     try {
-      const response = await examQuotaSubscriptions(payload).unwrap();
+      await examQuotaSubscriptions(payload).unwrap();
       toast.success("Subscription request submitted successfully ");
       refetch();
       setIsDialogOpen(false);

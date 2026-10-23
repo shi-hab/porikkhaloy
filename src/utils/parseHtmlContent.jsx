@@ -4,7 +4,7 @@ import { parseReactQuill } from "./parseReactQuill";
 export const parseHtmlContent = (htmlContent) => {
 
   return (
-    <div style={{ whiteSpace: "pre-wrap" }}>
+    <div className="ai-prose">
       {typeof htmlContent === "string" && htmlContent.trim().startsWith("<p") ? (
         <div>{parseReactQuill(htmlContent)}</div>
       ) : (

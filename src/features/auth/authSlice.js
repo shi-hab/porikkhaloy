@@ -23,8 +23,11 @@ const authSlice = createSlice({
       state.token = null;
       state.student = null;
     },
+    updateStudent: (state, action) => {
+      state.student = action.payload;
+    },
   },
 });
 
-export const { loggedIn, loggedOut } = authSlice.actions;
+export const { loggedIn, updateStudent, loggedOut } = authSlice.actions;
 export default authSlice.reducer;

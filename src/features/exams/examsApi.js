@@ -9,7 +9,9 @@ export const examsApi = apiSlice.injectEndpoints({
       query: () => "/exams/all/0",
     }),
     ExamSubscriptions: builder.query({
-      query: () => "/exam-subs-details",
+      // params = student's section_id / group_id / level_id / target (from the Redux profile).
+      // Use the useStudentSubscriptions() hook instead of calling this directly.
+      query: (params) => ({ url: "/exam-subs-details", params }),
     }),
     startExam: builder.mutation({
       query: (data) => ({
@@ -106,7 +108,7 @@ export const examsApi = apiSlice.injectEndpoints({
     getExamById: builder.query({
       query: (id) => `/exam-details/${id}`,
     }),
-    
+
     getMtExamStudentAnswers: builder.query({
       query: ({ modelTestId, studentId, attemptId }) =>
         `/exam-mt-result/${modelTestId}/${studentId}/${attemptId}`,

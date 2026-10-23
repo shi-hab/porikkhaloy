@@ -1,50 +1,91 @@
-﻿import { parseHtmlContent } from "@/utils/parseHtmlContent";
+﻿import { Clock3, User } from "lucide-react";
+import { formatDuration } from "./landingUtils";
+import { bn } from "./landingFormat";
 
+const AVATAR_TONES = [
+  "from-emerald-300 to-emerald-600",
+  "from-sky-300 to-indigo-500",
+  "from-amber-200 to-orange-500",
+  "from-rose-300 to-pink-600",
+  "from-violet-300 to-purple-600",
+];
 
-const LandingHeroSection = ({ pkg }) => {
-
-  if (!pkg) return null;
-
-  const {
-    hero_title,name, img
-  } = pkg;
-
-
-  const displayTitle = hero_title || parseHtmlContent(name);
-
+const AvatarStack = ({ urls }) => {
+  const real = Array.isArray(urls) ? urls.filter(Boolean).slice(0, 3) : [];
+  const items = real.length ? real : AVATAR_TONES.slice(0, 3);
 
   return (
-    <>
-      <section className="relative overflow-hidden rounded-2xl mb-6">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-blue-900 to-purple-900" />
+    <div className="flex -space-x-2">
+      {items.map((item, i) =>
+        real.length ? (
+          <img
+            key={i}
+            src={item}
+            alt=""
+            loading="lazy"
+            className="h-7 w-7 rounded-full object-cover ring-2 ring-[#0C1B15]"
+          />
+        ) : (
+          <span
+            key={i}
+            className={`flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br ${item} ring-2 ring-[#0C1B15]`}
+          >
+            <User className="h-3.5 w-3.5 text-white/90" />
+          </span>
+        )
+      )}
+    </div>
+  );
+};
 
-        {/* Decorative blobs */}
-        <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
+const LandingHeroSection = ({ pkg }) => {
+  if (!pkg) return null;
 
-        {/* Package image (right side on md+) */}
-        {img && (
-          <div className="absolute right-0 top-0 h-full w-2/5 hidden md:block">
-            <div className="absolute inset-0 bg-gradient-to-r from-indigo-900 to-transparent z-10" />
-            <img
-              src={img}
-              alt={displayTitle}
-              className="w-full h-full object-cover opacity-40"
-            />
+  const duration = formatDuration(pkg.duration_days);
+  const students = pkg.display_student_count;
+  const hasStudents = students !== undefined && students !== null && students !== "" && students !== 0;
+  const showMeta = Boolean(duration) && hasStudents;
+
+  return (
+    <section className="font-siliguri">
+      {/*  */}
+
+      {showMeta && (
+        <div className="relative z-10 my-3 px-4">
+          <div className="mx-auto flex items-center justify-between gap-3 rounded-2xl bg-[#0C1B15] px-4 py-2.5 text-white shadow-[0_14px_28px_-14px_rgba(12,27,21,0.75)] ring-1 ring-white/10 ">
+            {duration && (
+              <div className="flex min-w-0 items-center gap-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10">
+                  <Clock3 className="h-4 w-4 text-emerald-300" />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[11px] leading-none text-white/60">ব্যাচের মেয়াদ</p>
+                  <p className="mt-1 truncate  text-[17px] font-bold leading-none">
+                    {bn(duration)}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {duration && hasStudents && <span className="h-8 w-px shrink-0 bg-white/10" />}
+
+            {hasStudents && (
+              <div className="flex min-w-0 items-center gap-2.5">
+                <AvatarStack urls={pkg.student_avatars} />
+                <div className="min-w-0">
+                  <p className=" text-[17px] font-bold leading-none text-[#E8C26A]">
+                    {bn(students)}+
+                  </p>
+                  <p className="mt-1 whitespace-nowrap text-[11px] leading-none text-white/60">
+                    শিক্ষার্থী যুক্ত
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-
-        {/* Content */}
-        <div className="relative z-10 px-6 py-8 md:py-12 md:w-3/5">
-
-          {/* Title */}
-          <h1 className="text-2xl md:text-3xl font-extrabold text-white ">
-            {displayTitle}
-          </h1>
         </div>
-      </section>
-    </>
+      )}
+    </section>
   );
 };
 

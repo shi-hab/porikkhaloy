@@ -27,12 +27,20 @@ export const NavLinks = [
   },
   {
     title: "মক টেস্ট",
-    href: "/exams",
+    href: "/mock-test",
     icon: <FileText size={20} />,
-    urlActive: ["/exams", "/exam/start", "/exam-on-going", "/exam-result"],
+    urlActive: ["/mock-test", "/exam/start", "/exam-on-going", "/exam-result"],
     showInBottomNav: false,
 
   },
+  // {
+  //   title: "পরি AI",
+  //   href: "/pori-ai",
+  //   icon: <FileText size={20} />,
+  //   urlActive: ["/pori-ai"],
+  //   showInBottomNav: false,
+
+  // },
   {
     title: "লিডারবোর্ড",
     href: "/leaderboard",
@@ -57,6 +65,14 @@ export const NavLinks = [
     showInBottomNav: true,
 
   },
+  // {
+  //   title: "প্রশ্নব্যাংক",
+  //   href: "/qb",
+  //   icon: <FaBookReader size={20} />,
+  //   urlActive: ["/qb"],
+  //   showInBottomNav: true,
+
+  // },
   // {
   //   title: "টেস্ট পেপার",
   //   href: "/digital-testpaper",

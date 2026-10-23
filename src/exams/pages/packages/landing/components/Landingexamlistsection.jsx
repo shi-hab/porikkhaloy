@@ -1,73 +1,40 @@
-import { useMemo } from "react";
-import { motion } from "framer-motion";
-import {
-  ArrowUpRight,
-  CalendarDays,
-  Clock3,
-  ListChecks,
-  Sparkles,
-  Lock,
-} from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { ChevronRight, Clock3, ListChecks, Lock, Timer } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
-import {
-  normalizeExam,
-  formatExamDuration,
-  formatExamDateTime,
-} from "./landingUtils";
+import { normalizeExam } from "./landingUtils";
+import { bn, formatBnDuration, getExamDateParts } from "./landingFormat";
+import LandingSectionHeading from "./LandingSectionHeading";
 
 import { parseHtmlContent } from "@/utils/parseHtmlContent";
 import { clearMTExamInfo } from "@/features/packages/mtExamSlice";
 import { EncodeURL } from "../../../../components/atoms/urlHashCode/EncodeURL";
-// Adjust this path to wherever your auth hook actually lives
-// (same hook PrivateRoutes.jsx uses).
-import useAuth from "../../../../hooks/useAuth";
-import { setPostAuthRedirect } from "../../../../components/utils/authRedirect";
 
-const EXAM_LIST_MAX_HEIGHT = 500;
+const LIST_MAX_HEIGHT = 540;
 
-const ExamRow = ({ exam, index, packageId }) => {
+const ExamRow = ({ exam, packageId, highlight, reduceMotion }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const isLoggedIn = useAuth();
 
-  const formattedDateTime = formatExamDateTime(exam.startAt);
-
-  const [date, time] = formattedDateTime.includes(",")
-    ? formattedDateTime.split(",").map((item) => item.trim())
-    : [formattedDateTime, ""];
-
-  const packageIdEncoded = EncodeURL(packageId);
-  const examIdEncoded = EncodeURL(exam.id);
-  const targetUrl = `/package/${packageIdEncoded}/${examIdEncoded}`;
+  const parts = getExamDateParts(exam.startAt);
+  const marked = highlight && exam.isFree;
+  const shake = marked && !reduceMotion;
 
   const handleClick = () => {
-    // Locked (non-free) exams never navigate — they just tell the
-    // student they need to enroll in the package first.
     if (!exam.isFree) {
       toast.info("পরীক্ষাটি দেওয়ার জন্য এনরোল করতে হবে।");
       return;
     }
-
     dispatch(clearMTExamInfo());
-
-    navigate(targetUrl);
+    navigate(`/package/${EncodeURL(packageId)}/${EncodeURL(exam.id)}`);
   };
 
   return (
-    <motion.li
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.25,
-        delay: Math.min(index, 10) * 0.03,
-      }}
-      className="group relative"
-    >
-      <div
+    <li data-free={exam.isFree ? "true" : undefined}>
+      <motion.div
         role="button"
         tabIndex={0}
         onClick={handleClick}
@@ -77,223 +44,161 @@ const ExamRow = ({ exam, index, packageId }) => {
             handleClick();
           }
         }}
-        className={`relative flex cursor-pointer items-center justify-between gap-3 rounded-xl border px-3.5 py-3 transition-all duration-200 ${exam.isFree
-          ? "border-emerald-200 bg-white shadow-sm shadow-emerald-900/5 hover:border-emerald-300 hover:shadow-md hover:shadow-emerald-900/10"
-          : "border-white/5 bg-white/[0.02] hover:border-[#8B7FE8]/30 hover:bg-white/[0.05]"
-          }`}
+        animate={shake ? { x: [0, -7, 7, -5, 5, -2, 0] } : { x: 0 }}
+        transition={shake ? { duration: 0.6, delay: 0.55 } : { duration: 0.2 }}
+        className={`flex cursor-pointer items-center gap-3 rounded-2xl p-2.5 pr-3.5 transition-shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 ${
+          exam.isFree ? "bg-[#E7F6EE] ring-1 ring-emerald-300" : "bg-white"
+        } ${marked ? "!ring-2 !ring-emerald-400 ring-offset-2 ring-offset-[#0C1B15]" : ""}`}
       >
-        {/* Left Accent */}
-        <span
-          className={`absolute left-0 top-1/2 h-0 w-[3px] -translate-y-1/2 rounded-r-full transition-all duration-300 group-hover:h-2/3 ${exam.isFree
-            ? "bg-gradient-to-b from-emerald-400 to-emerald-500"
-            : "bg-gradient-to-b from-indigo-400 to-indigo-500"
-            }`}
-        />
+        {/* Date tile */}
+        <div
+          className={`flex h-[52px] w-[52px] shrink-0 flex-col items-center justify-center rounded-xl ${
+            exam.isFree ? "bg-[#0B6E4F] text-white" : "bg-[#EEF3F0] text-[#0C1B15]"
+          }`}
+        >
+          {parts ? (
+            <>
+              <span className="font-serif text-[19px] font-bold leading-none">{parts.day}</span>
+              <span className="mt-1 text-[10.5px] leading-none opacity-80">{parts.month}</span>
+            </>
+          ) : (
+            <Clock3 className="h-5 w-5 opacity-70" />
+          )}
+        </div>
 
-        {/* Exam Content */}
+        {/* Info */}
         <div className="min-w-0 flex-1">
-          {/* Exam Name */}
-          <p
-            className={`line-clamp-1 truncate text-[12px] font-semibold ${exam.isFree ? "text-slate-800" : "text-slate-700"
-              }`}
-          >
+          <p className="truncate text-[13.5px] font-semibold text-[#0C1B15]">
             {parseHtmlContent(exam.title)}
           </p>
-
-          {/* Meta */}
-          <div className="mt-1.5 flex items-center justify-between gap-2">
-            {/* Duration + Questions */}
-            <div className="flex min-w-0 items-center gap-1.5">
-              {/* Duration */}
-              <span
-                className={`inline-flex h-5 w-[48px] shrink-0 items-center justify-center gap-1 rounded-full px-1 text-[8px] lg:w-[58px] lg:text-[10px] ${exam.isFree
-                  ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100"
-                  : "bg-slate-100 text-slate-500 ring-1 ring-slate-200"
-                  }`}
-              >
-                <Clock3 className="h-2.5 w-2.5 shrink-0" />
-
-                <span className="whitespace-nowrap">
-                  {formatExamDuration(exam.durationMinutes)}
-                </span>
-              </span>
-
-              {/* Questions */}
-              <span
-                className={`inline-flex h-5 w-[48px] shrink-0 items-center justify-center gap-1 rounded-full px-1 text-[8px] lg:w-[58px] lg:text-[10px] ${exam.isFree
-                  ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100"
-                  : "bg-slate-100 text-slate-500 ring-1 ring-slate-200"
-                  }`}
-              >
-                <ListChecks className="h-2.5 w-2.5 shrink-0" />
-
-                <span className="whitespace-nowrap">
-                  {exam.questionCount}টি
-                </span>
-              </span>
-            </div>
-
-            {/* Free badge OR Date + Time (locked) */}
-            {exam.isFree ? (
-              <span className="inline-flex h-5 w-28 shrink-0 items-center justify-center gap-1 rounded-full bg-emerald-500 text-[9.5px] font-bold text-white shadow-sm shadow-emerald-500/30">
-                <Sparkles className="h-2.5 w-2.5 shrink-0" />
-                <span className="leading-none">ফ্রি পরীক্ষা দাও</span>
-              </span>
-            ) : (
-              <div className="flex shrink-0 items-center gap-1.5">
-                <Lock className="h-3 w-3 shrink-0 text-slate-400" />
-
-                <div className="text-right leading-none">
-                  <div className="text-[10.5px] font-medium text-slate-600">
-                    {date}
-                  </div>
-
-                  {time && (
-                    <p className="mt-1 text-[9.5px] text-slate-400">
-                      {time}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
+          <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] text-[#5B6E64]">
+            <span className="inline-flex items-center gap-1">
+              <Clock3 className="h-3 w-3" />
+              {parts ? parts.time : "সময় জানানো হবে"}
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Timer className="h-3 w-3" />
+              {formatBnDuration(exam.durationMinutes)}
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <ListChecks className="h-3 w-3" />
+              {bn(exam.questionCount)}টি প্রশ্ন
+            </span>
           </div>
         </div>
-      </div>
-    </motion.li>
+
+        {/* State */}
+        {exam.isFree ? (
+          <span className="flex h-8 shrink-0 items-center gap-0.5 rounded-full bg-[#0B6E4F] pl-3 pr-2 text-[12px] font-semibold text-white">
+            ফ্রি
+            <ChevronRight className="h-4 w-4" />
+          </span>
+        ) : (
+          <Lock className="h-4 w-4 shrink-0 text-slate-400" aria-label="এনরোল করলে খুলবে" />
+        )}
+      </motion.div>
+    </li>
   );
 };
 
-const LandingExamListSection = ({
-  mtUnderPkg,
-  isLoading,
-  pkg,
-}) => {
-  const routineUrl = pkg?.routine_pdf || pkg?.routine;
+const LandingExamListSection = ({ mtUnderPkg, isLoading, pkg, highlightKey }) => {
   const packageId = pkg?.id;
+  const reduceMotion = useReducedMotion();
 
+  const [highlight, setHighlight] = useState(false);
+  const sectionRef = useRef(null);
+  const listRef = useRef(null);
+
+  // Real routine order (by date). Free exams are marked in place.
   const exams = useMemo(() => {
     const raw = mtUnderPkg?.data;
-
     if (!Array.isArray(raw)) return [];
-
-    return raw
-      .map(normalizeExam)
-      .sort((a, b) => {
-        // Free exams float to the top so students see them first
-        if (a.isFree !== b.isFree) return a.isFree ? -1 : 1;
-        if (!a.startAt) return 1;
-        if (!b.startAt) return -1;
-
-        return new Date(a.startAt) - new Date(b.startAt);
-      });
+    return raw.map(normalizeExam).sort((a, b) => {
+      if (!a.startAt) return 1;
+      if (!b.startAt) return -1;
+      return new Date(a.startAt) - new Date(b.startAt);
+    });
   }, [mtUnderPkg]);
 
-  /* =========================
-     Loading State
-  ========================= */
+  const freeCount = exams.filter((e) => e.isFree).length;
+
+  // "ফ্রি এক্সাম দাও" pressed
+  useEffect(() => {
+    if (!highlightKey) return;
+
+    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    const list = listRef.current;
+    const first = list?.querySelector('[data-free="true"]');
+    if (list && first) {
+      list.scrollTo({ top: Math.max(first.offsetTop - 8, 0), behavior: "smooth" });
+    }
+
+    setHighlight(true);
+    const t = setTimeout(() => setHighlight(false), 3800);
+    return () => clearTimeout(t);
+  }, [highlightKey]);
+
   if (isLoading) {
     return (
-      <section className="mt-6 rounded-3xl border border-slate-200 bg-slate-50/80 p-5 font-['Hind_Siliguri'] shadow-[0_16px_45px_rgba(15,23,42,0.07)] sm:p-6">
-        {/* Header Skeleton */}
-        <div className="flex items-center justify-between">
-          <div className="h-6 w-40 animate-pulse rounded bg-slate-200" />
-
-          <div className="h-9 w-24 animate-pulse rounded-lg bg-slate-200" />
-        </div>
-
-        {/* List Skeleton */}
-        <div className="mt-3 space-y-2 rounded-2xl border border-slate-200 bg-white p-3.5">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3.5"
-            >
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 animate-pulse rounded-xl bg-slate-200" />
-
-                <div>
-                  <div className="h-3.5 w-32 animate-pulse rounded bg-slate-200" />
-
-                  <div className="mt-2 h-2.5 w-20 animate-pulse rounded bg-slate-100" />
-                </div>
-              </div>
-
-              <div className="h-8 w-20 animate-pulse rounded bg-slate-100" />
-            </div>
+      <section className="font-siliguri rounded-[28px] bg-[#0C1B15] p-5">
+        <div className="h-6 w-40 animate-pulse rounded bg-white/10" />
+        <div className="mt-4 space-y-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="h-[72px] animate-pulse rounded-2xl bg-white/10" />
           ))}
         </div>
       </section>
     );
   }
 
-  /* =========================
-     Empty State
-  ========================= */
   if (exams.length === 0) return null;
 
   return (
-    <section className="relative mt-6 overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/80 px-3 pt-5 pb-4 font-['Hind_Siliguri'] shadow-[0_18px_50px_rgba(15,23,42,0.08)] sm:p-6">
-      {/* Ambient Glow */}
-      <div className="pointer-events-none absolute inset-x-0 -top-16 h-40 rounded-full bg-indigo-100/60 blur-3xl" />
+    <section
+      id="routine-section"
+      ref={sectionRef}
+      className="font-siliguri scroll-mt-4 rounded-[28px] bg-[#0C1B15] px-3 pb-3 pt-6 shadow-[0_24px_50px_-24px_rgba(12,27,21,0.8)] sm:px-5 sm:pb-5"
+    >
+      <LandingSectionHeading
+        tone="dark"
+        className="px-2"
+        title="পরীক্ষার রুটিন"
+        subtitle={`মোট ${bn(exams.length)}টি পরীক্ষা${freeCount ? `, এর মধ্যে ${bn(freeCount)}টি ফ্রি` : ""}`}
+      />
 
-      {/* =========================
-          Header
-      ========================= */}
-      <div className="relative flex items-center justify-between gap-3">
-        <div className="min-w-0">
-          <h2 className="font-siliguri text-lg font-semibold text-slate-800">
-            পরীক্ষার রুটিন
-          </h2>
-
-          <p className="mt-0.5 text-[12px] text-slate-500">
-            রুটিন মডিউল অনুযায়ী সব পরীক্ষা ধারাবাহিকভাবে অনুষ্ঠিত হবে।
-          </p>
-        </div>
-
-        {/* Routine PDF */}
-        {routineUrl && (
-          <a
-            href={routineUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex shrink-0 items-center gap-2 rounded-xl border border-indigo-100 bg-indigo-50 px-3 py-2 text-[11.5px] font-medium text-indigo-700 shadow-sm transition-all duration-200 hover:border-indigo-200 hover:bg-indigo-100"
+      <AnimatePresence initial={false}>
+        {highlight && freeCount > 0 && (
+          <motion.p
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mx-2 mt-3 overflow-hidden rounded-xl bg-emerald-400/15 px-3.5 py-2.5 text-[12.5px] leading-snug text-emerald-100"
           >
-            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-white">
-              <CalendarDays className="h-3.5 w-3.5 text-indigo-600" />
-            </span>
-
-            <span className="hidden sm:block">
-              রুটিন মডিউল
-            </span>
-
-            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-          </a>
+            সবুজ চিহ্নিত পরীক্ষাগুলো ফ্রি। এনরোল ছাড়াই এগুলো দিতে পারবে।
+          </motion.p>
         )}
-      </div>
+      </AnimatePresence>
 
-      {/* =========================
-          Scrollable Exam List
-      ========================= */}
-      <div className="relative mt-3">
-        <ul
-          className="space-y-2 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-100/60 px-2 py-2.5 shadow-inner shadow-slate-200/50"
-          style={{
-            maxHeight: `${EXAM_LIST_MAX_HEIGHT}px`,
-            scrollbarWidth: "thin",
-            scrollbarColor:
-              "rgba(100,116,139,0.28) transparent",
-          }}
-        >
-          {exams.map((exam, index) => (
-            <ExamRow
-              key={exam.id}
-              exam={exam}
-              index={index}
-              packageId={packageId}
-            />
-          ))}
-        </ul>
-      </div>
+      <ul
+        ref={listRef}
+        className="relative mt-4 space-y-2 overflow-y-auto p-1 pr-1.5"
+        style={{
+          maxHeight: LIST_MAX_HEIGHT,
+          scrollbarWidth: "thin",
+          scrollbarColor: "rgba(255,255,255,0.25) transparent",
+        }}
+      >
+        {exams.map((exam) => (
+          <ExamRow
+            key={exam.id}
+            exam={exam}
+            packageId={packageId}
+            highlight={highlight}
+            reduceMotion={reduceMotion}
+          />
+        ))}
+      </ul>
     </section>
   );
 };

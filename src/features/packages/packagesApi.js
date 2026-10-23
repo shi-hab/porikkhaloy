@@ -10,7 +10,18 @@ export const packagesApi = apiSlice.injectEndpoints({
     }),
 
     getAllHomePageData: builder.query({
-      query: (student_id) => `/carousel/${student_id}`,
+      query: ({ student_id, section_id, group_id, level_id, target } = {}) => {
+        const params = new URLSearchParams();
+        Object.entries({ section_id, group_id, level_id, target }).forEach(
+          ([key, value]) => {
+            if (value !== undefined && value !== null && value !== "") {
+              params.append(key, value);
+            }
+          }
+        );
+        const qs = params.toString();
+        return `/carousel/${student_id}${qs ? `?${qs}` : ""}`;
+      },
     }),
 
     getSinglePackage: builder.query({

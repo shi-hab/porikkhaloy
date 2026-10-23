@@ -230,7 +230,7 @@ const EnrollmentForm = () => {
                         )}
                       </div>
                       <span className="text-base font-bold tracking-wide text-gray-800 dark:text-white font-mono tabular-nums flex-1 text-left">
-                        01706429945
+                        01881-628483
                       </span>
                       {numberCopied ? (
                         <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />

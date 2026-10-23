@@ -266,92 +266,127 @@
 }
 
 
-
 /* ==========================================================================
-   porikkhaloy-preview: ১০০% ফিক্সড স্ক্রলযোগ্য টেবিল স্টাইল
+   porikkhaloy-preview  (MarkdownPreview er shob styling -- ekhane ek jaygay)
+   Apnar ager css + AI chat er styling merge kora. Eta puro site e markdown er jonno kaj korbe.
+   Ager .porikkhaloy-preview er shob css muche ei file ti-i boshan.
    ========================================================================== */
 
+/* ---------- Text / Heading / Paragraph ---------- */
+.porikkhaloy-preview > :first-child { margin-top: 0 !important; }
+.porikkhaloy-preview > :last-child  { margin-bottom: 0 !important; }
 
-/* টেবিল স্টাইল */
+.porikkhaloy-preview p { margin: 0.6em 0; }
+
+.porikkhaloy-preview h1,
+.porikkhaloy-preview h2,
+.porikkhaloy-preview h3,
+.porikkhaloy-preview h4 {
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 1.1em 0 0.4em;
+  color: #0f172a;
+}
+.porikkhaloy-preview h1 { font-size: 1.3em; }
+.porikkhaloy-preview h2 { font-size: 1.18em; }
+.porikkhaloy-preview h3 { font-size: 1.05em; }
+.dark .porikkhaloy-preview h1,
+.dark .porikkhaloy-preview h2,
+.dark .porikkhaloy-preview h3,
+.dark .porikkhaloy-preview h4 { color: #f9fafb; }
+
+.porikkhaloy-preview strong { font-weight: 600; }
+.porikkhaloy-preview a { color: #2563eb; text-decoration: underline; text-underline-offset: 2px; }
+
+.porikkhaloy-preview blockquote {
+  margin: 0.8em 0;
+  padding: 0.2em 0 0.2em 0.9em;
+  border-left: 3px solid #cbd5e1;
+  color: #475569;
+}
+.porikkhaloy-preview hr { border: 0; border-top: 1px solid #e2e8f0; margin: 1.2em 0; }
+
+/* ---------- List ---------- */
+.porikkhaloy-preview ul { list-style: disc; padding-left: 1.5rem; margin: 0.6em 0; }
+.porikkhaloy-preview ol { list-style: decimal; padding-left: 1.5rem; margin: 0.6em 0; }
+.porikkhaloy-preview li { margin: 0.25em 0; }
+.porikkhaloy-preview li > p { margin: 0.2em 0; }
+.porikkhaloy-preview li > ul,
+.porikkhaloy-preview li > ol { margin-top: 2px; margin-bottom: 2px; }
+
+/* ---------- Table ---------- */
+/* MarkdownPreview er wrapper div (mt-[-15px] chilo, tai table headline er sathe leghe thakto) -- ekhon card er moto */
+.porikkhaloy-preview div.overflow-x-auto {
+  margin: 14px 0 !important;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  scrollbar-width: thin;                       /* Firefox */
+  scrollbar-color: #cbd5e1 transparent;
+}
+.dark .porikkhaloy-preview div.overflow-x-auto { border-color: #374151; background: #1f2937; }
+
+/* shorur chilo -- scrollbar shundor ar patla */
+.porikkhaloy-preview div.overflow-x-auto::-webkit-scrollbar { height: 6px; }
+.porikkhaloy-preview div.overflow-x-auto::-webkit-scrollbar-track { background: transparent; }
+.porikkhaloy-preview div.overflow-x-auto::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+.porikkhaloy-preview div.overflow-x-auto::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
 .porikkhaloy-preview table {
-  width: auto !important;             /* 🎯 টেবিল সাইজ কন্টেন্ট অনুযায়ী ছোট থাকবে */
-  min-width: max-content;            /* 🎯 মোবাইলে কলামগুলোকে চ্যাপ্টা হতে দেবে না */
+  width: 100%;
   border-collapse: collapse !important;
-  background-color: #ffffff;
-  border-radius: 6px;
-}
-
-.dark .porikkhaloy-preview table {
-  background-color: #1f2937 !important;
-}
-
-/* হেডার ও ডাটা সেল */
-.porikkhaloy-preview th, 
-.porikkhaloy-preview td {
-  padding: 8px 16px !important;
-  border: 1px solid #e2e8f0 !important;
-  text-align: center !important;
-  white-space: nowrap !important;     /* 🎯 লেখা বা ম্যাথ ভেঙে নিচে নামবে না */
+  background-color: transparent;
   font-size: 14px;
+  line-height: 1.55;
 }
 
-.dark .porikkhaloy-preview th, 
-.dark .porikkhaloy-preview td {
-  border-color: #374151 !important;
+.porikkhaloy-preview th,
+.porikkhaloy-preview td {
+  padding: 10px 16px !important;
+  border: 1px solid #e2e8f0 !important;
+  text-align: left !important;
+  vertical-align: middle;
+  white-space: normal !important;              /* lomba lekha bhenge nichei nambe; math (.katex) nijei nowrap */
+  min-width: 90px;
 }
+.dark .porikkhaloy-preview th,
+.dark .porikkhaloy-preview td { border-color: #374151 !important; }
 
-/* হেডার ব্যাকগ্রাউন্ড */
+/* card er baire er dike double border hobe na */
+.porikkhaloy-preview th:first-child,
+.porikkhaloy-preview td:first-child { border-left: 0 !important; }
+.porikkhaloy-preview th:last-child,
+.porikkhaloy-preview td:last-child { border-right: 0 !important; }
+.porikkhaloy-preview thead tr:first-child th { border-top: 0 !important; }
+.porikkhaloy-preview tbody tr:last-child td { border-bottom: 0 !important; }
+
 .porikkhaloy-preview th {
-  background-color: #f8fafc !important;
+  background-color: #f1f5f9 !important;
   font-weight: 600 !important;
   color: #0f172a !important;
+  text-align: center !important;
+  white-space: nowrap !important;              /* header ek line e */
 }
+.dark .porikkhaloy-preview th { background-color: #111827 !important; color: #f9fafb !important; }
 
-.dark .porikkhaloy-preview th {
-  background-color: #111827 !important;
-  color: #f9fafb !important;
-}
+.porikkhaloy-preview tbody tr:nth-child(even) td { background-color: #f8fafc; }
+.porikkhaloy-preview tbody tr:hover td { background-color: #eff6ff; }
+.dark .porikkhaloy-preview tbody tr:nth-child(even) td { background-color: #182231; }
+.dark .porikkhaloy-preview tbody tr:hover td { background-color: #243244; }
 
-
-/* ==========================================================================
-   porikkhaloy-preview: কাস্টম লিস্ট ও বুলেট স্টাইলিং
-   ========================================================================== */
-
-/* Unordered List */
-.porikkhaloy-preview ul {
-  list-style: disc;
-  padding-left: 1.5rem;
-}
-
-/* Ordered List */
-.porikkhaloy-preview ol {
-  list-style: decimal;
-  padding-left: 1.5rem;
-}
-
-/* Nested List */
-.porikkhaloy-preview li > ul,
-.porikkhaloy-preview li > ol {
-  margin-top: 2px;
-  margin-bottom: 2px;
-}
-
+/* ---------- Math (KaTeX) ---------- */
 .porikkhaloy-preview .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
   padding-bottom: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
 }
+.porikkhaloy-preview .katex-display::-webkit-scrollbar { height: 6px; }
+.porikkhaloy-preview .katex-display::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
 
-.porikkhaloy-preview .katex-display::-webkit-scrollbar {
-  height: 6px;
-}
-
-.porikkhaloy-preview pre {
-  overflow-x: auto;
-}
-
-/* Inline Code (`code`) */
+/* ---------- Code ---------- */
 .porikkhaloy-preview :not(pre) > code {
   background: #1e1e1e;
   color: #dcdcaa;
@@ -361,7 +396,6 @@
   font-family: "Fira Code", "JetBrains Mono", Consolas, monospace;
 }
 
-/* Code Block (` ``` `) */
 .porikkhaloy-preview pre {
   background: #1e1e1e;
   color: #d4d4d4;
@@ -372,9 +406,12 @@
   font-size: 14px;
   line-height: 1.6;
   font-family: "Fira Code", "JetBrains Mono", Consolas, monospace;
+  scrollbar-width: thin;
+  scrollbar-color: #4b5563 transparent;
 }
+.porikkhaloy-preview pre::-webkit-scrollbar { height: 6px; }
+.porikkhaloy-preview pre::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 999px; }
 
-/* Code Block এর ভিতরের code */
 .porikkhaloy-preview pre code {
   background: transparent;
   padding: 0;
@@ -382,4 +419,3 @@
   white-space: pre;
   display: block;
 }
-

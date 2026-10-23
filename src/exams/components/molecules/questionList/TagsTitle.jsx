@@ -7,9 +7,13 @@ const TagsTitle = ({ tagId }) => {
     id: tagId,
   });
 
-  return (
-    <Badge variant="outline outline-green-200">{tagData?.data?.title}</Badge>
-  );
+  const title = tagData?.data?.title;
+
+  if (!title || title.toLowerCase() === "uncategorized") {
+    return null;
+  }
+
+  return <Badge variant="outline">{title}</Badge>;
 };
 
 export default TagsTitle;
